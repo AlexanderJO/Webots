@@ -1,0 +1,159 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.5417478893081508 -0.7984551345609627 -0.2626378162477723 5.50317777983343
+  position 1.8133815165895115 1.332232713730892 1.936999844882763
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  name "shop_floor"
+  floorSize 10 10
+  floorTileSize 1 1
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallThickness 0.05
+  wallHeight 0.5
+}
+DEF agv Robot {
+  children [
+    DEF bodyAGV Transform {
+      translation 0 0.25 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.7 0.3 0.4
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.8 0.4 0.8
+          }
+        }
+      ]
+      rotationStep 0.261799
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0.2 0.1 0.425
+      }
+      device [
+        PositionSensor {
+          name "ps_rightFWD_AGV"
+        }
+        RotationalMotor {
+          name "motor_rightFWD_AGV"
+        }
+      ]
+      endPoint Solid {
+        translation 0.2 0.1 0.425
+        rotation 1 0 0 1.570790306100425
+        children [
+          DEF wheelAGV Shape {
+            appearance PBRAppearance {
+              baseColor 1 1 0.3
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.05
+              radius 0.1
+            }
+          }
+        ]
+        boundingObject USE wheelAGV
+        physics DEF wheelAGV_physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor -0.2 0.1 0.425
+      }
+      device [
+        PositionSensor {
+          name "ps_rightAFT_AGV"
+        }
+        RotationalMotor {
+          name "motor_rightAFT_AGV"
+        }
+      ]
+      endPoint Solid {
+        translation -0.2 0.1 0.425
+        rotation -1 0 0 1.5708013554159623
+        children [
+          USE wheelAGV
+        ]
+        name "solid(1)"
+        boundingObject USE wheelAGV
+        physics USE wheelAGV_physics
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor -0.2 0.1 -0.425
+      }
+      device [
+        PositionSensor {
+          name "ps_leftAFT_AGV"
+        }
+        RotationalMotor {
+          name "motor_leftAFT_AGV"
+        }
+      ]
+      endPoint Solid {
+        translation -0.2 0.1 -0.425
+        rotation -1 0 0 1.5708007254281589
+        children [
+          USE wheelAGV
+        ]
+        name "solid(2)"
+        boundingObject USE wheelAGV
+        physics USE wheelAGV_physics
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor 0.2 0.1 -0.425
+      }
+      device [
+        PositionSensor {
+          name "ps_leftFWD_AGV"
+        }
+        RotationalMotor {
+          name "motor_leftFWD_AGV"
+        }
+      ]
+      endPoint Solid {
+        translation 0.2 0.1 -0.425
+        rotation -1 0 0 1.5708007254279577
+        children [
+          USE wheelAGV
+        ]
+        name "solid(3)"
+        boundingObject USE wheelAGV
+        physics USE wheelAGV_physics
+      }
+    }
+  ]
+  physics Physics {
+  }
+  controller "agv_controller"
+}
+Solid {
+  translation 0 0.05 -1
+  children [
+    USE wheelAGV
+  ]
+  boundingObject USE wheelAGV
+  physics USE wheelAGV_physics
+}
