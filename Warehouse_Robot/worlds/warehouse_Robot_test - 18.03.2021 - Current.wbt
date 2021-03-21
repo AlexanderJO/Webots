@@ -592,7 +592,7 @@ DEF robot_1 Robot {
                                       }
                                       geometry Mesh {
                                         url [
-                                          "C:/Users/alexander.overvaag/OneDrive - NTNU/Automatiseringsteknikk/Fag/Vår 2021/Bacheloroppgave/Lagerrobot - Currence Robotics/Simulation og modell/Webots/Warehouse_Robot/3d model/Snakebox.stl"
+                                          "meshes/Snakebox.stl"
                                         ]
                                       }
                                     }
@@ -617,7 +617,7 @@ DEF robot_1 Robot {
                         }
                         geometry Mesh {
                           url [
-                            "C:/Users/alexander.overvaag/OneDrive - NTNU/Automatiseringsteknikk/Fag/Vår 2021/Bacheloroppgave/Lagerrobot - Currence Robotics/Simulation og modell/Webots/Warehouse_Robot/3d model/Hasselhoff_plate.stl"
+                            "meshes/Hasselhoff_plate.stl"
                           ]
                         }
                       }
