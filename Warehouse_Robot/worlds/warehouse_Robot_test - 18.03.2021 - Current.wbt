@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.9539448348197836 -0.2933244971110773 0.06284895794831814 0.4972437604415274
-  position -0.7214804038599735 5.113665850535067 7.323439291389528
+  orientation -0.9717533421607576 -0.20711279407504793 0.11313590292132872 0.6466806085990036
+  position -0.20288028892288443 3.5745587543628647 3.9157712940300513
 }
 TexturedBackground {
 }
@@ -273,6 +273,8 @@ DEF robot_1 Robot {
               ]
               name "solid(5)"
               boundingObject USE end_stop_top_shape
+              physics Physics {
+              }
             }
           ]
         }
@@ -294,6 +296,8 @@ DEF robot_1 Robot {
               ]
               name "solid(6)"
               boundingObject USE end_stop_bottom_shape
+              physics Physics {
+              }
             }
           ]
         }
@@ -356,7 +360,7 @@ DEF robot_1 Robot {
                                     }
                                   ]
                                   endPoint Solid {
-                                    translation -0.058 0 -0.03
+                                    translation -0.058 0.15 -0.03
                                     rotation 0 0 1 0
                                     children [
                                       DEF snake_section_init Group {
@@ -370,7 +374,7 @@ DEF robot_1 Robot {
                                                   metalness 0
                                                 }
                                                 geometry Box {
-                                                  size 0.016 0.5 0.032
+                                                  size 0.016 0.3 0.032
                                                 }
                                               }
                                             ]
@@ -381,7 +385,7 @@ DEF robot_1 Robot {
                                               DEF middle_block Shape {
                                                 appearance USE snake_app
                                                 geometry Box {
-                                                  size 0.1 0.5 0.09
+                                                  size 0.1 0.3 0.09
                                                 }
                                               }
                                             ]
@@ -392,7 +396,7 @@ DEF robot_1 Robot {
                                               DEF right_block Shape {
                                                 appearance USE snake_app
                                                 geometry Box {
-                                                  size 0.016 0.5 0.032
+                                                  size 0.016 0.3 0.032
                                                 }
                                               }
                                             ]
@@ -419,8 +423,8 @@ DEF robot_1 Robot {
                                       minPosition -5
                                     }
                                   ]
-                                  endPoint Solid {
-                                    translation -0.058 0 -0.03
+                                  endPoint DEF snake_section Solid {
+                                    translation -0.058 0.15 -0.03
                                     children [
                                       DEF snake_section Group {
                                         children [
@@ -433,7 +437,7 @@ DEF robot_1 Robot {
                                                   metalness 0
                                                 }
                                                 geometry Box {
-                                                  size 0.016 0.5 0.032
+                                                  size 0.016 0.3 0.032
                                                 }
                                               }
                                             ]
@@ -444,7 +448,7 @@ DEF robot_1 Robot {
                                               DEF middle_block Shape {
                                                 appearance USE snake_app
                                                 geometry Box {
-                                                  size 0.1 0.5 0.09
+                                                  size 0.1 0.3 0.09
                                                 }
                                               }
                                             ]
@@ -455,7 +459,7 @@ DEF robot_1 Robot {
                                               DEF right_block Shape {
                                                 appearance USE snake_app
                                                 geometry Box {
-                                                  size 0.016 0.5 0.032
+                                                  size 0.016 0.3 0.032
                                                 }
                                               }
                                             ]
@@ -481,7 +485,7 @@ DEF robot_1 Robot {
                                     }
                                   ]
                                   endPoint Solid {
-                                    translation -0.058 0 -0.03
+                                    translation -0.058 0.15 -0.03
                                     children [
                                       USE snake_section
                                     ]
@@ -503,7 +507,7 @@ DEF robot_1 Robot {
                                     }
                                   ]
                                   endPoint Solid {
-                                    translation -0.058 0 -0.03
+                                    translation -0.058 0.15 -0.03
                                     children [
                                       USE snake_section
                                     ]
@@ -525,7 +529,7 @@ DEF robot_1 Robot {
                                     }
                                   ]
                                   endPoint Solid {
-                                    translation -0.058 0 -0.03
+                                    translation -0.058 0.15 -0.03
                                     children [
                                       USE snake_section
                                     ]
@@ -547,7 +551,7 @@ DEF robot_1 Robot {
                                     }
                                   ]
                                   endPoint Solid {
-                                    translation -0.058 0 -0.03
+                                    translation -0.058 0.15 -0.03
                                     children [
                                       USE snake_section
                                     ]
@@ -569,12 +573,11 @@ DEF robot_1 Robot {
                                     }
                                   ]
                                   endPoint Solid {
-                                    translation -0.058 0 -0.03
+                                    translation -0.058 0.15 -0.03
                                     children [
                                       USE snake_section
                                     ]
                                     name "solid(2)"
-                                    boundingObject USE snake_section
                                   }
                                 }
                               ]
