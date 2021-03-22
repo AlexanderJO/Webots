@@ -196,19 +196,11 @@ def drive_axis_1(left, right, speed):
     else:
         motor_axis_1.setVelocity(speed)
 
-# Method to assign keys after keystrokes.
+# Method to assign keys after keystrokes. - REDACTED
 def key_assign(keystrokes):
     pass
-    
-# Switch case for robot control
-def control_selection(argument):
-    switcher = {
-        1: "Manual",
-        2: "Remote"
-    }
-    
-    print(switcher.get(argument, "Invalid selection"))
 
+# Read the distance sensor.
 def read_distance_sensor():
     # ------ DISTANCE SENSORS -----
     # read sensor outputs
