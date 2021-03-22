@@ -74,7 +74,7 @@ max_velocity_agv = min(motor_rightFWD_AGV.getMaxVelocity(),motor_rightAFT_AGV.ge
 speed_agv = 0.5 * max_velocity_agv
 SPEED_INCREMENT_AGV = 0.1
 
-# ------------------- AXIS 1 --------------
+# ------------------- AXIS 1 - Snake box --------------
 # Get Axis 1 motor
 motor_axis_1 = robot.getDevice('motor_axis_1')
 
@@ -89,7 +89,7 @@ max_velocity_axis_1 = motor_axis_1.getMaxVelocity()
 speed_axis_1 = 2
 SPEED_INCREMENT_AXIS_1 = 0.05
 
-# ------------------- AXIS 2 --------------
+# ------------------- AXIS 2 - Tower --------------
 # Get Axis 2 motor
 motor_axis_2 = robot.getDevice('motor_axis_2')
 axis_2_pos = 0
