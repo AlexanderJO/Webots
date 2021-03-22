@@ -103,25 +103,22 @@ max_velocity_axis_2 = motor_axis_2.getMaxVelocity()
 speed_axis_2 = 0.02
 SPEED_INCREMENT_AXIS_2 = 0.02
 
-# ------------------- AXIS 3 --------------
-num_snake_joints = 2
-motor_axis_3_pt = [""] * num_snake_joints
-for i in range(num_snake_joints):
-    motor_axis_3_pt[i] = "mtor_axis_3_pt" + str(i+1)
-    print(motor_axis_3_pt[i])
-# populate_snake(num_snake_joints)
-
+# ------------------- AXIS 3 - Snake --------------
+# Populate the snake robot
+num_snake_joints = 7
+snake_piece_length = 0.30         # Length in meter.
+dist_snake_start_to_tip = 0.445  # Length in meter.
+max_snake_length = 1.70 + dist_snake_start_to_tip    # Length in meter.
 
 # Get Axis 3 motor - Snake part 1
-motor_axis_3_pt1 = robot.getDevice('motor_axis_3_pt1')
-axis_3_pos_pt1 = 0
+#motor_axis_3_pt1 = robot.getDevice('motor_axis_3_pt1')
+#axis_3_pos_pt1 = 0
 
 # Get position sensor for axis 3 - Snake part 1
-ps_axis_3_pt1 = robot.getDevice('ps_axis_3_pt1')
-ps_axis_3_pt1.enable(TIME_STEP)
+#ps_axis_3_pt1 = robot.getDevice('ps_axis_3_pt1')
+#ps_axis_3_pt1.enable(TIME_STEP)
 
 # Speed settings for Axis 3
-max_velocity_axis_3 = motor_axis_3_pt1.getMaxVelocity()
 speed_axis_3 = 0.005
 SPEED_INCREMENT_AXIS_3 = 0.005
 
