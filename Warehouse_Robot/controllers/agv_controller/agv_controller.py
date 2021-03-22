@@ -396,91 +396,155 @@ def increment_speed_snake_manual(keystrokes):
 
 def move_snake(keystrokes):
     # Variables
-    global axis_3_pos_pt1
+    global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt
+
+    rem_length = round(axis_3_pos_pt[0], 3) % snake_piece_length
+    count = round(abs((round(axis_3_pos_pt[0], 4) - rem_length + snake_piece_length) / snake_piece_length), 0)
+    # print("Overshooting length: ", rem_length, " at ", count, " pieces")
+
+
+
+
+    for i in range(len(motor_axis_3_pt)):
+        # if count == i:
+        #     pos = i + 1
+        #
+        #     # Move snake part
+        #     if (EXTEND_AXIS_3 in keystrokes):
+        #         axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() - speed_axis_3, 3)
+        #     elif (RETRACT_AXIS_3 in keystrokes):
+        #         axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() + speed_axis_3, 3)
+        #
+        #     if (axis_3_pos_pt[i] > motor_axis_3_pt[i].getMaxPosition()):
+        #         print("Desired pos: ", axis_3_pos_pt[i])
+        #         axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMaxPosition(), 3)
+        #         # print("Max. pos: ", motor_axis_3_pt[i].getMaxPosition())
+        #         sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " has reached maximum length.")
+        #     elif (axis_3_pos_pt[i] < motor_axis_3_pt[i].getMinPosition()):
+        #         print("Desired pos: ", axis_3_pos_pt[i])
+        #         axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMinPosition(), 3)
+        #         # print("Min. pos: ", motor_axis_3_pt[i].getMaxPosition())
+        #         sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " - has reached minimum length.")
+        #     else:
+        #         motor_axis_3_pt[i].setPosition(axis_3_pos_pt[i])
+        #
+        #     print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
+
+        if count >= i:
+            pos = i + 1
+
+            # Move snake part
+            if (EXTEND_AXIS_3 in keystrokes):
+                axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() - speed_axis_3, 3)
+            elif (RETRACT_AXIS_3 in keystrokes):
+                axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() + speed_axis_3, 3)
+
+            if (axis_3_pos_pt[i] > motor_axis_3_pt[i].getMaxPosition()):
+                print("Desired pos: ", axis_3_pos_pt[i])
+                axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMaxPosition(), 3)
+                sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " has reached maximum length.")
+            elif (axis_3_pos_pt[i] < motor_axis_3_pt[i].getMinPosition()):
+                print("Desired pos: ", axis_3_pos_pt[i])
+                axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMinPosition(), 3)
+                sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " - has reached minimum length.")
+            else:
+                motor_axis_3_pt[i].setPosition(axis_3_pos_pt[i])
+
+            print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
+        pass
+
+def move_snake_manual(keystrokes):
+    # Variables
+    # global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt
+
+    # # Move snake part 1
+    # if (EXTEND_AXIS_3 in keystrokes):
+    #     axis_3_pos_pt[0] = round(ps_axis_3_pt[0].getValue() - speed_axis_3, 3)
+    #     print("Snake tip position: ", axis_3_pos_pt[0])
+    # elif (RETRACT_AXIS_3 in keystrokes):
+    #     axis_3_pos_pt[0] = round(ps_axis_3_pt[0].getValue() + speed_axis_3, 3)
+    #     print("Snake tip position: ", axis_3_pos_pt[0])
+    #
+    # if (axis_3_pos_pt[0] > motor_axis_3_pt[0].getMaxPosition()):
+    #     axis_3_pos_pt[0] = round(motor_axis_3_pt[0].getMaxPosition(), 3)
+    #     print("Desired pos: ", axis_3_pos_pt[0])
+    #     print("Max. pos: ", motor_axis_3_pt[0].getMaxPosition())
+    #     sys.stderr.write("Axis 3 - Snake Part 1 - has reached maximum length.\n")
+    # elif (axis_3_pos_pt[0] < motor_axis_3_pt[0].getMinPosition()):
+    #     axis_3_pos_pt[0] = round(motor_axis_3_pt[0].getMinPosition(), 3)
+    #     print("Desired pos: ", axis_3_pos_pt[0])
+    #     print("Min. pos: ", motor_axis_3_pt[0].getMaxPosition())
+    #     sys.stderr.write("Axis 3 - Snake Part 1 - has reached minimum length.\n")
+    # else:
+    #     motor_axis_3_pt[0].setPosition(axis_3_pos_pt[0])
+
+    move_snake(keystrokes)
+
+def manual_control_keyboard(keystrokes):
+
+    # ------ MOVE AGV -----
+    # Increment AGV speed
+    increment_speed_agv(keystrokes=keystrokes)
+
+    # Move AGV
+    move_agv(keystrokes=keystrokes)
+
+    # ------ HASSELHOFF HUG / SNAKE BOX - AXIS 1 -----
+    # Increment Axis 1 speed
+    increment_speed_snakebox(keystrokes=keystrokes)
+
+    # Rotate snake box - Axis 1
+    rotate_snakebox(keystrokes=keystrokes)
+
+    # ------ TOWER - AXIS 2 -----
+    # Increment Tower speed
+    increment_speed_tower(keystrokes=keystrokes)
+
+    # Move tower height
+    change_tower_height(keystrokes=keystrokes)
+
+    # ------ SNAKE - AXIS 3 -----
+    # Increment Snake speed
+    increment_speed_snake_manual(keystrokes=keystrokes)
 
     # Move snake part 1
-    if (EXTEND_AXIS_3 in keystrokes):
-        axis_3_pos_pt1 = round(ps_axis_3_pt1.getValue() - SPEED_INCREMENT_AXIS_3, 3)
-        print("Snake tip position: ", axis_3_pos_pt1)
-    elif (RETRACT_AXIS_3 in keystrokes):
-        axis_3_pos_pt1 = round(ps_axis_3_pt1.getValue() + SPEED_INCREMENT_AXIS_3, 3)
-        print("Snake tip position: ", axis_3_pos_pt1)
-
-    if (axis_3_pos_pt1 > motor_axis_3_pt1.getMaxPosition()):
-        axis_3_pos_pt1 = round(motor_axis_3_pt1.getMaxPosition(), 3)
-        print("Desired pos: ", axis_3_pos_pt1)
-        print("Max. pos: ", motor_axis_3_pt1.getMaxPosition())
-        sys.stderr.write("Axis 3 - Snake Part 1 - has reached maximum length.\n")
-    elif (axis_3_pos_pt1 < motor_axis_3_pt1.getMinPosition()):
-        axis_3_pos_pt1 = round(motor_axis_3_pt1.getMinPosition(), 3)
-        print("Desired pos: ", axis_3_pos_pt1)
-        print("Min. pos: ", motor_axis_3_pt1.getMaxPosition())
-        sys.stderr.write("Axis 3 - Snake Part 1 - has reached minimum length.\n")
-    else:
-        motor_axis_3_pt1.setPosition(axis_3_pos_pt1)
+    move_snake_manual(keystrokes=keystrokes)
 
 def main():
-    print("Hello World!")
+    # Create the snake and setup the linear motors
+    populate_snake(num_snake_joints)
     
     # Communication with TwinCAT/PLC over EtherCAT
-    communication.set_ip("254.254.254.253")
-    print("IP is: ", str((communication.get_ip())))
-    
+    #communication.set_ip("254.254.254.253")
+    #print("IP is: ", str((communication.get_ip())))
+
+    # Robot mode selection
+    mode_selection = 1
+    mode = robot_mode(mode_selection)
+
+    # Main loop:
+    # - perform simulation steps until Webots is stopping the controller
     while robot.step(TIME_STEP) != -1:
-    
-        # Robot mode selection
-        mode_selection = 1
-        robot_mode(mode_selection)
-    
-        # Read keyboard values
-        keystrokes = read_keyboard()
-    
-        # ------ MOVE AGV -----
-        # Increment AGV speed
-        increment_speed_agv(keystrokes=keystrokes)
-    
-        # Move AGV
-        move_agv(keystrokes=keystrokes)
-    
-        # ------ HASSELHOFF HUG / SNAKE BOX - AXIS 1 -----
-        # Increment Axis 1 speed
-        increment_speed_snakebox(keystrokes=keystrokes)
-    
-        # Rotate snake box - Axis 1
-        rotate_snakebox(keystrokes=keystrokes)
-    
-        # ------ TOWER - AXIS 2 -----
-        # Increment Tower speed
-        increment_speed_tower(keystrokes=keystrokes)
-    
-        # Move tower height
-        change_tower_height(keystrokes=keystrokes)
-    
-        # ------ SNAKE - AXIS 3 -----
-        # Increment Snake speed
-        increment_speed_snake(keystrokes=keystrokes)
-    
-        # Move snake part 1
-        move_snake(keystrokes=keystrokes)
+        # Runs either manual by keyboard input, or in automatic or remote mode.
+        if mode == 'Manual mode':
+            # Read keyboard values
+            keystrokes = read_keyboard()
+            manual_control_keyboard(keystrokes=keystrokes)
+        elif mode == "Automatic mode":
+            pass
+        elif mode == "Remote mode":
+            pass
+        else:
+            # Print error
+            sys.stderr.write("No or incorrect mode selected.\n")
 
+            # The program will exit
+            sys.exit("The program will now be terminated.")
+            pass
+
+# Method to start the program by running the main. Python override.
 if __name__ == "__main__":
-    print("This is my file to test Python's execution methods.")
-    print("The variable __name__ tells me which context this file is running in.")
-    print("The value of __name__ is:", repr(__name__))
+    #print("This is my file to test Python's execution methods.")
+    #print("The variable __name__ tells me which context this file is running in.")
+    #print("The value of __name__ is:", repr(__name__))
     main()
-
-# Main loop:
-# - perform simulation steps until Webots is stopping the controller
-
-        
-    # ------ AXIS 2 -----
-    #axis_2_dist = axis_2_dist + 0.5
-    #axis_2.setVelocity(0.5)
-    #if axis_2_dist < motor_axis_2.getMaxPosition():
-    #    motor_axis_2.setPosition(axis_2_dist)
-    #elif motor_axis_2.getPosition() < motor_axis_2.maxPosition():
-    #    motor_axis_2.setPosition(axis_2_dist)
-    #else:
-    #    sys.stderr.write("Axis 2 has reached maximum height.\n")
-        #pass
-    #print("Axis 2 dist: ", axis_2_dist)
