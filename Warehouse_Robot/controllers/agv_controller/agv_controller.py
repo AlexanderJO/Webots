@@ -155,11 +155,30 @@ SPEED_DECREASE_SNAKE = str(Keyboard.SHIFT+45)
 
 # ------------------- METHODS --------------
 def populate_snake(num_joints):
-    global motor_axis_3_pt
+    # Variables
+    global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt, max_velocity_axis_3
+
     motor_axis_3_pt = [""] * num_joints
+    axis_3_pos_pt = [0] * num_joints
+    ps_axis_3_pt = [""] * num_joints
+
+    max_velocity_axis_3 = 0
+
     for i in range(num_joints):
-        motor_axis_3_pt[i] = "mtor_axis_3_pt" + str(i+1)
-        print(motor_axis_3_pt[i])
+        # Get Axis 3 motor for each snake part
+        motor_axis_3_pt[i] = robot.getDevice("motor_axis_3_pt" + str(i+1))
+        axis_3_pos_pt[i] = 0
+
+        # Get position sensor for axis 3 - Snake part 1
+        ps_axis_3_pt[i] = robot.getDevice("ps_axis_3_pt" + str(i+1))
+        ps_axis_3_pt[i].enable(TIME_STEP)
+
+        # Get the maximum motor velocity.
+        motor_velocity = motor_axis_3_pt[i].getMaxVelocity()
+
+        # Set the maximum velocity.
+        if motor_velocity > max_velocity_axis_3:
+            max_velocity_axis_3 = motor_velocity
 
 # Method for driving AGV by controlling forward and aft wheel on left and right side
 def drive_agv(left_fwd, left_aft, right_fwd, right_aft, speed):
