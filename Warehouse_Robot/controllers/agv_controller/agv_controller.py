@@ -230,22 +230,29 @@ def read_keyboard():
     # print(keystrokes)
     return keystrokes
 
+# ------ Switch case -----
 def manual_mode():
     return "Manual mode"
 
 def remote_mode():
     return "Remote mode"
 
+def automatic_mode():
+    return "Automatic mode"
+
+# Set the type of robot mode.
 def robot_mode(argument):
     switcher = {
         1: manual_mode,
-        2: remote_mode
+        2: remote_mode,
+        3: automatic_mode
     }
+    
     # Get the function from switcher dictionary
     func = switcher.get(argument, lambda: "Invalid robot mode")
     # Execute the function
-    func()
-    #print(func())
+    mode = func()
+    return mode
 
 # ------ AGV -----
 def increment_speed_agv(keystrokes):
