@@ -8,4 +8,4 @@ class Communication():
         
     def get_ip(self):
         return self.ip
-        
+
