@@ -374,7 +374,7 @@ def change_tower_height(keystrokes):
         motor_axis_2.setPosition(axis_2_pos)
 
 # ------ Snake - Axis 3 -----
-def increment_speed_snake(keystrokes):
+def increment_speed_snake_manual(keystrokes):
     # Variable
     global speed_axis_3
 
