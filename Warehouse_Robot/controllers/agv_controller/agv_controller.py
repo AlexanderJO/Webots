@@ -557,9 +557,30 @@ def manual_control_keyboard(keystrokes):
     # Move snake part 1
     move_snake_manual(keystrokes=keystrokes)
 
+def snake_tip_kinematics(agv_heading, snake_angle, snake_tip_pos):
+    pass
+
+def get_snake_tip_globale_coord(agv_heading, snake_angle, agv_gps, snake_tip_pos):
+    angle = agv_heading + snake_angle
+
+    pass
+
+def circle_coordinates(length, angle):
+    coordinates = [0] * 2
+    coordinates[0] = length * math.sin(math.radians(angle))
+    coordinates[1] = length * math.cos(math.radians(angle))
+
+    return coordinates
+
 def main():
+    # Variables
+    # agv_heading = 0
+    # snake_box_angle = 0
+    # snake_angle = 0
+    
     # Create the snake and setup the linear motors
     populate_snake(num_snake_joints)
+    
     
     # Communication with TwinCAT/PLC over EtherCAT
     #communication.set_ip("254.254.254.253")
