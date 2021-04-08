@@ -498,8 +498,6 @@ def move_snake(keystrokes):
                 sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " - has reached minimum length.")
             else:
                 motor_axis_3_pt[i].setPosition(axis_3_pos_pt[i])
-
-            print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
         pass
 
 def move_snake_manual(keystrokes):
