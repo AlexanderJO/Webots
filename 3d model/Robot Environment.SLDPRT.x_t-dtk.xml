@@ -1,0 +1,83 @@
+<Log>
+<DtkApiVersion>201</DtkApiVersion>
+<DtkDllVersion>20200114</DtkDllVersion>
+<ProductMode>Psk</ProductMode>
+<InputFormat>SOLIDWORKS</InputFormat>
+<OutputFormat>PARASOLID</OutputFormat>
+<HealingFlag>0</HealingFlag>
+<ConfigFile>C:\Program Files\Siemens\NX1926\ugii\dtkConfig.dtk</ConfigFile>
+<FileName><![CDATA[C:\Users\xzbyt\OneDrive - NTNU\Automatiseringsteknikk\GRABRobot\Webots\3d model\Robot Environment.SLDPRT]]></FileName>
+<FileVersion>Official version for SolidWorks 2020</FileVersion>
+<OutPutFileName><![CDATA[C:\Users\xzbyt\OneDrive - NTNU\Automatiseringsteknikk\GRABRobot\Webots\3d model\Robot Environment.SLDPRT.x_t]]></OutPutFileName>
+<bill_of_materials>
+<component_root><path><![CDATA[C:\Users\xzbyt\OneDrive - NTNU\Automatiseringsteknikk\GRABRobot\Webots\3d model\Robot Environment.SLDPRT]]></path><type>Part</type><name><![CDATA[Robot Environment]]></name><status>dtkNoError</status><size>35347112</size><unit>Millimeters</unit><version></version></component_root>
+</bill_of_materials>
+<components_info>
+<component>
+<path><![CDATA[C:\Users\xzbyt\OneDrive - NTNU\Automatiseringsteknikk\GRABRobot\Webots\3d model\Robot Environment.SLDPRT]]></path>
+<name><![CDATA[Robot Environment]]></name>
+<errors>
+<error><message><![CDATA[Called currently unknown variable : moMeshFeatureContainer_c
+in G:\SVN\StandardLibs\DEVNET\datakit2000\sources\xr\sw\swr_generic_value_1.cpp - swr::Swr_GenericValue::restore at 2532 
+]]></message><type><![CDATA[Variable]]></type></error>
+</errors>
+<warnings>
+<warning><message><![CDATA[Error of parsing file : Main Object]]></message><type><![CDATA[Reading]]></type></warning>
+</warnings>
+</component>
+</components_info>
+<information>
+<info><message><![CDATA[PsKernel version used:28.0.197]]></message><type><![CDATA[Version]]></type></info>
+</information>
+<configuration>
+<path><![CDATA[C:\Program Files\Siemens\NX1926\ugii\dtkConfig.dtk]]></path>
+<section>
+<name><![CDATA[XMT CONF]]></name>
+<config><parameter>WRITE_BODY_ATTRIBUTES</parameter><value>1</value></config>
+</section>
+<section>
+<name><![CDATA[TRANSFORMATION ENTITES]]></name>
+<config><parameter>KEEP_ASSEMBLY</parameter><value>1</value></config>
+<config><parameter>BODY_TO_NURBS</parameter><value>0</value></config>
+<config><parameter>EXPLOSE_GROUP</parameter><value>1</value></config>
+<config><parameter>MERGE_BODIES</parameter><value>0</value></config>
+</section>
+<section>
+<name><![CDATA[FILTRAGE DE DOMAINE]]></name>
+<config><parameter>COURBE_LIM_3D</parameter><value>0</value></config>
+<config><parameter>FILAIRE</parameter><value>0</value></config>
+<config><parameter>FDT</parameter><value>0</value></config>
+<config><parameter>FEATURES</parameter><value>1</value></config>
+<config><parameter>META_PARAMETERS</parameter><value>0</value></config>
+<config><parameter>REFERENTIEL</parameter><value>1</value></config>
+<config><parameter>MESH</parameter><value>1</value></config>
+<config><parameter>RENDER_INFOS</parameter><value>1</value></config>
+<config><parameter>MODEL_DISPLAY</parameter><value>1</value></config>
+<config><parameter>DRAW</parameter><value>0</value></config>
+<config><parameter>CONSTRUCT_SOLIDS</parameter><value>1</value></config>
+</section>
+<section>
+<name><![CDATA[MODIFICATION D'ATTRIBUT]]></name>
+<config><parameter>VISIBILITY</parameter><value>-1</value></config>
+<config><parameter>ASM_VISIBILITY</parameter><value>-1</value></config>
+<config><parameter>FDT_VISIBILITY</parameter><value>-1</value></config>
+</section>
+<section>
+<name><![CDATA[DIALOG BOX]]></name>
+<config><parameter>CHOOSE_AXIS</parameter><value>0</value></config>
+<config><parameter>CHOOSE_IN_CATALOG</parameter><value>-1</value></config>
+<config><parameter>CHOOSE_LAYER_FILTER</parameter><value>0</value></config>
+<config><parameter>CHOOSE_IN_ASSEMBLY_TREE</parameter><value>0</value></config>
+</section>
+<section>
+<name><![CDATA[SCISSION FICHIER]]></name>
+<config><parameter>PAR_SOLIDE</parameter><value>0</value></config>
+<config><parameter>PER_CATALOG</parameter><value>0</value></config>
+</section>
+</configuration>
+<Conversion>
+<Start>  07:22:50</Start>
+<End>  07:22:51</End>
+<Duration>1 sec</Duration>
+</Conversion>
+</Log>
