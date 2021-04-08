@@ -2,7 +2,7 @@
 
 # You may need to import some classes of the controller module. Ex:
 #  from controller import Robot, Motor, DistanceSensor
-from controller import Robot, DistanceSensor, Motor, Keyboard
+from controller import Robot, DistanceSensor, Motor, Keyboard, GPS, Connector
 import sys, math
 from ethercatCommunication import Communication
 
@@ -393,6 +393,39 @@ def increment_speed_snake_manual(keystrokes):
         else:
             speed_axis_3 = 0
             sys.stderr.write("Minimum snake speed reached.\n")
+
+# Returns the angle in degrees (°) from two coordinate systems.
+def get_heading(coordinates_inner, coordinates_outer):
+    diff_x = coordinates_outer['gps_pos'][0] - coordinates_inner['gps_pos'][0]
+    diff_y = coordinates_outer['gps_pos'][1] - coordinates_inner['gps_pos'][1]
+    diff_z = coordinates_outer['gps_pos'][2] - coordinates_inner['gps_pos'][2]
+
+    # Calculates the angle in degrees (°).
+    angle = math.atan2(diff_x, diff_z) * (360/(2*math.pi))
+    if angle < 0:
+        angle = angle + 360
+
+    # Returns the angle in degrees (°).
+    return angle
+
+# Return GPS position in x, y and z format as a dictionary.
+def get_gps_pos(name):
+    # Read GPS position
+    gps_info = dict()
+    gps_info['gps_pos'] = name.getValues()
+    return gps_info
+
+# Returns the angular position in degrees (°) for a position sensor (name).
+def get_angular_position(name):
+    angle_rad = name.getValue()
+
+    # Calculates the angle in degrees (°).
+    angle_deg = angle_rad * (360 / (2 * math.pi))
+    if angle_deg < 0:
+        angle = angle_deg + 360
+
+    # Returns the angle in degrees (°).
+    return angle_deg
 
 def move_snake(keystrokes):
     # Variables
