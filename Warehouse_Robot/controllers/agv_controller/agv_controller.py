@@ -483,8 +483,10 @@ def move_snake(keystrokes):
             # Move snake part
             if (EXTEND_AXIS_3 in keystrokes):
                 axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() - speed_axis_3, 3)
+                print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
             elif (RETRACT_AXIS_3 in keystrokes):
                 axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() + speed_axis_3, 3)
+                print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
 
             if (axis_3_pos_pt[i] > motor_axis_3_pt[i].getMaxPosition()):
                 print("Desired pos: ", axis_3_pos_pt[i])
