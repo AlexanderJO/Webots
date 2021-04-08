@@ -77,6 +77,13 @@ max_velocity_agv = min(motor_rightFWD_AGV.getMaxVelocity(),motor_rightAFT_AGV.ge
 speed_agv = 0.5 * max_velocity_agv
 SPEED_INCREMENT_AGV = 0.1
 
+# ------------------- GPS Axis 1 - Axle --------------
+# Get the GPS device
+gps_axle = robot.getDevice('gps_axle_center')
+gps_agv = robot.getDevice('gps_agv')
+gps_axle.enable(TIME_STEP)
+gps_agv.enable(TIME_STEP)
+
 # ------------------- AXIS 1 - Snake box --------------
 # Get Axis 1 motor
 motor_axis_1 = robot.getDevice('motor_axis_1')
