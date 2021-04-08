@@ -593,6 +593,13 @@ def main():
     # Main loop:
     # - perform simulation steps until Webots is stopping the controller
     while robot.step(TIME_STEP) != -1:
+
+        # Connector for connecting to boxes
+        # print("Connector presence: ", con_suction_cup.getPresence())
+        if (con_suction_cup.getPresence() == 1):
+            # print("Connector presence")
+            con_suction_cup.lock()
+
         # Runs either manual by keyboard input, or in automatic or remote mode.
         if mode == 'Manual mode':
             # Read keyboard values
