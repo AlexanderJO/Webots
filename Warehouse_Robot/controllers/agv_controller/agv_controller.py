@@ -600,6 +600,39 @@ def main():
             # print("Connector presence")
             con_suction_cup.lock()
 
+        # Get GPS position
+        gps_axle_info = get_gps_pos(name=gps_axle)
+        #print("Axle GPS:", "X: ", round(gps_axle_info['gps_pos'][0], 6), "Y: ", round(gps_axle_info['gps_pos'][1], 6), "Z: ", round(gps_axle_info['gps_pos'][2], 6))
+        
+        gps_agv_info = get_gps_pos(name=gps_agv)
+        #print("AGV GPS:", "X: ", round(gps_agv_info['gps_pos'][0], 6), "Y: ", round(gps_agv_info['gps_pos'][1], 6), "Z: ", round(gps_agv_info['gps_pos'][2], 6))
+        
+        # Get heading of AGV
+        agv_heading = get_heading(coordinates_inner=gps_axle_info, coordinates_outer=gps_agv_info)
+        print("Heading of AGV: ", agv_heading, "°")
+
+        # Get snake box angle
+        angle_axis_1 = get_angular_position(name=ps_axis_1)
+        print("Snake box angle: ", angle_axis_1)
+
+        snake_length = axis_3_pos_pt[0]
+        print("Snake length: ", snake_length)
+
+        # angle_snake =
+        snake_coordinates = circle_coordinates(length=snake_length, angle=angle_axis_1)
+        print("Snake coordinates: ", snake_coordinates)
+
+
+
+
+
+
+
+
+
+
+
+
         # Runs either manual by keyboard input, or in automatic or remote mode.
         if mode == 'Manual mode':
             # Read keyboard values
