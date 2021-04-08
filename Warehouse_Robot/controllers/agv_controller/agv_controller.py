@@ -88,6 +88,10 @@ gps_agv.enable(TIME_STEP)
 # Get Axis 1 motor
 motor_axis_1 = robot.getDevice('motor_axis_1')
 
+# Get position sensor for axis 2
+ps_axis_1 = robot.getDevice('ps_axis_1')
+ps_axis_1.enable(TIME_STEP)
+
 # Sets the initial position of the motor.
 motor_axis_1.setPosition(float('inf'))
 
