@@ -1,0 +1,1096 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.1245202556871535 0.9869233369472828 0.10235737839768164 4.677380669225508
+  position -3.019887553658182 1.1142603933689847 -0.2031966921998566
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  name "shop_floor"
+  floorSize 10 10
+  floorTileSize 1 1
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallThickness 0.05
+  wallHeight 1
+}
+DEF robot_1 Robot {
+  translation 0 0 1
+  rotation 0 1 0 1.5707996938995747
+  children [
+    DEF agv_wheels Group {
+      children [
+        DEF right_fwd_wheel Transform {
+          translation 1.559 0.1 -0.59
+          children [
+            DEF right_fwd_wheel HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 0 1
+                suspensionAxis 0 0 1
+              }
+              device [
+                PositionSensor {
+                  name "ps_rightFWD_AGV"
+                }
+                RotationalMotor {
+                  name "motor_rightFWD_AGV"
+                }
+              ]
+              endPoint Solid {
+                rotation 0 0 1 0
+                children [
+                  DEF wheel_agv_shape Transform {
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      DEF agv_wheel Shape {
+                        appearance PBRAppearance {
+                          baseColor 1 1 0.3
+                          roughness 1
+                          metalness 0
+                        }
+                        geometry Cylinder {
+                          height 0.05
+                          radius 0.1
+                        }
+                      }
+                    ]
+                  }
+                ]
+                name "solid(12)"
+                boundingObject USE wheel_agv_shape
+                physics DEF wheel_agv_phys Physics {
+                }
+              }
+            }
+          ]
+        }
+        DEF right_aft2_wheel Transform {
+          translation -0.65 0.3 -0.59
+          children [
+            DEF right_aft2_wheel HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 0 1
+                suspensionAxis 0 0 1
+              }
+              device [
+                PositionSensor {
+                  name "ps_rightAFT2_AGV"
+                }
+                RotationalMotor {
+                  name "motor_rightAFT2_AGV"
+                }
+              ]
+              endPoint Solid {
+                translation 3.308066273788805e-10 3.4943827989068334e-05 2.615386796023245e-10
+                rotation 0 0 1 0
+                children [
+                  USE wheel_agv_shape
+                ]
+                name "solid(10)"
+                boundingObject USE wheel_agv_shape
+              }
+            }
+          ]
+        }
+        DEF left_aft2_wheel Transform {
+          translation -0.65 0.3 0.59
+          children [
+            DEF left_aft2_wheel HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 0 1
+                suspensionAxis 0 0 1
+              }
+              device [
+                PositionSensor {
+                  name "ps_leftAFT2_AGV"
+                }
+                RotationalMotor {
+                  name "motor_leftAFT2_AGV"
+                }
+              ]
+              endPoint Solid {
+                translation 1.9686432950567543e-10 3.4968101702643683e-05 -2.0883195173126983e-10
+                rotation 0 0 1 0
+                children [
+                  USE wheel_agv_shape
+                ]
+                name "solid(3)"
+                boundingObject USE wheel_agv_shape
+              }
+            }
+          ]
+        }
+        DEF left_fwd_wheel Transform {
+          translation 1.559 0.1 0.59
+          children [
+            DEF left_fwd_wheel HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 0 1
+                suspensionAxis 0 0 1
+              }
+              device [
+                PositionSensor {
+                  name "ps_leftFWD_AGV"
+                }
+                RotationalMotor {
+                  name "motor_leftFWD_AGV"
+                }
+              ]
+              endPoint Solid {
+                translation 1.1971405315641693e-09 2.4256993936716432e-05 -2.7601876340099807e-10
+                rotation 0 0 1 0
+                children [
+                  USE wheel_agv_shape
+                ]
+                name "solid(9)"
+                boundingObject USE wheel_agv_shape
+                physics USE wheel_agv_phys
+              }
+            }
+          ]
+        }
+        DEF left_aft_wheel Transform {
+          translation 1 0.1 0.59
+          children [
+            DEF left_aft_wheel HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 0 1
+                suspensionAxis 0 0 1
+              }
+              device [
+                PositionSensor {
+                  name "ps_leftAFT_AGV"
+                }
+                RotationalMotor {
+                  name "motor_leftAFT_AGV"
+                }
+              ]
+              endPoint Solid {
+                translation 1.9686432950567543e-10 3.4968101702643683e-05 -2.0883195173126983e-10
+                rotation 0 0 1 0
+                children [
+                  USE wheel_agv_shape
+                ]
+                name "solid(1)"
+                boundingObject USE wheel_agv_shape
+                physics USE wheel_agv_phys
+              }
+            }
+          ]
+        }
+        DEF right_aft_wheel Transform {
+          translation 1 0.1 -0.59
+          children [
+            DEF right_aft_wheel HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 0 1
+                suspensionAxis 0 0 1
+              }
+              device [
+                PositionSensor {
+                  name "ps_rightAFT_AGV"
+                }
+                RotationalMotor {
+                  name "motor_rightAFT_AGV"
+                }
+              ]
+              endPoint Solid {
+                translation 3.308066273788805e-10 3.4943827989068334e-05 2.615386796023245e-10
+                rotation 0 0 1 0
+                children [
+                  USE wheel_agv_shape
+                ]
+                name "solid(2)"
+                boundingObject USE wheel_agv_shape
+                physics USE wheel_agv_phys
+              }
+            }
+          ]
+        }
+      ]
+    }
+    DEF body_agv Solid {
+      children [
+        DEF gps_agv Solid {
+          translation 0 0.435 0
+          children [
+            DEF gps_agv GPS {
+              name "gps_agv"
+            }
+          ]
+        }
+        DEF agv_body Group {
+          children [
+            DEF body_agv_platform Transform {
+              translation 1.24 0.135 0
+              children [
+                DEF body_agv_platform Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.8 0.3 0.8
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 0.938 0.23 1.13
+                  }
+                }
+              ]
+            }
+            DEF body_agv_battery Transform {
+              translation 0 0.435 0
+              children [
+                DEF body_agv_battery Shape {
+                  appearance DEF agv_app PBRAppearance {
+                    baseColor 0.8 0.3 0.8
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 1.542 0.83 1.13
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      name "solid(8)"
+    }
+    DEF tower Group {
+      children [
+        DEF end_stop_top Transform {
+          translation 1.459 3.5 0
+          children [
+            Solid {
+              children [
+                DEF end_stop_top_shape Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.5 1 0.5
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 0.1 0.1 0.1
+                  }
+                }
+              ]
+              name "solid(5)"
+              boundingObject USE end_stop_top_shape
+              physics Physics {
+              }
+            }
+          ]
+        }
+        DEF end_stop_bottom Transform {
+          translation 1.459 0.3 0
+          children [
+            Solid {
+              children [
+                DEF end_stop_bottom_shape Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.5 1 0.5
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 0.1 0.1 0.1
+                  }
+                }
+              ]
+              name "solid(6)"
+              boundingObject USE end_stop_bottom_shape
+              physics Physics {
+              }
+            }
+          ]
+        }
+        DEF aixs_2 SliderJoint {
+          jointParameters JointParameters {
+            axis 0 1 0
+          }
+          device [
+            PositionSensor {
+              name "ps_axis_2"
+            }
+            LinearMotor {
+              name "motor_axis_2"
+              minPosition -0.2
+              maxPosition 2.646
+            }
+          ]
+          endPoint Solid {
+            translation 2.05 0.1 0
+            children [
+              DEF Hasselhoff Transform {
+                translation 1.186 0.55 0.469
+                rotation -0.5773503689241595 0.5773503689241595 0.5773500697205066 2.094395106381219
+                children [
+                  DEF axis_1 HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis 0 0 1
+                      anchor 0.469 2.095 -0.0304
+                    }
+                    device [
+                      PositionSensor {
+                        name "ps_axis_1"
+                      }
+                      RotationalMotor {
+                        name "motor_axis_1"
+                        minPosition -1.9635
+                        maxPosition 1.9635
+                      }
+                    ]
+                    endPoint Solid {
+                      rotation 0 0 1 0
+                      children [
+                        DEF snake_box Transform {
+                          translation 0.469 2.095 -0.0304
+                          rotation 0 0 1 3.14159
+                          children [
+                            DEF snake Group {
+                              children [
+                                DEF snake_pt1 SliderJoint {
+                                  jointParameters DEF snake_parameter JointParameters {
+                                    axis 0 1 0
+                                  }
+                                  device [
+                                    PositionSensor {
+                                      name "ps_axis_3_pt1"
+                                    }
+                                    LinearMotor {
+                                      name "motor_axis_3_pt1"
+                                      minPosition -5
+                                    }
+                                  ]
+                                  endPoint Solid {
+                                    translation -0.058 0.15 -0.03
+                                    rotation 0 0 1 0
+                                    children [
+                                      DEF snake_section_init Group {
+                                        children [
+                                          DEF left_block Transform {
+                                            children [
+                                              DEF left_block Shape {
+                                                appearance DEF snake_app PBRAppearance {
+                                                  baseColor 1 0.3 0
+                                                  roughness 1
+                                                  metalness 0
+                                                }
+                                                geometry Box {
+                                                  size 0.016 0.3 0.032
+                                                }
+                                              }
+                                            ]
+                                          }
+                                          DEF left_block1 Transform {
+                                            translation 0.0135 -0.092 0
+                                            children [
+                                              DEF left_block1 Shape {
+                                                appearance DEF snake_app PBRAppearance {
+                                                  baseColor 1 0.3 0
+                                                  roughness 1
+                                                  metalness 0
+                                                }
+                                                geometry Box {
+                                                  size 0.011 0.116 0.032
+                                                }
+                                              }
+                                            ]
+                                          }
+                                          DEF middle_block Transform {
+                                            translation 0.058 0.145 -0.029
+                                            children [
+                                              DEF middle_block Shape {
+                                                appearance USE snake_app
+                                                geometry Box {
+                                                  size 0.1 0.01 0.09
+                                                }
+                                              }
+                                            ]
+                                          }
+                                          DEF middle_block1 Transform {
+                                            translation 0.058 0.053 0
+                                            children [
+                                              DEF middle_block1 Shape {
+                                                appearance USE snake_app
+                                                geometry Box {
+                                                  size 0.1 0.174 0.032
+                                                }
+                                              }
+                                            ]
+                                          }
+                                          DEF right_block Transform {
+                                            translation 0.116 0 0
+                                            children [
+                                              DEF right_block Shape {
+                                                appearance USE snake_app
+                                                geometry Box {
+                                                  size 0.016 0.3 0.032
+                                                }
+                                              }
+                                            ]
+                                          }
+                                          DEF right_block1 Transform {
+                                            translation 0.1025 -0.092 0
+                                            children [
+                                              DEF right_block1 Shape {
+                                                appearance USE snake_app
+                                                geometry Box {
+                                                  size 0.011 0.116 0.032
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                      DEF motor_axis_4 HingeJoint {
+                                        jointParameters HingeJointParameters {
+                                        }
+                                        device [
+                                          DEF motor_axis_4 RotationalMotor {
+                                            name "motor_axis_4"
+                                          }
+                                          DEF ps_axis_4 PositionSensor {
+                                            name "ps_axis_4"
+                                          }
+                                        ]
+                                        endPoint Solid {
+                                          children [
+                                            DEF suction_box Transform {
+                                              translation 0.058 -0.061 -0.0869
+                                              children [
+                                                DEF suction_box_shape Shape {
+                                                  appearance PBRAppearance {
+                                                    baseColor 1 0.3 0.1
+                                                    roughness 1
+                                                    metalness 0
+                                                  }
+                                                  geometry Box {
+                                                    size 0.2 0.16 0.015
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                            DEF suction_cup Transform {
+                                              translation 0.058 -0.061 -0.1068
+                                              rotation 1 0 0 1.5707996938995747
+                                              children [
+                                                DEF suction_cup_shape Shape {
+                                                  appearance PBRAppearance {
+                                                    baseColor 0 0 0.5
+                                                    roughness 1
+                                                    metalness 0
+                                                  }
+                                                  geometry Cylinder {
+                                                    height 0.0248
+                                                    radius 0.0225
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                            DEF con_suction_cup Connector {
+                                              translation 0.058 -0.061 -0.1192
+                                              rotation 1 0 0 -3.141592653589793
+                                              name "con_suction_cup"
+                                              model "magnetic"
+                                              autoLock TRUE
+                                              distanceTolerance 0.1
+                                              axisTolerance 3.14
+                                              rotationTolerance 3.14
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                    boundingObject USE snake_section_init
+                                    recognitionColors [
+                                      0 0 0
+                                    ]
+                                  }
+                                }
+                                DEF snake_pt2 SliderJoint {
+                                  jointParameters JointParameters {
+                                    axis 0 1 0
+                                  }
+                                  device [
+                                    PositionSensor {
+                                      name "ps_axis_3_pt2"
+                                    }
+                                    LinearMotor {
+                                      name "motor_axis_3_pt2"
+                                      minPosition -5
+                                    }
+                                  ]
+                                  endPoint DEF snake_section Solid {
+                                    translation -0.058 0.15 -0.03
+                                    children [
+                                      DEF snake_section Group {
+                                        children [
+                                          DEF left_block Transform {
+                                            children [
+                                              DEF left_block Shape {
+                                                appearance DEF snake_app PBRAppearance {
+                                                  baseColor 1 0.3 0
+                                                  roughness 1
+                                                  metalness 0
+                                                }
+                                                geometry Box {
+                                                  size 0.016 0.3 0.032
+                                                }
+                                              }
+                                            ]
+                                          }
+                                          DEF middle_block Transform {
+                                            translation 0.058 0 -0.029
+                                            children [
+                                              DEF middle_block Shape {
+                                                appearance USE snake_app
+                                                geometry Box {
+                                                  size 0.1 0.3 0.09
+                                                }
+                                              }
+                                            ]
+                                          }
+                                          DEF right_block Transform {
+                                            translation 0.116 0 0
+                                            children [
+                                              DEF right_block Shape {
+                                                appearance USE snake_app
+                                                geometry Box {
+                                                  size 0.016 0.3 0.032
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                    name "solid(1)"
+                                    boundingObject USE snake_section
+                                  }
+                                }
+                                DEF snake_pt3 SliderJoint {
+                                  jointParameters JointParameters {
+                                    axis 0 1 0
+                                  }
+                                  device [
+                                    PositionSensor {
+                                      name "ps_axis_3_pt3"
+                                    }
+                                    LinearMotor {
+                                      name "motor_axis_3_pt3"
+                                      minPosition -5
+                                    }
+                                  ]
+                                  endPoint Solid {
+                                    translation -0.058 0.15 -0.03
+                                    children [
+                                      USE snake_section
+                                    ]
+                                    name "solid(6)"
+                                    boundingObject USE snake_section
+                                  }
+                                }
+                                DEF snake_pt4 SliderJoint {
+                                  jointParameters JointParameters {
+                                    axis 0 1 0
+                                  }
+                                  device [
+                                    PositionSensor {
+                                      name "ps_axis_3_pt4"
+                                    }
+                                    LinearMotor {
+                                      name "motor_axis_3_pt4"
+                                      minPosition -5
+                                    }
+                                  ]
+                                  endPoint Solid {
+                                    translation -0.058 0.15 -0.03
+                                    children [
+                                      USE snake_section
+                                    ]
+                                    name "solid(5)"
+                                    boundingObject USE snake_section
+                                  }
+                                }
+                                DEF snake_pt5 SliderJoint {
+                                  jointParameters JointParameters {
+                                    axis 0 1 0
+                                  }
+                                  device [
+                                    PositionSensor {
+                                      name "ps_axis_3_pt5"
+                                    }
+                                    LinearMotor {
+                                      name "motor_axis_3_pt5"
+                                      minPosition -5
+                                    }
+                                  ]
+                                  endPoint Solid {
+                                    translation -0.058 0.15 -0.03
+                                    children [
+                                      USE snake_section
+                                    ]
+                                    name "solid(4)"
+                                    boundingObject USE snake_section
+                                  }
+                                }
+                                DEF snake_pt6 SliderJoint {
+                                  jointParameters JointParameters {
+                                    axis 0 1 0
+                                  }
+                                  device [
+                                    PositionSensor {
+                                      name "ps_axis_3_pt6"
+                                    }
+                                    LinearMotor {
+                                      name "motor_axis_3_pt6"
+                                      minPosition -5
+                                    }
+                                  ]
+                                  endPoint Solid {
+                                    translation -0.058 0.15 -0.03
+                                    children [
+                                      USE snake_section
+                                    ]
+                                    name "solid(3)"
+                                    boundingObject USE snake_section
+                                  }
+                                }
+                                DEF snake_pt7 SliderJoint {
+                                  jointParameters JointParameters {
+                                    axis 0 1 0
+                                  }
+                                  device [
+                                    PositionSensor {
+                                      name "ps_axis_3_pt7"
+                                    }
+                                    LinearMotor {
+                                      name "motor_axis_3_pt7"
+                                      minPosition -5
+                                    }
+                                  ]
+                                  endPoint Solid {
+                                    translation -0.058 0.15 -0.03
+                                    children [
+                                      USE snake_section
+                                    ]
+                                    name "solid(2)"
+                                  }
+                                }
+                              ]
+                            }
+                            DEF snake_box_shape Transform {
+                              scale 0.001 0.001 0.001
+                              children [
+                                Solid {
+                                  children [
+                                    DEF snake_box Shape {
+                                      appearance PBRAppearance {
+                                        baseColor 1 0.7 0.7
+                                        roughness 1
+                                        metalness 0
+                                      }
+                                      geometry Mesh {
+                                        url [
+                                          "meshes/Snakebox.stl"
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                  name "solid_snake_box"
+                                  boundingObject USE snake_box
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                  Solid {
+                    children [
+                      DEF hasselhoff_shape Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.7 0.5 0.3
+                          roughness 1
+                          metalness 0
+                        }
+                        geometry Mesh {
+                          url [
+                            "meshes/Hasselhoff_plate.stl"
+                          ]
+                        }
+                      }
+                      DEF axle Solid {
+                        translation 0.469 2.095 0.0345
+                        rotation 1 0 0 1.5707996938995747
+                        children [
+                          DEF gps_axle_center GPS {
+                            name "gps_axle_center"
+                          }
+                          DEF axle_shape Shape {
+                            appearance PBRAppearance {
+                              baseColor 0.3 0.4 0.5
+                            }
+                            geometry Cylinder {
+                              height 0.14
+                              radius 0.01
+                            }
+                          }
+                        ]
+                        name "solid(15)"
+                      }
+                    ]
+                    name "solid(1)"
+                  }
+                ]
+              }
+            ]
+            name "solid(4)"
+          }
+        }
+        DEF tower_AGV Transform {
+          translation 1.559 1.9 0
+          children [
+            Solid {
+              children [
+                DEF tower_shape Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.8 0.3 0.8
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 0.1 3.3 0.2
+                  }
+                }
+              ]
+              name "solid(7)"
+              boundingObject USE tower_shape
+              physics Physics {
+                density -1
+                mass 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  boundingObject USE agv_body
+  physics Physics {
+    density -1
+    mass 1
+  }
+  controller "agv_controller"
+  supervisor TRUE
+}
+DEF reol Solid {
+  translation -0.047 3 0.6
+  rotation 1 0 0 1.5707996938995747
+  scale 0.001 0.001 0.001
+  children [
+    DEF reol_shape Shape {
+      appearance PBRAppearance {
+        baseColor 0.5 0.5 0.6
+      }
+      geometry DEF reol_mesh Mesh {
+        url [
+          "meshes/robot_env_reol.stl"
+        ]
+      }
+    }
+  ]
+  boundingObject USE reol_shape
+  locked TRUE
+}
+DEF pallets Group {
+  children [
+    DEF pallet_floor_1 Transform {
+      children [
+        Solid {
+          children [
+            DEF pallet Group {
+              children [
+                DEF pallet_floor_trans Transform {
+                  translation -0.046 0 -0.798
+                  rotation -1 0 0 1.5707996938995747
+                  scale 0.001 0.001 0.001
+                  children [
+                    DEF pallet_shape Shape {
+                      appearance PBRAppearance {
+                        baseColor 0.6 0.3 0.1
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry Mesh {
+                        url [
+                          "meshes/robot_env_pallet.stl"
+                        ]
+                      }
+                    }
+                  ]
+                }
+                DEF pallet_plate_trans Transform {
+                  translation -1.371 0.149 0.8
+                  children [
+                    DEF pallet_plate Shape {
+                      appearance PBRAppearance {
+                        baseColor 0.4 0.4 0.4
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry Box {
+                        size 1.2 0.01 0.8
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+          name "solid(2)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_floor_2 Transform {
+      translation 0 0 -0.85
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(14)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_floor_3 Transform {
+      translation 0 0 -1.7
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(13)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_floor_4 Transform {
+      translation 4.357 0 -0.116
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(12)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_floor_5 Transform {
+      translation 4.357 0 -0.966
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(11)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_floor_6 Transform {
+      translation 4.357 0 -1.816
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(10)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_level1_1 Transform {
+      translation 0 1.53 0
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(9)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_level1_2 Transform {
+      translation 0 1.53 -0.85
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(6)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_level1_3 Transform {
+      translation 0 1.53 -1.7
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(5)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_level1_4 Transform {
+      translation 4.357 1.53 -0.116
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(4)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_level1_5 Transform {
+      translation 4.357 1.53 -0.966
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(3)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+    DEF pallet_level1_6 Transform {
+      translation 4.357 1.53 -1.816
+      children [
+        Solid {
+          children [
+            USE pallet
+          ]
+          name "solid(1)"
+          boundingObject USE pallet
+        }
+      ]
+    }
+  ]
+}
+DEF small_boxes_level1 Group {
+  children [
+    DEF small_box Solid {
+      translation -0.921 0.255 1.1
+      children [
+        DEF connector_small_box Connector {
+          translation 0 0.09 0
+          rotation 1 0 0 -1.5707996938995747
+          name "con_box_1"
+          model "magnetic"
+          autoLock TRUE
+        }
+        DEF small_box_shape Shape {
+          appearance PBRAppearance {
+            baseColor 0.7 0.7 0.3
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.3 0.18 0.2
+          }
+        }
+      ]
+      name "solid(8)"
+      boundingObject USE small_box_shape
+      physics DEF small_box_physics Physics {
+        density -1
+        mass 0.1
+      }
+    }
+    DEF small_box Solid {
+      translation -0.921 0.255 0.9
+      children [
+        DEF connector_small_box Connector {
+          translation 0 0.09 0
+          rotation 1 0 0 -1.5707996938995747
+          name "con_box_2"
+          model "magnetic"
+          autoLock TRUE
+          axisTolerance 1
+          rotationTolerance 1
+        }
+        DEF small_box_shape Shape {
+          appearance PBRAppearance {
+            baseColor 0.7 0.7 0.3
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.3 0.18 0.2
+          }
+        }
+      ]
+      name "solid(7)"
+      boundingObject USE small_box_shape
+      physics USE small_box_physics
+    }
+  ]
+}
+DEF zero_point Solid {
+  translation 0 0.6845 -0.418
+  name "solid(15)"
+}
+DEF small_box_1_robot Robot {
+  translation -0.921 0.255 0.25
+  children [
+    DEF small_box Solid {
+      children [
+        DEF connector_small_box Connector {
+          translation 0 0.09 0
+          rotation 1 0 0 -1.5707996938995747
+          name "con_box"
+          model "magnetic"
+          autoLock TRUE
+          distanceTolerance 0.1
+          axisTolerance 3.14
+          rotationTolerance 3.14
+        }
+        DEF small_box_shape Shape {
+          appearance PBRAppearance {
+            baseColor 0.7 0.7 0.3
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.3 0.18 0.2
+          }
+        }
+      ]
+      name "solid(7)"
+      boundingObject USE small_box_shape
+      physics USE small_box_physics
+    }
+  ]
+  name "small_box_robot_1"
+  boundingObject USE small_box_shape
+  physics USE small_box_physics
+  controller "box_controller"
+}
