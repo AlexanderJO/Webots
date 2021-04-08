@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.9717533421607576 -0.20711279407504793 0.11313590292132872 0.6466806085990036
-  position -0.20288028892288443 3.5745587543628647 3.9157712940300513
+  orientation -0.35250469144465396 0.8982523664738996 0.2624559556069331 0.7642350465121296
+  position 4.321811617310084 5.027893653559461 6.248749680605355
 }
 TexturedBackground {
 }
@@ -663,4 +663,43 @@ DEF robot_1 Robot {
     mass 1
   }
   controller "agv_controller"
+}
+DEF reol Solid {
+  translation 0 3 0
+  rotation 1 0 0 1.5707996938995747
+  scale 0.001 0.001 0.001
+  children [
+    DEF reol_shape Shape {
+      appearance PBRAppearance {
+        baseColor 0.5 0.5 0.6
+      }
+      geometry DEF reol_mesh Mesh {
+        url [
+          "meshes/robot_env_reol.stl"
+        ]
+      }
+    }
+  ]
+  boundingObject USE reol_shape
+}
+Solid {
+  translation 0 4.2 0
+  rotation 1 0 0 -1.5707996938995747
+  scale 0.001 0.001 0.001
+  children [
+    DEF pallet_shape Shape {
+      appearance PBRAppearance {
+        baseColor 0.6 0.3 0.1
+        roughness 1
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "meshes/robot_env_pallet.stl"
+        ]
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE pallet_shape
 }
