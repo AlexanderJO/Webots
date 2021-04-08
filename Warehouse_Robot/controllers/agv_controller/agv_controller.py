@@ -35,8 +35,11 @@ ds_names = ['ds_fwd', 'ds_aft', 'ds_left', 'ds_right']
 # led_top = robot.getDevice('led_top')
 # --> led.set(1) # Turns the led on
 
-# COmmunication
+# Communication
 
+# ----------------- BOX CONNECTORS ---------------
+con_suction_cup = robot.getDevice('con_suction_cup')
+con_suction_cup.enablePresence(TIME_STEP)
 
 # ----------------- AGV ---------------
 # Create instances of the AGV wheel motors.
