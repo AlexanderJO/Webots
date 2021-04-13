@@ -669,8 +669,11 @@ def main():
         snake_coordinates = circle_coordinates(length=snake_length, angle=angle_axis_1)
         print("Snake coordinates: ", snake_coordinates)
 
-
-
+        # print("==========               ============")
+        # for packet in range(len(pallet1.get_packets())):
+        #     packet_current = pallet1.get_packets()[packet]
+        #     print("This should be 300: ", packet_current.width)
+        # print("======================")
 
 
 
