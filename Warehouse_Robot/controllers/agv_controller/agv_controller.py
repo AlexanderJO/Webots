@@ -4,6 +4,8 @@
 #  from controller import Robot, Motor, DistanceSensor
 from controller import Robot, DistanceSensor, Motor, Keyboard, GPS, Connector
 import sys, math
+from dataclasses import dataclass, field
+from typing import List
 from ethercatCommunication import Communication
 
 #robotCtrlTest = RobotControllerTest()
@@ -36,6 +38,11 @@ ds_names = ['ds_fwd', 'ds_aft', 'ds_left', 'ds_right']
 # --> led.set(1) # Turns the led on
 
 # Communication
+
+# Driving class
+class Drive():
+    def __init__(self):
+        pass
 
 # ----------------- BOX CONNECTORS ---------------
 con_suction_cup = robot.getDevice('con_suction_cup')
@@ -572,6 +579,38 @@ def circle_coordinates(length, angle):
 
     return coordinates
 
+# Dataclass for Packet with immutable input.
+@dataclass(frozen=True, order=True)
+class Packet:
+    length: int = field()
+    width: int = field()
+    height: int = field()
+    size: str = field(default="NO SIZE SELECTED!")
+
+class Pallet:
+    length = int(0)
+    width = int(0)
+    height = int(0)
+    packets = []
+
+    def __init__(self, length, height, width):
+        self.length = length
+        self.width = height
+        self.height = width
+
+    # Private function for setting length. Only used for testing. Not callable from outside class.
+    def __set_length(self, length):
+        self.length = length
+
+    def add_packet(self, packet):
+        self.packets.append(packet)
+
+    def remove_packet(self, packet):
+        pass
+
+    def get_packets(self):
+        return self.packets
+
 def main():
     # Variables
     # agv_heading = 0
@@ -589,6 +628,14 @@ def main():
     # Robot mode selection
     mode_selection = 1
     mode = robot_mode(mode_selection)
+
+    # Populate with packets
+    packet1 = Packet(300, 200, 180, "small")
+    packet2 = Packet(300, 200, 180, "large")
+
+    pallet1 = Pallet(1200, 800, 145)
+    pallet1.add_packet(packet1)
+    pallet1.add_packet(packet2)
 
     # Main loop:
     # - perform simulation steps until Webots is stopping the controller
@@ -622,8 +669,11 @@ def main():
         snake_coordinates = circle_coordinates(length=snake_length, angle=angle_axis_1)
         print("Snake coordinates: ", snake_coordinates)
 
-
-
+        # print("==========               ============")
+        # for packet in range(len(pallet1.get_packets())):
+        #     packet_current = pallet1.get_packets()[packet]
+        #     print("This should be 300: ", packet_current.width)
+        # print("======================")
 
 
 

@@ -20,7 +20,7 @@ RectangleArena {
   wallThickness 0.05
   wallHeight 1
 }
-DEF robot_1 Robot {
+DEF AGV_ROBOT1 Robot {
   translation 0 0 1
   rotation 0 1 0 1.5707996938995747
   children [
@@ -792,7 +792,7 @@ DEF robot_1 Robot {
   controller "agv_controller"
   supervisor TRUE
 }
-DEF reol Solid {
+DEF REOL Solid {
   translation -0.047 3 0.6
   rotation 1 0 0 1.5707996938995747
   scale 0.001 0.001 0.001
@@ -811,7 +811,7 @@ DEF reol Solid {
   boundingObject USE reol_shape
   locked TRUE
 }
-DEF pallets Group {
+DEF PALLETS Group {
   children [
     DEF pallet_floor_1 Transform {
       children [
@@ -995,7 +995,7 @@ DEF pallets Group {
     }
   ]
 }
-DEF small_boxes_level1 Group {
+DEF SMALL_BOXES_LEVEL1 Group {
   children [
     DEF small_box Solid {
       translation -0.921 0.255 1.1
@@ -1054,11 +1054,11 @@ DEF small_boxes_level1 Group {
     }
   ]
 }
-DEF zero_point Solid {
+DEF ZERO_POINT_REFERENCE Solid {
   translation 0 0.6845 -0.418
   name "solid(15)"
 }
-DEF small_box_1_robot Robot {
+DEF SMALL_BOX_ROBOT1 Robot {
   translation -0.921 0.255 0.25
   children [
     DEF small_box Solid {
@@ -1093,4 +1093,10 @@ DEF small_box_1_robot Robot {
   boundingObject USE small_box_shape
   physics USE small_box_physics
   controller "box_controller"
+  supervisor TRUE
+}
+DEF DRIVER Robot {
+  name "Driver"
+  controller "supervisor"
+  supervisor TRUE
 }
