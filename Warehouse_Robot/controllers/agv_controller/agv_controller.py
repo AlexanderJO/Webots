@@ -5,6 +5,7 @@
 from controller import Robot, DistanceSensor, Motor, Keyboard, GPS, Connector
 import sys, math
 from dataclasses import dataclass, field
+from typing import List
 from ethercatCommunication import Communication
 
 #robotCtrlTest = RobotControllerTest()
