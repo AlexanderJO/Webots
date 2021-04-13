@@ -579,6 +579,38 @@ def circle_coordinates(length, angle):
 
     return coordinates
 
+# Dataclass for Packet with immutable input.
+@dataclass(frozen=True, order=True)
+class Packet:
+    length: int = field()
+    width: int = field()
+    height: int = field()
+    size: str = field(default="NO SIZE SELECTED!")
+
+class Pallet:
+    length = int(0)
+    width = int(0)
+    height = int(0)
+    packets = []
+
+    def __init__(self, length, height, width):
+        self.length = length
+        self.width = height
+        self.height = width
+
+    # Private function for setting length. Only used for testing. Not callable from outside class.
+    def __set_length(self, length):
+        self.length = length
+
+    def add_packet(self, packet):
+        self.packets.append(packet)
+
+    def remove_packet(self, packet):
+        pass
+
+    def get_packets(self):
+        return self.packets
+
 def main():
     # Variables
     # agv_heading = 0
