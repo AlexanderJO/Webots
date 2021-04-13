@@ -39,6 +39,11 @@ ds_names = ['ds_fwd', 'ds_aft', 'ds_left', 'ds_right']
 
 # Communication
 
+# Driving class
+class Drive():
+    def __init__(self):
+        pass
+
 # ----------------- BOX CONNECTORS ---------------
 con_suction_cup = robot.getDevice('con_suction_cup')
 con_suction_cup.enablePresence(TIME_STEP)
