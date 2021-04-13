@@ -629,6 +629,14 @@ def main():
     mode_selection = 1
     mode = robot_mode(mode_selection)
 
+    # Populate with packets
+    packet1 = Packet(300, 200, 180, "small")
+    packet2 = Packet(300, 200, 180, "large")
+
+    pallet1 = Pallet(1200, 800, 145)
+    pallet1.add_packet(packet1)
+    pallet1.add_packet(packet2)
+
     # Main loop:
     # - perform simulation steps until Webots is stopping the controller
     while robot.step(TIME_STEP) != -1:
