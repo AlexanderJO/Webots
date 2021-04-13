@@ -1,32 +1,54 @@
 """supervisor controller."""
+from controller import Supervisor, Keyboard
+import traceback
 
-# You may need to import some classes of the controller module. Ex:
-#  from controller import Robot, Motor, DistanceSensor
-from controller import Robot
+# Error codes
+INVALID_NUM_MSG = "The parameter must be integer!"
 
-# create the Robot instance.
-robot = Robot()
+class Driver(Supervisor):
+    TIME_STEP = 20
+    x = int(0.0)
+    y = int(0.0)
+    z = int(0.0)
+    translation = [x, y, z]
 
-# get the time step of the current world.
-timestep = int(robot.getBasicTimeStep())
 
-# You should insert a getDevice-like function in order to get the
-# instance of a device of the robot. Something like:
-#  motor = robot.getMotor('motorname')
-#  ds = robot.getDistanceSensor('dsname')
-#  ds.enable(timestep)
+    def __init__(self):
+        # Initialize the driver.
+        super(Driver, self).__init__()
 
-# Main loop:
-# - perform simulation steps until Webots is stopping the controller
-while robot.step(timestep) != -1:
-    # Read the sensors:
-    # Enter here functions to read sensor data, like:
-    #  val = ds.getValue()
+        # ========== AGV ROBOTS ==========
+        # Instantiate the AGV robots.
+        agv_robot_1 = self.getFromDef('AGV_ROBOT1')
+        self.agv_robot_1_translation_field = agv_robot_1.getField('translation')
 
-    # Process sensor data here.
+        # ========== PACKET ROBOTS ==========
+        # Instantiate the active packets/boxes.
 
-    # Enter here functions to send actuator commands, like:
-    #  motor.setPosition(10.0)
-    pass
+        
+    def run(self):
+    
+        # Main loop:
+        # while self.step(timestep) != -1:
+        while True:
+            print("Translation field: ", self.agv_robot_1_translation_field.getSFVec3f())
+            
+            
+            #
+            while self.step(self.TIME_STEP) == -1:
+                print("============== I'm breaking up! ==============")
+                break
 
-# Enter here exit cleanup code.
+    def error_testing_thingy(self, num):
+        assert isinstance(num, int), INVALID_NUM_MSG
+
+    def instantiate_packets(self):
+        try:
+            pass
+        except Exception as e:
+            e = traceback.format_exc()
+            print("Error: ", e)
+
+
+controller = Driver()
+controller.run()
