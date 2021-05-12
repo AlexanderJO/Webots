@@ -526,9 +526,18 @@ class AGV(Robot):
         else:
             self.drive_agv(left_fwd=1, left_aft=1, right_fwd=1, right_aft=1, speed=0)
 
-# ------ Snake box - 1 -----
-def increment_speed_snakebox(keystrokes):
-    # Variable
+    def get_agv_heading(self):
+        # Get GPS position
+        gps_axle_info = self.get_gps_pos(name=self.gps_axle)
+        # print("Axle GPS:", "X: ", round(gps_axle_info['gps_pos'][0], 6), "Y: ", round(gps_axle_info['gps_pos'][1], 6), "Z: ", round(gps_axle_info['gps_pos'][2], 6))
+
+        gps_agv_info = self.get_gps_pos(name=self.gps_agv)
+        # print("AGV GPS:", "X: ", round(gps_agv_info['gps_pos'][0], 6), "Y: ", round(gps_agv_info['gps_pos'][1], 6), "Z: ", round(gps_agv_info['gps_pos'][2], 6))
+
+        # Get heading of AGV
+        agv_heading = self.get_heading(coordinates_inner=gps_axle_info, coordinates_outer=gps_agv_info)
+
+        return agv_heading
     global speed_axis_1
 
     # Increment Snake box - Axis 1 speed
