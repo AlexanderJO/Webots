@@ -733,9 +733,37 @@ class AGV(Robot):
             speed_axis_2 = round(self.speed_axis_2 - self.SPEED_INCREMENT_AXIS_2, 3)
             print("Tower speed decreased to: ", self.speed_axis_2)
 
-def change_tower_height(keystrokes):
-    # Variables
-    global axis_2_pos
+    def get_tower_height_abl(self):
+        pass
+
+    def move_tower_to(self, height):
+        self.motor_axis_2.setVelocity(0.1)
+        axis_2_height = height
+        self.motor_axis_2.setPosition(axis_2_height)
+
+    def change_tower_height(self, keyword):
+        if (keyword == 'up'):
+            self.axis_2_pos = round(self.ps_axis_2.getValue() + self.speed_axis_2, 2)
+            print(self.axis_2_pos)
+        elif (keyword == 'down'):
+            self.axis_2_pos = round(self.ps_axis_2.getValue() - self.speed_axis_2, 2)
+            print(self.axis_2_pos)
+
+        if (self.axis_2_pos > self.motor_axis_2.getMaxPosition()):
+            self.axis_2_pos = round(self.motor_axis_2.getMaxPosition(), 2)
+            #print("Desired pos: ", self.axis_2_pos)
+            #print("Maximum position: ", motor_axis_2.getMaxPosition())
+            sys.stderr.write("Axis 2 has reached maximum height.\n")
+        elif (self.axis_2_pos < self.motor_axis_2.getMinPosition()):
+            self.axis_2_pos = round(self.motor_axis_2.getMinPosition(), 2)
+            #print("Min. pos: ", motor_axis_2.getMaxPosition())
+            sys.stderr.write("Axis 2 has reached minimum height.\n")
+        else:
+            self.motor_axis_2.setPosition(self.axis_2_pos)
+
+    def change_tower_height_keyboard(self, keystrokes):
+        # Variables
+        # global axis_2_pos
 
     if (UP_AXIS_2 in keystrokes):
         axis_2_pos = round(ps_axis_2.getValue() + speed_axis_2, 2)
