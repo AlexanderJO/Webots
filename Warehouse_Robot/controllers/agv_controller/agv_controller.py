@@ -378,20 +378,29 @@ class AGV(Robot):
         else:
             self.motor_axis_1.setVelocity(speed)
 
+    # Method for rotating snake tip - Axis 4
+    def drive_axis_4(self, left, right, speed):
+        if (left):
+            self.motor_axis_4.setVelocity(speed)
+        elif (right):
+            self.motor_axis_4.setVelocity(-speed)
+        else:
+            self.motor_axis_4.setVelocity(speed)
+
 # Method to assign keys after keystrokes. - REDACTED
 def key_assign(keystrokes):
     pass
 
-# Read the distance sensor.
-def read_distance_sensor():
-    # ------ DISTANCE SENSORS -----
-    # read sensor outputs
-    ds_values = []
-    for i in range(len(ds_names)):
-        pass
-        # print(ds_names[i])
-        # ds_values.append(ds[i].getValue())
-    return ds_values
+    # Read the distance sensor.
+    def read_distance_sensor(self):
+        # ------ DISTANCE SENSORS -----
+        # read sensor outputs
+        ds_values = []
+        for i in range(len(ds_names)):
+            pass
+            # print(ds_names[i])
+            # ds_values.append(ds[i].getValue())
+        return ds_values
 
 # Takes in a single keyboard input from user.
 def keyboard_input_int(prompt):
