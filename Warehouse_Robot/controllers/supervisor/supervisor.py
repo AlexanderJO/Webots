@@ -242,3 +242,7 @@ class Packet:
 
 controller = Driver()
 controller.run()
+if __name__ == "__main__":
+    Driver()
+# controller = Driver()
+# controller.run()
