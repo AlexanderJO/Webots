@@ -701,13 +701,13 @@ class AGV(Robot):
         # Variables
         # global speed_axis_1
 
-    # Rotate snake box - Axis 1
-    if (LEFT_AXIS_1 in keystrokes):
-        drive_axis_1(left=True, right=False, speed=speed_axis_1)
-    elif (RIGHT_AXIS_1 in keystrokes):
-        drive_axis_1(left=False, right=True, speed=speed_axis_1)
-    else:
-        drive_axis_1(left=False, right=False, speed=0)
+        # Rotate snake box - Axis 1
+        if (keyword == 'left'):
+            self.drive_axis_1(left=True, right=False, speed=self.speed_axis_1)
+        elif (keyword == 'right'):
+            self.drive_axis_1(left=False, right=True, speed=self.speed_axis_1)
+        else:
+            self.drive_axis_1(left=False, right=False, speed=0)
 
 # ------ Tower - Axis 2 -----
 def increment_speed_tower(keystrokes):
