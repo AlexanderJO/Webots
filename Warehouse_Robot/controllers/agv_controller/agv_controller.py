@@ -540,6 +540,49 @@ class AGV(Robot):
         return agv_heading
     global speed_axis_1
 
+    def turn_agv(self, desired_heading):
+        heading_reached = False
+        heading_error_margin = 0.5  # Heading margin in degrees.
+        current_heading = self.get_agv_heading()
+
+        if desired_heading >= 359 or desired_heading <= 1:
+            desired_heading = 0
+
+        print("Desired heading: ", desired_heading, " Current heading: ", current_heading)
+
+        if current_heading >= (desired_heading - heading_error_margin) and current_heading <= (desired_heading + heading_error_margin):
+            print("Desired heading reached.")
+            self.move_agv('idle')
+            heading_reached = True
+            self.state_agv = 1
+        else:
+            # if (current_heading - desired_heading) > 0 - heading_error_margin / 2:
+            if (current_heading - desired_heading) > 180 + heading_error_margin / 2:
+                if (current_heading - desired_heading) > 0 - heading_error_margin / 2:
+                    self.move_agv('left')
+                elif (current_heading - desired_heading) < 0 - heading_error_margin / 2:
+                    self.move_agv('right')
+                else:
+                    print("I've stopped turning.")
+            # elif (current_heading - desired_heading) < 0 - heading_error_margin / 2:
+            elif (current_heading - desired_heading) <= 180:
+                if (current_heading - desired_heading) > 0 - heading_error_margin / 2:
+                    self.move_agv('right')
+                elif (current_heading - desired_heading) < 0 - heading_error_margin / 2:
+                    self.move_agv('left')
+                else:
+                    print("I've stopped turning.")
+
+            # if (current_heading - desired_heading) > 0 - heading_error_margin / 2:
+            # # if (current_heading - desired_heading) > 180 + heading_error_margin / 2:
+            #     # print("Moving right: ", (current_heading - desired_heading))
+            #     self.move_agv('right')
+            # elif (current_heading - desired_heading) < 0 - heading_error_margin / 2:
+            # # elif (current_heading - desired_heading) <= 180 - heading_error_margin / 2:
+            #     # print("Moving left: ", (current_heading - desired_heading))
+            #     self.move_agv('left')
+            # else:
+            #     print("I've stopped turning.")
     # Increment Snake box - Axis 1 speed
     if (SPEED_INCREASE_SNAKEBOX in keystrokes):
         if (speed_axis_1 < max_velocity_axis_1):
