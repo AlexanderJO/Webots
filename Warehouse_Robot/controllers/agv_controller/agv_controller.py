@@ -326,6 +326,14 @@ class AGV(Robot):
             self.emitter.send(message.encode('utf-8'))
             # message_sent = True
         # return message_sent
+
+    def send_message_struct(self, message_list):
+        # messages = [i for i in range(0,7)]
+        # buffer = struct.pack('%sf' % len(message_list), *message_list)
+        # var = struct.pack('hhl', 'test')
+        s = struct.Struct('4s 4s 4s 4s 4s 4s 4s')
+        packed = s.pack(message_list.encode('utf-8'))
+        return packed
 # ------------------- METHODS --------------
     def create_pallet(self, num_pallets):
         self.pallet_list = [""] * num_pallets
