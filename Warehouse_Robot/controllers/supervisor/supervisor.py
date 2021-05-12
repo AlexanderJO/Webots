@@ -257,6 +257,38 @@ class Driver(Supervisor):
         # self.pallet_list[0].add_packet(packet=packet16)
         # self.pallet_list[0].add_packet(packet=packet17)
         # self.pallet_list[0].add_packet(packet=packet18)
+    def manual_control(self, keystrokes):
+
+        # ------ MOVE AGV -----
+        # Increment AGV speed
+        # self.increment_speed_agv(keystrokes=keystrokes)
+
+        # Move AGV
+        # self.emitter.send()
+        # self.AGV_ROBOT_1.move_agv()
+        # self.move_agv(keystrokes=keystrokes)
+
+        # ------ HASSELHOFF HUG / SNAKE BOX - AXIS 1 -----
+        # Increment Axis 1 speed
+        # self.increment_speed_snakebox(keystrokes=keystrokes)
+
+        # Rotate snake box - Axis 1
+        # self.rotate_snakebox(keystrokes=keystrokes)
+
+        # ------ TOWER - AXIS 2 -----
+        # Increment Tower speed
+        # self.increment_speed_tower(keystrokes=keystrokes)
+
+        # Move tower height
+        # self.change_tower_height(keystrokes=keystrokes)
+
+        # ------ SNAKE - AXIS 3 -----
+        # Increment Snake speed
+        # self.increment_speed_snake_manual(keystrokes=keystrokes)
+
+        # Move snake part 1
+        # self.move_snake_manual(keystrokes=keystrokes)
+        pass
     def run(self):
     
         # Main loop:
