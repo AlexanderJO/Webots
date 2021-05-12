@@ -402,12 +402,12 @@ def key_assign(keystrokes):
             # ds_values.append(ds[i].getValue())
         return ds_values
 
-# Takes in a single keyboard input from user.
-def keyboard_input_int(prompt):
-    try:
-        text = input(prompt)
-    except:
-        raise Exception('Input not an integer.')
+    # Takes in a single keyboard input from user.
+    def keyboard_input_int(self, prompt):
+        try:
+            text = input(prompt)
+        except:
+            raise Exception('Input not an integer.')
 
 # Continuously reads the keyboard for user inputs.
 # Reads up to 7 simultaneous/combined key presses.
