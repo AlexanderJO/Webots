@@ -721,18 +721,17 @@ class AGV(Robot):
         else:
             self.drive_axis_1(left=False, right=False, speed=0)
 
-# ------ Tower - Axis 2 -----
-def increment_speed_tower(keystrokes):
-    # Variables
-    global speed_axis_2
+    # ------ Tower - Axis 2 -----
+    def increment_speed_tower(self, keystrokes):
+        # Variables
 
-    # Increment Tower speed
-    if (SPEED_INCREASE_TOWER in keystrokes):
-        speed_axis_2 = round(speed_axis_2 + SPEED_INCREMENT_AXIS_2, 3)
-        print("Tower speed increased to: ", speed_axis_2)
-    elif (SPEED_DECREASE_TOWER in keystrokes):
-        speed_axis_2 = round(speed_axis_2 - SPEED_INCREMENT_AXIS_2, 3)
-        print("Tower speed decreased to: ", speed_axis_2)
+        # Increment Tower speed
+        if (self.SPEED_INCREASE_TOWER in keystrokes):
+            self.speed_axis_2 = round(self.speed_axis_2 + self.SPEED_INCREMENT_AXIS_2, 3)
+            print("Tower speed increased to: ", self.speed_axis_2)
+        elif (self.SPEED_DECREASE_TOWER in keystrokes):
+            speed_axis_2 = round(self.speed_axis_2 - self.SPEED_INCREMENT_AXIS_2, 3)
+            print("Tower speed decreased to: ", self.speed_axis_2)
 
 def change_tower_height(keystrokes):
     # Variables
