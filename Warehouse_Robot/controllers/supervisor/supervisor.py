@@ -361,6 +361,13 @@ class Driver(Supervisor):
             print("Updated position for: ", self.picked_packets)
 
         return updated
+
+    # Convert list to string. List shall contain
+    def list_to_string(self, list_elem):
+        text_string = ' '.join([str(elem) for elem in list_elem])
+
+        return text_string
+
     def run(self):
     
         # Main loop:
