@@ -538,7 +538,10 @@ class AGV(Robot):
         agv_heading = self.get_heading(coordinates_inner=gps_axle_info, coordinates_outer=gps_agv_info)
 
         return agv_heading
-    global speed_axis_1
+
+    # Return the desired heading of the AGV based on the desired end position.
+    def get_desired_heading(self, x, y, z):
+        pass
 
     def turn_agv(self, desired_heading):
         heading_reached = False
@@ -672,6 +675,7 @@ class AGV(Robot):
 
         elif self.packet_picking_ended:
             self.move_agv(keyword='forward')
+
     # ------ Snake box - Axis 1 -----
     def increment_speed_snakebox(self, keystrokes):
         # Variable
@@ -935,43 +939,49 @@ class AGV(Robot):
 
         self.move_snake_keyboard(keystrokes)
 
-def manual_control_keyboard(keystrokes):
+        # Checks the AGV heading and turns AGV if heading is incorrect.
 
-    # ------ MOVE AGV -----
-    # Increment AGV speed
-    increment_speed_agv(keystrokes=keystrokes)
+    def manual_control_keyboard(self, keystrokes):
+        # ------ MOVE AGV -----
+        # Increment AGV speed
+        self.increment_speed_agv(keystrokes=keystrokes)
 
-    # Move AGV
-    move_agv(keystrokes=keystrokes)
+        # Move AGV
+        self.move_agv_keyboard(keystrokes=keystrokes)
 
-    # ------ HASSELHOFF HUG / SNAKE BOX - AXIS 1 -----
-    # Increment Axis 1 speed
-    increment_speed_snakebox(keystrokes=keystrokes)
+        # ------ HASSELHOFF HUG / SNAKE BOX - AXIS 1 -----
+        # Increment Axis 1 speed
+        self.increment_speed_snakebox(keystrokes=keystrokes)
 
-    # Rotate snake box - Axis 1
-    rotate_snakebox(keystrokes=keystrokes)
+        # Rotate snake box - Axis 1
+        self.rotate_snakebox_keyboard(keystrokes=keystrokes)
 
-    # ------ TOWER - AXIS 2 -----
-    # Increment Tower speed
-    increment_speed_tower(keystrokes=keystrokes)
+        # ------ TOWER - AXIS 2 -----
+        # Increment Tower speed
+        self.increment_speed_tower(keystrokes=keystrokes)
 
-    # Move tower height
-    change_tower_height(keystrokes=keystrokes)
+        # Move tower height
+        self.change_tower_height_keyboard(keystrokes=keystrokes)
 
-    # ------ SNAKE - AXIS 3 -----
-    # Increment Snake speed
-    increment_speed_snake_manual(keystrokes=keystrokes)
+        # ------ SNAKE - AXIS 3 -----
+        # Increment Snake speed
+        self.increment_speed_snake_manual(keystrokes=keystrokes)
 
-    # Move snake part 1
-    move_snake_manual(keystrokes=keystrokes)
+        # Move snake part 1
+        self.move_snake_keyboard(keystrokes=keystrokes)
 
-def snake_tip_kinematics(agv_heading, snake_angle, snake_tip_pos):
-    pass
+        # ------ SNAKETIP - AXIS 4 -----
+        # Move snake part 1
+        self.rotate_snaketip_keyboard(keystrokes=keystrokes)
 
-def get_snake_tip_globale_coord(agv_heading, snake_angle, agv_gps, snake_tip_pos):
-    angle = agv_heading + snake_angle
+    # Cylindrical coordinates for snake tip with polar 2D-coordinates.
+    def snake_tip_kinematics(self, packet_pos):
+        # Placeholder for suction cup point.
+        point = [0, 0, 0]
 
-    pass
+        # Modifiers of values based on actual model.
+        mod_length = 0.089 # Difference in x-direction from gripper to axis 1.
+        mod_height = 0.2919 # Difference in y-direction from gripper to axis 1. 0.2166
 
         angle = self.get_angle(adjacent=packet_pos[2], opposite=packet_pos[0])
         length = abs(packet_pos[0] / math.sin(math.radians(angle))) + mod_length
