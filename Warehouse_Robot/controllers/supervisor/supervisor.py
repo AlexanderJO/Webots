@@ -13,6 +13,78 @@ class Driver(Supervisor):
     translation = [x, y, z]
 
 
+    # Variables for AGV, pallets and packets
+    picking_started = False
+    picking_finished = False
+    robot_status = False
+    MAX_NUM_PALLETS = None
+    AGV_PALLET_NO = None
+    count_now = False
+    packet_removed = False
+    packet_added = False
+
+    # Pallets
+    pallet_list = None
+    pallet_num = None
+
+    # Packets
+    picked_packets = None
+    packet_list = None
+    packet_num = None
+    agv_packet_num = None
+
+    # Variables to hold and update the location of packets.
+    current_gps_pos = None
+    previous_gps_pos = None
+
+    # ----------------- COMMUNICATION ---------------
+    # Instantiate receiver node to obtain data from emitters.
+    emitter = None
+    receiver = None
+
+    # Message sent by emitter.
+    emitted_message = None
+    previous_message = None
+
+    # ------------------- KEYBOARD --------------
+    # # Enable the keyboard.
+    # kb = Keyboard()
+    # kb.enable(TIME_STEP)
+
+    # Keyboard values for AGV
+    FORWARD = '315'
+    BACKWARD = '317'
+    TURN_LEFT = '314'
+    TURN_RIGHT = '316'
+    SPEED_INCREASE_AGV = '43'
+    SPEED_DECREASE_AGV = '45'
+
+    # Keyboard values for Hasselhoff Hug - Axis 1
+    LEFT_AXIS_1 = '65'
+    RIGHT_AXIS_1 = '68'
+    SPEED_INCREASE_SNAKEBOX = str(Keyboard.CONTROL + Keyboard.SHIFT + 43)
+    SPEED_DECREASE_SNAKEBOX = str(Keyboard.CONTROL + Keyboard.SHIFT + 45)
+
+    # Keyboard values for Tower - Axis 2
+    UP_AXIS_2 = '87'
+    DOWN_AXIS_2 = '83'
+    SPEED_INCREASE_TOWER = str(Keyboard.CONTROL + 43)
+    SPEED_DECREASE_TOWER = str(Keyboard.CONTROL + 45)
+
+    # Keyboard values for Snake - Axis 3
+    EXTEND_AXIS_3 = '81'
+    RETRACT_AXIS_3 = '69'
+    SPEED_INCREASE_SNAKE = str(Keyboard.SHIFT + 43)
+    SPEED_DECREASE_SNAKE = str(Keyboard.SHIFT + 45)
+
+    # Keyboard values for Snake tip - Axis 4
+    LEFT_AXIS_4 = '90'
+    RIGHT_AXIS_4 = '67'
+
+    # Keyboard values for Packet handling
+    PACKET_ATTACH = '32'
+    PACKET_DETACH = '65568'
+
     def __init__(self):
         # Initialize the driver.
         super(Driver, self).__init__()
