@@ -193,6 +193,70 @@ class Driver(Supervisor):
             pallet = Pallet(pallet=pallet_obj, length=1.200, width=0.800, height=0.155)
             self.pallet_list[i] = pallet
             print("Pallet position ", i+1, ": ", self.pallet_list[i].get_pallet_position())
+    def set_small_dummy_pallets(self, pallet_num, num_packets, packet_size):
+        # Set number of dummy packets.
+        length = 0
+        width = 0
+        height = 0
+
+        if packet_size == "small":
+            length = 0.300
+            width = 0.200
+            height = 0.180
+        elif packet_size == "large":
+            length = 0.600
+            width = 0.400
+            height = 0.369
+        else:
+            packet_size = "small"
+            length = 0.300
+            width = 0.200
+            height = 0.180
+
+        for i in range(num_packets):
+            packet_name = "PACKET_" + str(i+1)
+            packet = Packet(length, width, height, packet_size, packet_name)
+            self.pallet_list[pallet_num-1].add_packet(packet=packet)
+
+
+        # Populate with packets
+        # packet1 = Packet(0.300, 0.200, 0.180, "small")
+        # packet2 = Packet(0.300, 0.200, 0.180, "small")
+        # packet3 = Packet(0.300, 0.200, 0.180, "small")
+        # packet4 = Packet(0.300, 0.200, 0.180, "small")
+        # packet5 = Packet(0.300, 0.200, 0.180, "small")
+        # packet6 = Packet(0.300, 0.200, 0.180, "small")
+        # packet7 = Packet(0.300, 0.200, 0.180, "small")
+        # packet8 = Packet(0.300, 0.200, 0.180, "small")
+        # packet9 = Packet(0.300, 0.200, 0.180, "small")
+        # packet10 = Packet(0.300, 0.200, 0.180, "small")
+        # packet11 = Packet(0.300, 0.200, 0.180, "small")
+        # packet12 = Packet(0.300, 0.200, 0.180, "small")
+        # packet13 = Packet(0.300, 0.200, 0.180, "small")
+        # packet14 = Packet(0.300, 0.200, 0.180, "small")
+        # packet15 = Packet(0.300, 0.200, 0.180, "small")
+        # packet16 = Packet(0.300, 0.200, 0.180, "small")
+        # packet17 = Packet(0.300, 0.200, 0.180, "small")
+        # packet18 = Packet(0.300, 0.200, 0.180, "small")
+
+        # self.pallet_list[0].add_packet(packet=packet1)
+        # self.pallet_list[0].add_packet(packet=packet2)
+        # self.pallet_list[0].add_packet(packet=packet3)
+        # self.pallet_list[0].add_packet(packet=packet4)
+        # self.pallet_list[0].add_packet(packet=packet5)
+        # self.pallet_list[0].add_packet(packet=packet6)
+        # self.pallet_list[0].add_packet(packet=packet7)
+        # self.pallet_list[0].add_packet(packet=packet8)
+        # self.pallet_list[0].add_packet(packet=packet9)
+        # self.pallet_list[0].add_packet(packet=packet10)
+        # self.pallet_list[0].add_packet(packet=packet11)
+        # self.pallet_list[0].add_packet(packet=packet12)
+        # self.pallet_list[0].add_packet(packet=packet13)
+        # self.pallet_list[0].add_packet(packet=packet14)
+        # self.pallet_list[0].add_packet(packet=packet15)
+        # self.pallet_list[0].add_packet(packet=packet16)
+        # self.pallet_list[0].add_packet(packet=packet17)
+        # self.pallet_list[0].add_packet(packet=packet18)
     def run(self):
     
         # Main loop:
