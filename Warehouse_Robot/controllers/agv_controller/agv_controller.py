@@ -431,19 +431,19 @@ def remote_mode():
 def automatic_mode():
     return "Automatic mode"
 
-# Set the type of robot mode.
-def robot_mode(argument):
-    switcher = {
-        1: manual_mode,
-        2: remote_mode,
-        3: automatic_mode
-    }
-    
-    # Get the function from switcher dictionary
-    func = switcher.get(argument, lambda: "Invalid robot mode")
-    # Execute the function
-    mode = func()
-    return mode
+    # Set the type of robot mode.
+    def robot_mode(self, argument):
+        switcher = {
+            1: self.manual_mode_sc,
+            2: self.remote_mode_sc,
+            3: self.automatic_mode_sc
+        }
+
+        # Get the function from switcher dictionary
+        func = switcher.get(argument, lambda: "Invalid robot mode")
+        # Execute the function
+        mode = func()
+        return mode
 
 # ------ AGV -----
 def increment_speed_agv(keystrokes):
