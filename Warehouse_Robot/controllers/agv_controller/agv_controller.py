@@ -369,14 +369,14 @@ class AGV(Robot):
         self.motor_leftFWD_AGV.setVelocity(left_fwd * speed)
         self.motor_leftAFT_AGV.setVelocity(left_aft * speed)
 
-# Method for rotating snake box - Axis 1
-def drive_axis_1(left, right, speed):
-    if (left):
-        motor_axis_1.setVelocity(speed)
-    elif (right):
-        motor_axis_1.setVelocity(-speed)
-    else:
-        motor_axis_1.setVelocity(speed)
+    # Method for rotating snake box - Axis 1
+    def drive_axis_1(self, left, right, speed):
+        if (left):
+            self.motor_axis_1.setVelocity(speed)
+        elif (right):
+            self.motor_axis_1.setVelocity(-speed)
+        else:
+            self.motor_axis_1.setVelocity(speed)
 
 # Method to assign keys after keystrokes. - REDACTED
 def key_assign(keystrokes):
