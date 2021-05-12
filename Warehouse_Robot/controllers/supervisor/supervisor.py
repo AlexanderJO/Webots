@@ -183,6 +183,16 @@ class Driver(Supervisor):
 
     def get_rotation(self, object):
         return object.getOrientation()
+    def create_pallets(self, num_pallets):
+        # Create pallet list.
+        self.pallet_list = [""] * num_pallets
+
+        for i in range(num_pallets):
+            pallet_name = "PALLET_" + str(i+1)
+            pallet_obj = self.getFromDef(pallet_name)
+            pallet = Pallet(pallet=pallet_obj, length=1.200, width=0.800, height=0.155)
+            self.pallet_list[i] = pallet
+            print("Pallet position ", i+1, ": ", self.pallet_list[i].get_pallet_position())
     def run(self):
     
         # Main loop:
