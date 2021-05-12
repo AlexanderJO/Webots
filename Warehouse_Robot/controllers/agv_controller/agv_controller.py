@@ -672,21 +672,26 @@ class AGV(Robot):
 
         elif self.packet_picking_ended:
             self.move_agv(keyword='forward')
-    # Increment Snake box - Axis 1 speed
-    if (SPEED_INCREASE_SNAKEBOX in keystrokes):
-        if (speed_axis_1 < max_velocity_axis_1):
-            speed_axis_1 = round(speed_axis_1 + SPEED_INCREMENT_AXIS_1, 3)
-            print("Snake box speed increased to: ", speed_axis_1)
-        else:
-            speed_axis_1 = max_velocity_axis_1
-            sys.stderr.write("Maximum snake box speed reached.\n")
-    elif (SPEED_DECREASE_SNAKEBOX in keystrokes):
-        if (speed_axis_1 > 0):
-            speed_axis_1 = round(speed_axis_1 - SPEED_INCREMENT_AXIS_1, 3)
-            print("Snake box speed decreased to: ", speed_axis_1)
-        else:
-            speed_axis_1 = 0
-            sys.stderr.write("Minimum snake box speed reached.\n")
+    # ------ Snake box - Axis 1 -----
+    def increment_speed_snakebox(self, keystrokes):
+        # Variable
+        # global speed_axis_1
+
+        # Increment Snake box - Axis 1 speed
+        if (self.SPEED_INCREASE_SNAKEBOX in keystrokes):
+            if (self.speed_axis_1 < self.max_velocity_axis_1):
+                self.speed_axis_1 = round(self.speed_axis_1 + self.SPEED_INCREMENT_AXIS_1, 3)
+                print("Snake box speed increased to: ", self.speed_axis_1)
+            else:
+                speed_axis_1 = self.max_velocity_axis_1
+                sys.stderr.write("Maximum snake box speed reached.\n")
+        elif (self.SPEED_DECREASE_SNAKEBOX in keystrokes):
+            if (self.speed_axis_1 > 0):
+                self.speed_axis_1 = round(self.speed_axis_1 - self.SPEED_INCREMENT_AXIS_1, 3)
+                print("Snake box speed decreased to: ", self.speed_axis_1)
+            else:
+                speed_axis_1 = 0
+                sys.stderr.write("Minimum snake box speed reached.\n")
 
 def rotate_snakebox(keystrokes):
     # Variables
