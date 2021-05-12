@@ -907,32 +907,33 @@ class AGV(Robot):
                     self.motor_axis_3_pt[i].setPosition(self.axis_3_pos_pt[i])
             pass
 
-def move_snake_manual(keystrokes):
-    # Variables
-    # global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt
+    # REDACTED METHOD!
+    def move_snake_manual(self, keystrokes):
+        # Variables
+        # global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt
 
-    # # Move snake part 1
-    # if (EXTEND_AXIS_3 in keystrokes):
-    #     axis_3_pos_pt[0] = round(ps_axis_3_pt[0].getValue() - speed_axis_3, 3)
-    #     print("Snake tip position: ", axis_3_pos_pt[0])
-    # elif (RETRACT_AXIS_3 in keystrokes):
-    #     axis_3_pos_pt[0] = round(ps_axis_3_pt[0].getValue() + speed_axis_3, 3)
-    #     print("Snake tip position: ", axis_3_pos_pt[0])
-    #
-    # if (axis_3_pos_pt[0] > motor_axis_3_pt[0].getMaxPosition()):
-    #     axis_3_pos_pt[0] = round(motor_axis_3_pt[0].getMaxPosition(), 3)
-    #     print("Desired pos: ", axis_3_pos_pt[0])
-    #     print("Max. pos: ", motor_axis_3_pt[0].getMaxPosition())
-    #     sys.stderr.write("Axis 3 - Snake Part 1 - has reached maximum length.\n")
-    # elif (axis_3_pos_pt[0] < motor_axis_3_pt[0].getMinPosition()):
-    #     axis_3_pos_pt[0] = round(motor_axis_3_pt[0].getMinPosition(), 3)
-    #     print("Desired pos: ", axis_3_pos_pt[0])
-    #     print("Min. pos: ", motor_axis_3_pt[0].getMaxPosition())
-    #     sys.stderr.write("Axis 3 - Snake Part 1 - has reached minimum length.\n")
-    # else:
-    #     motor_axis_3_pt[0].setPosition(axis_3_pos_pt[0])
+        # # Move snake part 1
+        # if (EXTEND_AXIS_3 in keystrokes):
+        #     axis_3_pos_pt[0] = round(ps_axis_3_pt[0].getValue() - speed_axis_3, 3)
+        #     print("Snake tip position: ", axis_3_pos_pt[0])
+        # elif (RETRACT_AXIS_3 in keystrokes):
+        #     axis_3_pos_pt[0] = round(ps_axis_3_pt[0].getValue() + speed_axis_3, 3)
+        #     print("Snake tip position: ", axis_3_pos_pt[0])
+        #
+        # if (axis_3_pos_pt[0] > motor_axis_3_pt[0].getMaxPosition()):
+        #     axis_3_pos_pt[0] = round(motor_axis_3_pt[0].getMaxPosition(), 3)
+        #     print("Desired pos: ", axis_3_pos_pt[0])
+        #     print("Max. pos: ", motor_axis_3_pt[0].getMaxPosition())
+        #     sys.stderr.write("Axis 3 - Snake Part 1 - has reached maximum length.\n")
+        # elif (axis_3_pos_pt[0] < motor_axis_3_pt[0].getMinPosition()):
+        #     axis_3_pos_pt[0] = round(motor_axis_3_pt[0].getMinPosition(), 3)
+        #     print("Desired pos: ", axis_3_pos_pt[0])
+        #     print("Min. pos: ", motor_axis_3_pt[0].getMaxPosition())
+        #     sys.stderr.write("Axis 3 - Snake Part 1 - has reached minimum length.\n")
+        # else:
+        #     motor_axis_3_pt[0].setPosition(axis_3_pos_pt[0])
 
-    move_snake(keystrokes)
+        self.move_snake_keyboard(keystrokes)
 
 def manual_control_keyboard(keystrokes):
 
