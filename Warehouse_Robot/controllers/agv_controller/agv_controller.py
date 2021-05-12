@@ -1710,85 +1710,131 @@ def main():
 
             # Reset emitted message.
             # self.emitted_message = ""
-    populate_snake(num_snake_joints)
-    
-    
-    # Communication with TwinCAT/PLC over EtherCAT
-    #communication.set_ip("254.254.254.253")
-    #print("IP is: ", str((communication.get_ip())))
 
-    # Robot mode selection
-    mode_selection = 1
-    mode = robot_mode(mode_selection)
+# Dataclass for Packet with immutable input.
+@dataclass(frozen=True, order=True)
+class Packet:
+    length: float = field()
+    width: float = field()
+    height: float = field()
+    size: str = field(default="NO SIZE SELECTED!")
+    name: str = field(default="NO PACKET NAME")
 
-    # Populate with packets
-    packet1 = Packet(300, 200, 180, "small")
-    packet2 = Packet(300, 200, 180, "large")
+    def get_length(self):
+        return self.length
 
-    pallet1 = Pallet(1200, 800, 145)
-    pallet1.add_packet(packet1)
-    pallet1.add_packet(packet2)
+    def get_width(self):
+        return self.width
 
-    # Main loop:
-    # - perform simulation steps until Webots is stopping the controller
-    while robot.step(TIME_STEP) != -1:
+    def get_height(self):
+        return self.height
 
-        # Connector for connecting to boxes
-        # print("Connector presence: ", con_suction_cup.getPresence())
-        if (con_suction_cup.getPresence() == 1):
-            # print("Connector presence")
-            con_suction_cup.lock()
+    def get_size(self):
+        return self.size
 
-        # Get GPS position
-        gps_axle_info = get_gps_pos(name=gps_axle)
-        #print("Axle GPS:", "X: ", round(gps_axle_info['gps_pos'][0], 6), "Y: ", round(gps_axle_info['gps_pos'][1], 6), "Z: ", round(gps_axle_info['gps_pos'][2], 6))
-        
-        gps_agv_info = get_gps_pos(name=gps_agv)
-        #print("AGV GPS:", "X: ", round(gps_agv_info['gps_pos'][0], 6), "Y: ", round(gps_agv_info['gps_pos'][1], 6), "Z: ", round(gps_agv_info['gps_pos'][2], 6))
-        
-        # Get heading of AGV
-        agv_heading = get_heading(coordinates_inner=gps_axle_info, coordinates_outer=gps_agv_info)
-        print("Heading of AGV: ", agv_heading, "°")
+    def get_name(self):
+        return self.name
 
-        # Get snake box angle
-        angle_axis_1 = get_angular_position(name=ps_axis_1)
-        print("Snake box angle: ", angle_axis_1)
+@dataclass
+class Pallet:
+    max_packets = 64  # Max number of packets considered as 16 packets for each level, up to 4 levels.
+    length = float(0)
+    width = float(0)
+    height = float(0)
+    count_packets = 0
+    packets = {}
 
-        snake_length = axis_3_pos_pt[0]
-        print("Snake length: ", snake_length)
+    def __init__(self, length, height, width):
+        self.length = length
+        self.width = width
+        self.height = height
 
-        # angle_snake =
-        snake_coordinates = circle_coordinates(length=snake_length, angle=angle_axis_1)
-        print("Snake coordinates: ", snake_coordinates)
-
-        # print("==========               ============")
-        # for packet in range(len(pallet1.get_packets())):
-        #     packet_current = pallet1.get_packets()[packet]
-        #     print("This should be 300: ", packet_current.width)
-        # print("======================")
+        # Populate the pallet list with None objects.
+        self.__create_pallet_list()
 
 
+    # Private function for setting length. Only used for testing. Not callable from outside class.
+    def __set_length(self, length):
+        self.length = length
 
+    # Private function for setting width. Only used for testing. Not callable from outside class.
+    def __set_width(self, width):
+        self.width = width
 
+    # Private function for setting height. Only used for testing. Not callable from outside class.
+    def __set_height(self, height):
+        self.height = height
 
+    def __create_pallet_list(self):
+        for i in range(self.max_packets):
+            self.packets[i+1] = None
 
+    def add_packet(self, packet):
+        self.count_packets += 1
+        self.packets[self.count_packets] = packet
 
+    def remove_packet(self, packet_num):
+        self.count_packets -= 1
+        self.packets[packet_num] = None
 
+    # Returns a dictionary of packets with Packet and packet number.
+    def get_packets(self):
+        return self.packets
 
-        # Runs either manual by keyboard input, or in automatic or remote mode.
-        if mode == 'Manual mode':
-            # Read keyboard values
-            keystrokes = read_keyboard()
-            manual_control_keyboard(keystrokes=keystrokes)
-        elif mode == "Automatic mode":
-            pass
-        elif mode == "Remote mode":
-            pass
-        else:
-            # Print error
-            sys.stderr.write("No or incorrect mode selected.\n")
+    def get_packet(self, packet_num):
+        return self.packets.get(packet_num)
 
-            # The program will exit
+    def get_packet_dimensions(self, packet_num):
+        dimensions = [0, 0, 0]
+        packet = self.packets.get(packet_num)
+        width = packet.get_width()
+        length = packet.get_length()
+        height = packet.get_height()
+
+        dimensions = [width, length, height]
+
+        return dimensions
+
+    def get_pallet_position(self):
+        # Initial displacement of pallets due to inaccuracy of STL file.
+        pallet_coordinates_corner = [-0.3997, 0.5197, -0.5412]
+
+        return pallet_coordinates_corner
+
+    def get_num_packets(self):
+        # return len(self.packets)
+        return self.count_packets
+
+    def get_packet_position(self, packet_num):
+        pallet_coordinates_corner = [-0.3997, 0.5197, -0.5412]
+        coordinates = [0, 0, 0]
+
+        packet_dimensions = self.get_packet_dimensions(packet_num=packet_num)
+
+        max_width = self.width / packet_dimensions[0]
+        max_length = self.length / packet_dimensions[1]
+        max_packets_level = max_width * max_length
+
+        # Find the level where the packet is located. Each level has maximum 16 packets.
+        level = ((packet_num - 1) - (packet_num - 1) % max_packets_level) / max_packets_level + 1
+
+        ver_pos = (((packet_num - 1) % max_packets_level) - ((packet_num - 1) % max_packets_level) % max_width) / max_width + 1
+        # print("Vertical position: ", ver_pos)
+        hor_pos = ((packet_num - 1) % max_packets_level + 1) - max_width * (ver_pos - 1)
+        # print("Horisontal position: ", hor_pos)
+
+        x = pallet_coordinates_corner[0] + packet_dimensions[0] / 2 + packet_dimensions[0] * (hor_pos - 1)
+        y = pallet_coordinates_corner[1] + packet_dimensions[2] / 2 + packet_dimensions[2] * (level - 1)
+        z = pallet_coordinates_corner[2] - packet_dimensions[1] / 2 - packet_dimensions[1] * (ver_pos - 1)
+        # print("Packet dimensions: ", packet_dimensions)
+
+        # print("I'm inside and checking coordinates: ", " X = ", x, " Y = ", y, " Z = ", z)
+
+        coordinates[0] = x
+        coordinates[1] = y
+        coordinates[2] = z
+
+        return coordinates
             sys.exit("The program will now be terminated.")
             pass
 
