@@ -368,6 +368,383 @@ class Driver(Supervisor):
 
         return text_string
 
+
+    def run(self):
+        # Set initial conditions.
+        self.pallet_num = 0
+        self.packet_num = 30
+        self.agv_packet_num = 0
+        # self.picking_started = True
+
+        # Populate pallets with packets.
+        self.set_small_dummy_pallets(pallet_num=(self.pallet_num + 1), num_packets=self.packet_num, packet_size="small") # Create a dummy pallet.
+
+        #pallet1 = Pallet(pallet=self.pallet_list[0],length=1200, width=800, height=145)
+        #pallet1.add_packet(packet1)
+        #pallet1.add_packet(packet2)
+
+        # print("Number of packets: ", self.pallet_list[0].get_num_packets())
+        # print("Packet num 1: ", self.pallet_list[0].get_packet(1))
+        # print("Packets: ", self.pallet_list[self.pallet_num].get_packets())
+        # print("Num packets: ", sum(1 for _ in filter(None.__ne__, self.pallet_list[0].get_packets())))
+        # print("Num packets: ", sum(x is not None for x in self.pallet_list[0].get_num_packets()))
+
+        # print("Num packets: ", self.pallet_list[self.AGV_PALLET_NO].get_num_packets())
+        # print("Num packets pallet 0: ", self.pallet_list[0].get_num_packets())
+        # print("Packets pallet 0: ", self.pallet_list[0].get_packets())
+        # print("Num packets pallet 1: ", self.pallet_list[1].get_num_packets())
+        # print("Packets pallet 1: ", self.pallet_list[1].get_packets())
+        # print("Num packets pallet 2: ", self.pallet_list[2].get_num_packets())
+        # print("Packets pallet 2: ", self.pallet_list[2].get_packets())
+
+        # print("Packet deleted: ", self.pallet_list[0].remove_packet(1))
+        # print("Packets: ", self.pallet_list[0].get_packets())
+
+        # Position data for connecting packets.
+        positioned = [False for i in range(3)]
+        error_margin = [0] * 3
+        error_margin[0] = 0.1
+        error_margin[1] = 0.025
+        error_margin[2] = 0.05
+
+        # Robot mode selection
+        mode_selection = 2
+        mode = self.robot_mode(mode_selection)
+
+        # Initial robot state
+        # self.state_machine("")
+
+        # Main loop:
+        # while self.step(timestep) != -1:
+        while True:
+            # Read keyboard values
+            keystrokes = self.read_keyboard()
+
+            # Update GPS positions.
+            self.current_gps_pos = self.getFromDef('body_agv').getPosition()
+            # print("Current gps pos of AGV: ", self.current_gps_pos)
+
+            # print("==================")
+            # print("AGV position      2: ", self.get_position(self.AGV_ROBOT_1))
+            # print("Suction cup position: ", self.get_position(self.SUCTION_CUP))
+            # print("==================")
+
+            dist = self.dist_two_objects(self.AGV_ROBOT_1, self.SUCTION_CUP)
+            # print("Difference AGV and Snake tip: ", dist)
+            # print(self.get_position(self.SUCTION_CUP))
+
+            # test = self.getFromDef('body_agv')
+            # print("Parent node: ", test.getPosition())
+
+            suction_cup_pos = self.get_position(self.SUCTION_CUP)
+            # packet_picked_pos_init = self.pallet_list[0].get_packet_position(16)
+            # print("Suction cup position: ", suction_cup_pos)
+            # print("Packet picked position: ", packet_picked_pos_init)
+
+
+
+            # print(positioned)
+
+            #self.switch_case(argument=1)
+
+
+
+
+
+            # Runs either manual by keyboard input, or in automatic or remote mode.
+            if mode == 'Manual mode':
+                manual_message = ['None'] * 12 # Clear previous message.
+
+                message = self.receive_message()
+                # print("Message received supervisor:", message)
+
+                # AGV keyboard input.
+                if (self.FORWARD in keystrokes):  # Drive forwards
+                    if (self.TURN_LEFT in keystrokes):  # Turn left
+                        agv_state = 'forward_left'
+                    elif (self.TURN_RIGHT in keystrokes):  # Turn right
+                        agv_state = 'forward_right'
+                    else:
+                        agv_state = 'forward'
+                elif (self.BACKWARD in keystrokes):  # Drive backwards
+                    if (self.TURN_LEFT in keystrokes):  # Turn left
+                        agv_state = 'backward_left'
+                    elif (self.TURN_RIGHT in keystrokes):  # Turn right
+                        agv_state = 'backward_right'
+                    else:
+                        agv_state = 'backward'
+                elif (self.TURN_LEFT in keystrokes):  # Turn left
+                    agv_state = 'left'
+                elif (self.TURN_RIGHT in keystrokes):  # Turn right
+                    agv_state = 'right'
+                else:
+                    agv_state = 'idle'
+                manual_message[0] = agv_state
+
+                # Tower keyboard input.
+                if (self.UP_AXIS_2 in keystrokes):
+                    tower_state = 'up'
+                elif (self.DOWN_AXIS_2 in keystrokes):
+                    tower_state = 'down'
+                else:
+                    tower_state = 'idle'
+                manual_message[5] = tower_state
+
+                # Snakebox keyboard input.
+                if (self.LEFT_AXIS_1 in keystrokes):
+                    snakebox_state = 'left'
+                elif (self.RIGHT_AXIS_1 in keystrokes):
+                    snakebox_state = 'right'
+                else:
+                    snakebox_state = 'idle'
+                manual_message[4] = snakebox_state
+
+                # Snake keyboard input.
+                if (self.EXTEND_AXIS_3 in keystrokes):
+                    snake_state = 'extend'
+                elif (self.RETRACT_AXIS_3 in keystrokes):
+                    snake_state = 'retract'
+                else:
+                    snake_state = 'idle'
+                manual_message[6] = snake_state
+
+                # Snaketip keyboard input.
+                if (self.LEFT_AXIS_4 in keystrokes):
+                    snaketip_state = 'left'
+                elif (self.RIGHT_AXIS_4 in keystrokes):
+                    snaketip_state = 'right'
+                else:
+                    snaketip_state = 'idle'
+                manual_message[7] = snaketip_state
+
+
+
+                # if (self.axis_2_pos > self.motor_axis_2.getMaxPosition()):
+                #     self.axis_2_pos = round(self.motor_axis_2.getMaxPosition(), 2)
+                #     # print("Desired pos: ", self.axis_2_pos)
+                #     # print("Maximum position: ", motor_axis_2.getMaxPosition())
+                #     sys.stderr.write("Axis 2 has reached maximum height.\n")
+                # elif (self.axis_2_pos < self.motor_axis_2.getMinPosition()):
+                #     self.axis_2_pos = round(self.motor_axis_2.getMinPosition(), 2)
+                #     # print("Min. pos: ", motor_axis_2.getMaxPosition())
+                #     sys.stderr.write("Axis 2 has reached minimum height.\n")
+                # else:
+                #     self.motor_axis_2.setPosition(self.axis_2_pos)
+
+                self.emitted_message = self.list_to_string(manual_message)
+
+            elif mode == "Remote mode":
+                remote_message = ['None'] * 20 # Clear previous message.
+
+                message = self.receive_message()
+                # print("Message received supervisor:", message)
+
+                # print("=========================================")
+                # print("OTHER pallet packets: ", self.pallet_list[self.pallet_num].get_packets())
+                # print("             --------------                 ")
+                # print("AGV pallet packets: ", self.pallet_list[self.AGV_PALLET_NO].get_packets())
+                # print("=========================================")
+
+                # robot_status = 'true'  # message[2].lower()
+
+                try:
+                    self.robot_status = message[2].lower()
+                    self.picking_started = True
+                except:
+                    pass
+
+                print("Currently packed: ", self.picked_packets)
+
+                if self.packet_num <= 0:
+                    self.picking_finished = True
+                else:
+                    # Picked packets.
+                    packet_picked_pos_init = self.pallet_list[self.pallet_num].get_packet_position(self.packet_num)
+                    remote_message[8] = packet_picked_pos_init[0]
+                    remote_message[9] = packet_picked_pos_init[1]
+                    remote_message[10] = packet_picked_pos_init[2]
+
+                # pallet_num = 0
+                #
+                # packet_num = 16
+
+                # print("AGV Pallet: ", "Num. packets: ", self.pallet_list[self.AGV_PALLET_NO].get_num_packets(),
+                #       " and stored: ", self.pallet_list[self.AGV_PALLET_NO].get_packets())
+                # print("Main Pallet: ", "Num. packets: ", self.pallet_list[self.pallet_num].get_num_packets(),
+                #       " and stored: ", self.pallet_list[self.pallet_num].get_packets())
+                if self.picking_started and not self.picking_finished:
+                    if (self.robot_status == 'true'):
+                        # print("This is remaining packets: ", self.pallet_list[self.pallet_num].get_packets())
+
+                        if all(positioned):
+                            if (message[0] == 'attach'):
+                                # print("We're about to connect!")
+                                packet_name = self.pallet_list[self.pallet_num].get_packet(self.packet_num).get_name()
+                                packet = self.getFromDef(packet_name)
+                                x = round(suction_cup_pos[0], 7)
+                                y = round(suction_cup_pos[1], 7) - self.pallet_list[self.pallet_num].get_packet(self.packet_num).get_height() / 2
+                                z = round(suction_cup_pos[2], 7)
+                                pos = [x, y, z]
+                                packet.getField('translation').setSFVec3f(pos)
+                                # print("New packet position: ", self.get_position(packet))
+                                # print("Used position: ", pos)
+
+                                # packet_picked_pos
+                                # setSFVec3f(suction_cup_pos)
+                                remote_message[11] = 'True'
+                                print("Picked packet: ", packet_name)
+                                print("Picked packet number: ", self.packet_num)
+                                # print("We're connected!")
+                                # print("=============")
+
+                                # Rotate the package in accordance with the snake angle.
+                                gripper_angle = math.radians(float(message[1]))
+                                gripper_angle_list = [0, 1, 0, gripper_angle]
+                                # gripper = self.getFromDef('motor_axis_4')
+                                # gripper_angle_1 = gripper.getField('rotation')
+                                # print("Gripper angle first: ", gripper_angle_1)
+                                # gripper_angle_2 = gripper.getField('rotation').getSFRotation()
+                                # print("Gripper angle first: ", gripper_angle_2)
+                                # gripper_angle = gripper.getSFRotation()
+                                # print("Gripper angle: ", gripper_angle)
+                                packet.getField('rotation').setSFRotation(gripper_angle_list)
+
+                                # Sets status that packet has been picked.
+                                remote_message[11] = "True"
+
+                                if not self.packet_added:
+                                    # Packet to be moved.
+                                    packet = self.pallet_list[self.pallet_num].get_packet(packet_num=self.packet_num)
+                                    self.picked_packets.append(self.packet_num)
+                                    print("PACKET ADDED: ", packet)
+
+                                    # Find position on new pallet and place packet.
+                                    # self.pallet_list[self.AGV_PALLET_NO].add_packet(packet=packet)
+                                    self.agv_packet_num += 1
+                                    # self.agv_packet_num = self.pallet_list[self.AGV_PALLET_NO].get_num_packets()
+
+                                    # Packet has been added.
+                                    self.packet_added = True
+
+                                if self.packet_added:
+                                    # print("AGV pallet packets: ", self.pallet_list[self.AGV_PALLET_NO].get_packets())
+                                    # print("Other pallet packets: ", self.pallet_list[self.pallet_num].get_packets())
+
+                                    # Get the next position for the packet - Only preliminary position. AGV to decide final position.
+                                    # packet_picked_pos_final = self.pallet_list[self.AGV_PALLET_NO].get_packet_position(self.agv_packet_num)
+                                    # remote_message[12] = packet_picked_pos_final[0]
+                                    # remote_message[13] = packet_picked_pos_final[1]
+                                    # remote_message[14] = packet_picked_pos_final[2]
+
+                                    remote_message[15] = self.agv_packet_num
+                                    packet_dimensions = self.pallet_list[self.pallet_num].get_packet_dimensions(self.packet_num)
+                                    # packet_dimensions = self.pallet_list[self.AGV_PALLET_NO].get_packet_dimensions(self.agv_packet_num)
+                                    remote_message[16] = packet_dimensions[0] # Width
+                                    remote_message[17] = packet_dimensions[1] # Length
+                                    remote_message[18] = packet_dimensions[2] # Height
+
+                                    # print("Packet dimensions: ", "Width = ", remote_message[16], "Length = ", remote_message[17], "Height = ", remote_message[18])
+
+
+
+                                # Ready to do a count when detaching packet.
+                                self.count_now = True
+
+
+                            elif (message[0] == 'detach'):
+                                if self.count_now:
+                                    if not self.packet_removed:
+                                        # Remove packet from initial pallet.
+                                        # self.pallet_list[self.pallet_num].remove_packet(packet_num=self.packet_num)
+                                        self.packet_removed = True
+
+                                    self.packet_num -= 1
+                                    print("I counted now up to: ", self.packet_num)
+                                    self.count_now = False
+                                    self.packet_added = False
+                                remote_message[11] = "False"
+
+                            elif (message[0] == 'idle'):
+                                remote_message[11] = "False"
+                                print("Currently I have: ", self.packet_num, " packets.")
+                        else:
+                            for i in range(3):
+                                # Check x, y and z position
+                                if suction_cup_pos[i] >= (packet_picked_pos_init[i] - error_margin[i]) and suction_cup_pos[i] <= \
+                                        (packet_picked_pos_init[i] + error_margin[i]):
+                                    positioned[i] = True
+                                else:
+                                    positioned[i] = False
+
+                    else:
+                        print("AGV not ready.")
+
+                elif self.picking_finished:
+                    print("Picking order has finished.")
+                    remote_message[0] = 'idle'
+
+                else:
+                    print("AGV robot is not ready.")
+                    self.picking_started = False
+
+                # Updating packet position on AGV.
+                if self.update_picked_packet_positions():
+                    print("Packet positions on AGV updated.")
+
+                # print("Packet position: ", positioned)
+
+                self.emitted_message = self.list_to_string(remote_message)
+
+
+            elif mode == "Automatic mode":
+                pass
+
+            else:
+                # Print error
+                sys.stderr.write("No or incorrect mode selected.\n")
+
+                # The program will exit
+                sys.exit("The program will now be terminated.")
+                pass
+
+            # time1 = time.time()
+            # count = 0
+            # for i in range(100):
+            #     count += 1
+            #     s = self.emitted_message+str(count)
+            #     self.send_message(s)
+            # time2 = time.time()
+            # print("Time 1: ", time1)
+            # print("Time 2: ", time2)
+            # print("========")
+            # print("Keys: ", keystrokes)
+            # print("Type: ", type(keystrokes[0]))
+            # print(*keystrokes[0])
+            # bufferTest = self.send_message_struct(keystrokes)
+
+
+
+
+
+
+            # Send the message at the end of the iteration.
+            self.send_message(self.emitted_message)
+
+            # Update previous GPS position.
+            self.previous_gps_pos = self.current_gps_pos
+
+            try:
+                pass
+                # print(self.pallet_list[0].get_pallet_position())
+                # print(self.pallet_list[0].get_packet_position(16))
+            except AttributeError:
+                print("Pallet number is incorrect.")
+
+            # Reset emitted message.
+            self.emitted_message = ""
+
+
+            # Breaks the simulation.
     def run(self):
     
         # Main loop:
