@@ -618,6 +618,495 @@ def main():
     # snake_angle = 0
     
     # Create the snake and setup the linear motors
+    def run(self):
+        # Set robot in ready for operation.
+        self.robot_ready = True
+
+        # Variables
+        # agv_heading = 0
+        # snake_box_angle = 0
+        # snake_angle = 0
+
+        # Create the snake and setup the linear motors
+        self.populate_snake(self.num_snake_joints)
+
+
+        # Communication with TwinCAT/PLC over EtherCAT
+        #communication.set_ip("254.254.254.253")
+        #print("IP is: ", str((communication.get_ip())))
+        manual_message = ['None'] * 1  # Clear previous message.
+        remote_message = ['None'] * 3  # Clear previous message.
+        remote_message[2] = 'True' # Sets the robot as ready.
+
+        # Set initial GPS values for storing of updated packet positions.
+        self.current_gps_pos = [0, 0, 0]
+        self.previous_gps_pos = [0, 0, 0]
+
+        # Robot mode selection
+        mode_selection = 1
+        mode = self.robot_mode(mode_selection)
+
+        # Margins
+        tower_margin = 0.001
+        snakebox_margin = 2
+        gripper_margin = 2
+
+        # State machine init
+        self.state_agv = 3
+
+        # Main loop:
+        # - perform simulation steps until Webots is stopping the controller
+        while robot.step(self.TIME_STEP) != -1:
+            # Connector for connecting to boxes
+            # print("Connector presence: ", con_suction_cup.getPresence())
+            # if (self.con_suction_cup.getPresence() == 1):
+            #     # print("Connector presence")
+            #     self.con_suction_cup.lock()
+
+            # Get GPS position
+            # print("Heading of AGV: ", self.get_agv_heading())
+
+            # Get snake box angle
+            # angle_axis_1 = self.get_angular_position(name=self.ps_axis_1)
+            # print("Snake box angle: ", angle_axis_1)
+
+            # snake_length = self.axis_3_pos_pt[0]
+            # print("Snake length: ", snake_length)
+
+            # angle_snake =
+            # snake_coordinates = self.circle_coordinates(length=snake_length, angle=angle_axis_1)
+            # x = self.get_gps_pos(name=self.gps_axle)['gps_pos'][0] - snake_coordinates[0] + 0.16/2
+            # z = self.get_gps_pos(name=self.gps_axle)['gps_pos'][2] - snake_coordinates[1]
+
+            # print("X: ", x)
+            # print("Z: ", z)
+            # print("Axle position: ", self.get_gps_pos(name=self.gps_axle))
+            # print("Snake coordinates: ", snake_coordinates)
+
+            # print("==========               ============")
+            # for packet in range(len(pallet1.get_packets())):
+            #     packet_current = pallet1.get_packets()[packet]
+            #     print("This should be 300: ", packet_current.width)
+            # print("======================")
+
+
+
+
+
+
+            # Runs either manual by keyboard input, or in automatic or remote mode.
+            if mode == 'Manual mode':
+                # Communication
+                # Receive message from emitter
+                message = self.receive_message()
+                # print("Message received AGV:", message)
+
+                # Read keyboard values
+                keystrokes = self.read_keyboard()
+
+                # print("Keystroke class: ", type(keystrokes))
+                self.manual_control_keyboard(keystrokes=keystrokes)
+
+                if (self.PACKET_ATTACH in keystrokes):
+                    manual_message[0] = 'attach'
+                elif (self.PACKET_DETACH in keystrokes):
+                    manual_message[0] = 'detach'
+
+                # message = self.receive_message()
+                # print("Message received AGV:", message)
+
+                self.emitted_message = self.list_to_string(manual_message)
+
+                # print("Am I close to desired heading?: ",)
+            elif mode == "Remote mode":
+                # Communication
+                # Receive message from emitter
+                message = self.receive_message()
+                print("Message received AGV:", message)
+
+
+
+
+                if self.robot_ready:
+                    # self.move_agv(message[0])
+
+                    if message[0] == 'idle' and self.packet_picking_started:
+                        print("AGV going to idle position.")
+                        self.go_init_pos = True
+                    else:
+                        # Variables for packet handling.
+                        packet_pos = [float for i in range(3)]
+                        packet_pos_new = [float for i in range(3)]
+
+                        # Get packet position
+                        packet_pos[0] = float(message[8])
+                        packet_pos[1] = float(message[9])
+                        packet_pos[2] = float(message[10])
+
+
+                    # print("Packet position to be handled: ", packet_pos)
+
+                    # Get current AGV position.
+                    agv_pos = self.get_gps_pos(name=self.gps_axle)['gps_pos']
+                    # print("AGV positon: ", agv_pos)
+
+                    # Get actual snake tip heading.
+                    snaketip_angle = self.snaketip_angle()
+                    # print("Actual snaketip angle: ", snaketip_angle)
+
+                    # Get the angle of attack for the snake tip.
+                    snaketip_attack_angle = self.get_angle_between_coords(agv_pos, packet_pos)
+                    # print("Snake tip angle: ", snaketip_angle, " Attack angle: ", snaketip_attack_angle)
+                    axis_4_angle = self.get_angular_position(self.ps_axis_4)
+                    remote_message[1] = (snaketip_angle + axis_4_angle)
+
+                    snake_length = self.get_snake_length((360 - snaketip_attack_angle), agv_pos, packet_pos) + 0.08
+                    # print("Snake length attack: ", snake_length)
+
+                    # self.state_machine_agv(self.state_agv)
+                    # self.turn_agv(90)
+                    # Move AGV to desired position.
+                    print("Packet position: ", packet_pos)
+                    if not all(self.agv_positioned) and not self.packet_picking_started:
+                        self.speed_agv = 0.5 * self.max_velocity_agv
+                        self.move_agv_to(0, 0, packet_pos[2])
+
+                    elif all(self.agv_positioned) and not self.packet_attached and not self.deliver_on_agv and not self.go_idle and not self.snake_extending:
+                        self.speed_agv = 0.1 * self.max_velocity_agv
+                        self.packet_picking_started = True
+                        self.move_agv_to(0, 0, packet_pos[2])
+
+                        if not self.tower_pos_reached and not self.snake_pos_reached and not self.agv_moving:
+                            desired_tower_height = packet_pos[1] - 0.2798 + 0.2
+                            self.move_tower_to(desired_tower_height)
+                            if (desired_tower_height >= (self.ps_axis_2.getValue() - tower_margin) and desired_tower_height <= (self.ps_axis_2.getValue() + tower_margin)):
+                                self.tower_pos_reached = True
+                                print("Tower positon reached!")
+
+                        if not self.snakebox_pos_reached and self.tower_pos_reached:
+                            desired_snakebox_angle = snaketip_attack_angle - 270
+                            print("Rotating snakebox")
+                            self.rotate_snakebox_to(desired_snakebox_angle)
+
+                            print("Reading angle: ", math.degrees(self.ps_axis_1.getValue()))
+
+                            if (desired_snakebox_angle >= (math.degrees(self.ps_axis_1.getValue()) - snakebox_margin)) and \
+                                    (desired_snakebox_angle <= (math.degrees(self.ps_axis_1.getValue()) + snakebox_margin)):
+                                self.snakebox_pos_reached = True
+
+                        if not self.snake_pos_reached and self.snakebox_pos_reached:
+                            self.move_snake_to(snake_length)
+                            if self.snake_pos_reached:
+                                self.tower_pos_reached = False
+
+                        if not self.tower_pos_reached and self.snake_pos_reached:
+                            desired_tower_height = packet_pos[1] - 0.2798
+                            self.move_tower_to(desired_tower_height)
+
+                            if (desired_tower_height >= (
+                                    self.ps_axis_2.getValue() - tower_margin) and desired_tower_height <= (
+                                    self.ps_axis_2.getValue() + tower_margin)):
+                                self.tower_pos_reached = True
+                                print("Tower position reached!")
+
+                            if self.tower_pos_reached:
+                                remote_message[0] = 'attach'
+
+                        print("Lowered message", message[11].lower())
+                        if (message[11].lower() == 'true'):
+                            print("It is connected!")
+                            self.packet_attached = True
+
+                        if self.packet_attached and self.tower_pos_reached:
+                            # Reseting status variables
+                            self.reset_pick_packet_variables()
+                            print("Variables reset!")
+                            self.snake_retracting = True
+
+
+                    elif self.packet_attached and self.packet_picking_started and not self.go_idle:
+                        print("Packet attached.")
+
+                        if not self.deliver_on_agv:
+
+                            if not self.packet_created:
+                                self.packet_num += 1
+                                # self.packet_dimensions = [0, 0, 0]
+                                # self.packet_dimensions[0] = float(message[16]) # Width
+                                # self.packet_dimensions[1] = float(message[17]) # Length
+                                # self.packet_dimensions[2] = float(message[18]) # Height
+                                width = float(message[16]) # Width
+                                length = float(message[17]) # Length
+                                height = float(message[18]) # Height
+                                packet_size = message[19] # Size of packet.
+
+                                packet = Packet(width=width, length=length, height=height, size=packet_size)
+                                self.pallet_list[0].add_packet(packet=packet)
+                                print("Packet ", self.pallet_list[0].get_packet(self.packet_num), " has been added on AGV pallet.")
+
+                                self.packet_created = True
+
+                            # print("Packet dimensions: ",
+                            #       "Width = ", self.pallet_list[0].get_packet(self.packet_num).get_width(),
+                            #       "Length = ", self.pallet_list[0].get_packet(self.packet_num).get_length(),
+                            #       "Height = ", self.pallet_list[0].get_packet(self.packet_num).get_height())
+
+                            packet_coordinates = self.get_packet_position(pallet_num=0, packet_num=self.packet_num)
+                            print("Packet position on pallet: ", self.pallet_list[0].get_packet_position(self.packet_num))
+                            print("Packet position in LCS: ", packet_coordinates)
+
+                            snaketip_coordinates = self.snake_tip_kinematics(packet_pos=packet_coordinates)
+                            print("Snake tip coordinates:", snaketip_coordinates)
+
+                            # Get new preliminary packet position
+                            # packet_pos_new[0] = float(message[12])
+                            # packet_pos_new[1] = float(message[13])
+                            # packet_pos_new[2] = float(message[14])
+                            # print("New packet position: ", packet_pos_new)
+
+                            if self.snake_retracting and not self.snake_extending and not self.deliver_on_agv:
+                                if not self.tower_pos_reached:
+                                    desired_tower_height = packet_pos[1] - 0.2798 + 0.2
+                                    self.move_tower_to(desired_tower_height)
+                                    if (desired_tower_height >= (self.ps_axis_2.getValue() - tower_margin) and desired_tower_height <= (self.ps_axis_2.getValue() + tower_margin)):
+                                        self.tower_pos_reached = True
+                                        print("Tower position reached!")
+
+                                if not self.snake_pos_reached and self.tower_pos_reached:
+                                    self.move_snake_to(0)
+                                    if self.snake_pos_reached:
+                                        print("Snake retracted!")
+                                        # self.reset_retracting_variables()
+                                        # self.snake_extending = True
+
+                            # elif self.snake_extending and not self.snake_retracting and not self.deliver_on_agv:
+                                # if not self.tower_pos_reached:
+                                #     desired_tower_height = packet_pos[1] - 0.2798 + 0.2
+                                #     self.move_tower_to(desired_tower_height)
+                                #     if (desired_tower_height >= (self.ps_axis_2.getValue() - tower_margin) and desired_tower_height <= (self.ps_axis_2.getValue() + tower_margin)):
+                                #         self.tower_pos_reached = True
+                                #         print("Tower position reached!")
+
+                                # if not self.snake_pos_reached and self.tower_pos_reached:
+                                #     self.move_snake_to(0)
+                                #     print("Snake retracted!")
+
+                                if self.snake_pos_reached and self.tower_pos_reached:
+                                    self.deliver_on_agv = True
+                                    self.snake_extending = True
+
+                                    # Reseting variables.
+                                    self.reset_retracting_variables()
+
+
+                        elif self.deliver_on_agv and self.packet_picking_started:
+                            print("Delivering packet to AGV!")
+
+                            # Get the angle of attack for the snake tip.
+                            snaketip_attack_angle = snaketip_coordinates[1] + 90
+                            # snaketip_attack_angle = self.get_angle_between_coords(packet_coordinates, [0,0,0]) + 90
+                            # snaketip_attack_angle = self.get_angle_between_coords(agv_pos, packet_pos_new)
+                            print("New snake tip angle: ", snaketip_coordinates[1], " New attack angle: ", snaketip_attack_angle)
+                            # snake_length_new = self.get_snake_length((snaketip_attack_angle), packet_coordinates, [0,0,0]) + 0.08
+                            # snake_length_new = self.get_snake_length((snaketip_attack_angle), agv_pos, packet_pos_new)
+                            if self.snake_extending and not self.snake_retracting:
+                                if not self.tower_pos_reached and not self.snake_pos_reached:
+                                    desired_tower_height = snaketip_coordinates[2] + 0.2
+                                    # desired_tower_height = packet_coordinates[1] + 0.2798 + 0.2 # - 0.83 + 0.2
+                                    self.move_tower_to(desired_tower_height)
+                                    if (desired_tower_height >= (self.ps_axis_2.getValue() - tower_margin) and desired_tower_height <= (self.ps_axis_2.getValue() + tower_margin)):
+                                        self.tower_pos_reached = True
+                                        print("Tower position reached!")
+                                if not self.snakebox_pos_reached and self.tower_pos_reached:
+                                    desired_snakebox_angle = snaketip_attack_angle - 180
+                                    print("Desired angle: ", desired_snakebox_angle, " Attack angle: ", snaketip_attack_angle)
+                                    # print("Rotating snakebox")
+                                    self.rotate_snakebox_to(desired_snakebox_angle)
+                                    print("Reading angle: ", math.degrees(self.ps_axis_1.getValue()))
+                                    if (desired_snakebox_angle >= (
+                                            math.degrees(self.ps_axis_1.getValue()) - snakebox_margin)) and \
+                                            (desired_snakebox_angle <= (math.degrees(self.ps_axis_1.getValue()) + snakebox_margin)):
+                                        self.snakebox_pos_reached = True
+
+                                if not self.snake_pos_reached and self.snakebox_pos_reached:
+                                    self.move_snake_to(snaketip_coordinates[0])
+                                    if self.snake_pos_reached:
+                                        self.tower_pos_reached = False
+
+                                if not self.gripper_pos_reached and self.snake_pos_reached:
+                                    desired_gripper_angle = 360 - snaketip_coordinates[1]
+                                    print("Gripper angle: ", desired_gripper_angle)
+
+                                    self.rotate_snaketip_to(angle=desired_gripper_angle, speed=2)
+
+                                    if (desired_gripper_angle >= (
+                                            math.degrees(self.ps_axis_4.getValue()) - gripper_margin)) and \
+                                            (desired_gripper_angle <= (math.degrees(self.ps_axis_4.getValue()) + gripper_margin)):
+                                        self.gripper_pos_reached = True
+
+                                if not self.tower_pos_reached and self.snake_pos_reached and self.gripper_pos_reached:
+                                    desired_tower_height = snaketip_coordinates[2]
+                                    # desired_tower_height = packet_coordinates[1] + 0.2798 # - 0.83
+                                    self.move_tower_to(desired_tower_height)
+
+                                    if (desired_tower_height >= (self.ps_axis_2.getValue() - tower_margin) and desired_tower_height <= (self.ps_axis_2.getValue() + tower_margin)):
+                                        self.tower_pos_reached = True
+                                        print("Tower position reached!")
+
+                                if self.tower_pos_reached and self.snake_pos_reached and self.gripper_pos_reached:
+                                    self.packet_placed = True
+
+                                    # if self.
+                                    # remote_message[0] = 'detach'
+                                    # print("Lowered message", message[11].lower())
+                                    # if (message[11].lower() == 'false'):
+                                    #     print("It is connected!")
+                                    #     self.packet_attached = False
+
+                        if self.packet_placed:
+                            # Place the packet.
+                            remote_message[0] = 'detach'
+                            self.packet_attached = False
+
+                            self.go_init_pos = True
+                            self.reset_picking_variables()
+                            print("Go to initial position.")
+                            # remote_message[0] = 'detach'
+                            # self.deliver_on_agv = False
+
+                    elif self.go_init_pos:
+                        remote_message[0] = 'idle'
+
+                        if not self.tower_pos_reached and not self.snake_pos_reached:
+                            desired_tower_height = snaketip_coordinates[2] + 0.2
+                            # desired_tower_height = packet_coordinates[1] + 0.2798 + 0.2 # - 0.83 + 0.2
+                            self.move_tower_to(desired_tower_height)
+                            if (desired_tower_height >= (
+                                    self.ps_axis_2.getValue() - tower_margin) and desired_tower_height <= (
+                                    self.ps_axis_2.getValue() + tower_margin)):
+                                self.tower_pos_reached = True
+                                print("Tower position reached!")
+
+                        if not self.gripper_pos_reached and self.tower_pos_reached:
+                            desired_gripper_angle = 0
+                            print("Gripper angle: ", desired_gripper_angle)
+
+                            self.rotate_snaketip_to(angle=desired_gripper_angle, speed=2)
+
+                            if (desired_gripper_angle >= (
+                                    math.degrees(self.ps_axis_4.getValue()) - gripper_margin)) and \
+                                    (desired_gripper_angle <= (
+                                            math.degrees(self.ps_axis_4.getValue()) + gripper_margin)):
+                                self.gripper_pos_reached = True
+
+                        if not self.snake_pos_reached and self.gripper_pos_reached:
+                            self.move_snake_to(0)
+
+                        if not self.snakebox_pos_reached and self.snake_pos_reached:
+                            desired_snakebox_angle = 0
+                            self.rotate_snakebox_to(desired_snakebox_angle)
+
+                            if (desired_snakebox_angle >= (
+                                    math.degrees(self.ps_axis_1.getValue()) - snakebox_margin)) and \
+                                    (desired_snakebox_angle <= (
+                                            math.degrees(self.ps_axis_1.getValue()) + snakebox_margin)):
+                                self.snakebox_pos_reached = True
+
+                            if self.snakebox_pos_reached:
+                                self.tower_pos_reached = False
+
+                        if not self.tower_pos_reached and self.snake_pos_reached and self.gripper_pos_reached and self.snakebox_pos_reached:
+                            desired_tower_height = 1
+                            self.move_tower_to(desired_tower_height)
+
+                            if (desired_tower_height >= (
+                                    self.ps_axis_2.getValue() - tower_margin) and desired_tower_height <= (
+                                    self.ps_axis_2.getValue() + tower_margin)):
+                                self.tower_pos_reached = True
+                                print("Tower position reached!")
+
+                        if self.tower_pos_reached and self.snakebox_pos_reached and self.gripper_pos_reached and self.snakebox_pos_reached:
+                            print("Robot is now in idle position.")
+                            self.robot_ready = False
+
+                    # if not self.packet_attached and not remote_message[0] == 'detach':
+                    #     remote_message[0] = 'idle'
+                    #     remote_message[1] = 0
+
+
+                else:
+                    remote_message[0] = 'idle'
+                    print("Robot is not ready for new packet.")
+
+                    if message[0] == 'idle' and self.packet_picking_started:
+                        print("AGV going to idle position.")
+                        self.speed_agv = 0.5 * self.max_velocity_agv
+                        self.move_agv_to(0, 0, 8)
+                        self.go_idle = True
+
+                    elif self.restart_picking_process() and not message[0] == 'idle':
+                        print("Robot has been reset and is ready.")
+                        remote_message[2] = 'True'
+                        self.robot_ready = True
+
+                    elif self.go_idle:
+                        print("Robot is idle.")
+                        # self.reset_extending_variables()
+                        # self.snake_retracting = True
+                        pass
+
+                    else:
+                        print("I'm idle.")
+
+
+
+
+
+
+
+
+                # elif not self.packet_attached and self.packet_picking_started:
+                #     pass
+
+
+
+
+                    # if not self.snake_pos_reached and self.tower_pos_reached:
+                    #
+
+
+
+                # if (self.PACKET_ATTACH in keystrokes):
+                #     remote_message[0] = 'attach'
+                # elif (self.PACKET_DETACH in keystrokes):
+                #     remote_message[0] = 'detach'
+
+                self.emitted_message = self.list_to_string(remote_message)
+
+
+            elif mode == "Automatic mode":
+                pos = 2
+                self.motor_rightFWD_AGV.setVelocity(5)
+                self.motor_rightAFT_AGV.setVelocity(5)
+                self.motor_leftFWD_AGV.setVelocity(5)
+                self.motor_leftAFT_AGV.setVelocity(5)
+                self.motor_rightFWD_AGV.setPosition(pos)
+                self.motor_rightAFT_AGV.setPosition(pos)
+                self.motor_leftFWD_AGV.setPosition(pos)
+                self.motor_leftAFT_AGV.setPosition(pos)
+            else:
+                # Print error
+                sys.stderr.write("No or incorrect mode selected.\n")
+
+                # The program will exit
+                sys.exit("The program will now be terminated.")
+                pass
+
+            # Send the message at the end of the iteration.
+            self.send_message(self.emitted_message)
+
+            # Reset emitted message.
+            # self.emitted_message = ""
     populate_snake(num_snake_joints)
     
     
