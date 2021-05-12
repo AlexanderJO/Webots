@@ -973,10 +973,34 @@ def get_snake_tip_globale_coord(agv_heading, snake_angle, agv_gps, snake_tip_pos
 
     pass
 
-def circle_coordinates(length, angle):
-    coordinates = [0] * 2
-    coordinates[0] = length * math.sin(math.radians(angle))
-    coordinates[1] = length * math.cos(math.radians(angle))
+        angle = self.get_angle(adjacent=packet_pos[2], opposite=packet_pos[0])
+        length = abs(packet_pos[0] / math.sin(math.radians(angle))) + mod_length
+        height = packet_pos[1] + mod_height
+
+        point[0] = length
+        point[1] = angle
+        point[2] = height
+
+        return point
+
+    # def get_snake_tip_globale_coord(self, agv_heading, snake_angle, agv_gps, snake_tip_pos):
+    #     angle = agv_heading + snake_angle
+    #
+    #     pass
+
+    # Returns total snake length from trigonometry between packet and snake axle.
+    def get_snake_length(self, angle, coordinates_inner, coordinates_outer):
+        diff_z = coordinates_outer[2] - coordinates_inner[2]
+
+        length = diff_z / math.cos(math.radians(angle))
+
+        return abs(length)
+
+
+    def circle_coordinates(self, length, angle):
+        coordinates = [0] * 2
+        coordinates[0] = length * math.sin(math.radians(angle))
+        coordinates[1] = length * math.cos(math.radians(angle))
 
     return coordinates
 
