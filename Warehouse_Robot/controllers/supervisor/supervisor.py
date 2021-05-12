@@ -174,8 +174,12 @@ class Driver(Supervisor):
         dist[2] = obj_1_pos[2] - obj_2_pos[2]
 
         return dist
+
     def get_translation(self, object):
         return object.getField('translation').getSFVec3f()
+
+    def get_position(self, object):
+        return object.getPosition()
     def run(self):
     
         # Main loop:
