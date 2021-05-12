@@ -445,8 +445,8 @@ SPEED_DECREASE_SNAKE = str(Keyboard.SHIFT+45)
 
         return message
 # ------------------- METHODS --------------
-def populate_snake(num_joints):
-    # Variables
+    def create_pallet(self, num_pallets):
+        self.pallet_list = [""] * num_pallets
     global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt, max_velocity_axis_3
 
     motor_axis_3_pt = [""] * num_joints
