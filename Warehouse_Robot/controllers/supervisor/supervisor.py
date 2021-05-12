@@ -114,6 +114,15 @@ class Driver(Supervisor):
         # Initialize the driver.
         super(Driver, self).__init__()
 
+        # Instantiate emitter node to send data to receivers.
+        self.emitter = self.getDevice('emitter_supervisor')
+
+        # Instantiate receiver node to obtain data from emitters.
+        self.receiver = self.getDevice('receiver_supervisor')
+        self.receiver.enable(self.TIME_STEP)
+
+        # Create list for emitted message.
+
         # ========== AGV ROBOTS ==========
         # Instantiate the AGV robots.
         agv_robot_1 = self.getFromDef('AGV_ROBOT1')
