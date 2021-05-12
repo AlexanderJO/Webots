@@ -2,8 +2,8 @@
 
 # You may need to import some classes of the controller module. Ex:
 #  from controller import Robot, Motor, DistanceSensor
-from controller import Robot, DistanceSensor, Motor, Keyboard, GPS, Connector
-import sys, math
+from controller import Robot, DistanceSensor, Motor, Keyboard, GPS, Connector, Camera
+import sys, math, struct
 from dataclasses import dataclass, field
 from typing import List
 from ethercatCommunication import Communication
@@ -19,13 +19,6 @@ communication = Communication()
 # create the Robot instance.
 robot = Robot()
 
-# get the time step of the current world.
-TIME_STEP = int(robot.getBasicTimeStep())
-if TIME_STEP < 64:
-    TIME_STEP = 20
-else:
-    TIME_STEP = 20
-
 # Distance sensor initialization
 ds = []
 ds_names = ['ds_fwd', 'ds_aft', 'ds_left', 'ds_right']
@@ -40,9 +33,9 @@ ds_names = ['ds_fwd', 'ds_aft', 'ds_left', 'ds_right']
 # Communication
 
 # Driving class
-class Drive():
-    def __init__(self):
-        pass
+# class Drive():
+#     def __init__(self):
+#         pass
 
 class AGV(Robot):
     # get the time step of the current world.
@@ -344,14 +337,6 @@ class AGV(Robot):
             pallet = Pallet(length=1.200, width=0.800, height=0.155)
             self.pallet_list[i] = pallet
             print("Pallet ", pallet_name, " placed on AGV.")
-# ------------------- METHODS --------------
-    def create_pallet(self, num_pallets):
-        self.pallet_list = [""] * num_pallets
-    global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt, max_velocity_axis_3
-
-    motor_axis_3_pt = [""] * num_joints
-    axis_3_pos_pt = [0] * num_joints
-    ps_axis_3_pt = [""] * num_joints
 
     def populate_snake(self, num_joints):
         # Variables
