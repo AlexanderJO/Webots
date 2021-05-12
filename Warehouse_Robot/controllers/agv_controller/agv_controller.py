@@ -362,12 +362,12 @@ class AGV(Robot):
         if motor_velocity > max_velocity_axis_3:
             max_velocity_axis_3 = motor_velocity
 
-# Method for driving AGV by controlling forward and aft wheel on left and right side
-def drive_agv(left_fwd, left_aft, right_fwd, right_aft, speed):
-    motor_rightFWD_AGV.setVelocity(right_fwd * speed)
-    motor_rightAFT_AGV.setVelocity(right_aft * speed)
-    motor_leftFWD_AGV.setVelocity(left_fwd * speed)
-    motor_leftAFT_AGV.setVelocity(left_aft * speed)
+    # Method for driving AGV by controlling forward and aft wheel on left and right side
+    def drive_agv(self, left_fwd, left_aft, right_fwd, right_aft, speed):
+        self.motor_rightFWD_AGV.setVelocity(right_fwd * speed)
+        self.motor_rightAFT_AGV.setVelocity(right_aft * speed)
+        self.motor_leftFWD_AGV.setVelocity(left_fwd * speed)
+        self.motor_leftAFT_AGV.setVelocity(left_aft * speed)
 
 # Method for rotating snake box - Axis 1
 def drive_axis_1(left, right, speed):
