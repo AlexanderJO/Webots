@@ -30,13 +30,6 @@ class Driver(Supervisor):
     #agv_robot_1_translation_field = agv_robot_1.getField('translation')
     #suction_cup = self.getFromDef('suction_cup')
     #box_1 =
-class Driver(Supervisor):
-    TIME_STEP = 20
-    x = int(0.0)
-    y = int(0.0)
-    z = int(0.0)
-    translation = [x, y, z]
-
 
     # Variables for AGV, pallets and packets
     picking_started = False
@@ -160,7 +153,17 @@ class Driver(Supervisor):
             keystrokes[i] = str(self.kb.getKey())
         # print(keystrokes)
         return keystrokes
-        
+
+    def error_testing_thingy(self, num):
+        assert isinstance(num, int), INVALID_NUM_MSG
+
+    def instantiate_packets(self):
+        try:
+            pass
+        except Exception as e:
+            e = traceback.format_exc()
+            print("Error: ", e)
+
     # Returns the distance of two objects as coordinate system.
     # Distance calculated as difference between object 1 and object 2.
     def dist_two_objects(self, obj_1, obj_2):
@@ -183,6 +186,11 @@ class Driver(Supervisor):
 
     def get_rotation(self, object):
         return object.getOrientation()
+
+    def populate_packets(self, no_packets):
+        for i in no_packets:
+            pass
+
     def create_pallets(self, num_pallets):
         # Create pallet list.
         self.pallet_list = [""] * num_pallets
@@ -193,6 +201,18 @@ class Driver(Supervisor):
             pallet = Pallet(pallet=pallet_obj, length=1.200, width=0.800, height=0.155)
             self.pallet_list[i] = pallet
             print("Pallet position ", i+1, ": ", self.pallet_list[i].get_pallet_position())
+
+    def place_pallets(self):
+        #pallets = self.create_pallets(num_pallets=12)
+        #self.pallet_list
+        pass
+
+    def get_pallet_pos(self, pallet_num):
+        pass
+
+    def get_packet_level(self, packet_num, packet_size, pallet_num):
+        max_packets_level = 9
+
     def set_small_dummy_pallets(self, pallet_num, num_packets, packet_size):
         # Set number of dummy packets.
         length = 0
@@ -257,6 +277,9 @@ class Driver(Supervisor):
         # self.pallet_list[0].add_packet(packet=packet16)
         # self.pallet_list[0].add_packet(packet=packet17)
         # self.pallet_list[0].add_packet(packet=packet18)
+
+    # def check_dist
+
     def manual_control(self, keystrokes):
 
         # ------ MOVE AGV -----
@@ -745,28 +768,80 @@ class Driver(Supervisor):
 
 
             # Breaks the simulation.
-    def run(self):
-    
-        # Main loop:
-        # while self.step(timestep) != -1:
-        while True:
-            print("Translation field: ", self.agv_robot_1_translation_field.getSFVec3f())
-            
-            
-            #
             while self.step(self.TIME_STEP) == -1:
                 print("============== I'm breaking up! ==============")
                 break
 
-    def error_testing_thingy(self, num):
-        assert isinstance(num, int), INVALID_NUM_MSG
+    def switch_case_robot(self, argument):
+        # Creating a dictionary of the states.
+        switcher = {
+            1: self.robot_idle_sc,
+            2: self.move_agv_sc,
+            3: self.move_tower_sc,
+            4: self.rotate_snakebox_sc,
+            5: self.extend_snake_sc,
+            6: self.attach_packet_sc,
+            7: self.detach_packet_sc,
+            8: self.retract_snake_sc
+        }
 
-    def instantiate_packets(self):
-        try:
-            pass
-        except Exception as e:
-            e = traceback.format_exc()
-            print("Error: ", e)
+        # Get the function from switcher dictionary
+        func = switcher.get(argument, lambda: "Invalid robot state")
+        # Execute the function
+        state = func()
+        return state
+
+    def robot_idle_sc(self):
+        print("Robot is in idle mode!")
+        pass
+
+    def move_agv_sc(self):
+        pass
+
+    def move_tower_sc(self):
+        pass
+
+    def rotate_snakebox_sc(self):
+        pass
+
+    def extend_snake_sc(self):
+        pass
+
+    def attach_packet_sc(self):
+
+        pass
+
+    def detach_packet_sc(self):
+        pass
+
+    def retract_snake_sc(self):
+        pass
+
+    # ------ Switch case -----
+    def manual_mode_sc(self):
+        return "Manual mode"
+
+    def remote_mode_sc(self):
+        return "Remote mode"
+
+    def automatic_mode_sc(self):
+        return "Automatic mode"
+
+    # Set the type of robot mode.
+    def robot_mode(self, argument):
+        switcher = {
+            1: self.manual_mode_sc,
+            2: self.remote_mode_sc,
+            3: self.automatic_mode_sc
+        }
+
+        # Get the function from switcher dictionary
+        func = switcher.get(argument, lambda: "Invalid robot mode")
+        # Execute the function
+        mode = func()
+        return mode
+
+
 # Dataclass for Packet with immutable input.
 @dataclass(frozen=True, order=True)
 class Packet:
@@ -926,8 +1001,11 @@ class Pallet:
 
         return coordinates
 
-controller = Driver()
-controller.run()
+
+
+
+
+
 if __name__ == "__main__":
     Driver()
 # controller = Driver()
