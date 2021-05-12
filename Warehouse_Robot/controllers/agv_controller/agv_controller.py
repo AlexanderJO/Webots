@@ -445,26 +445,26 @@ class AGV(Robot):
         mode = func()
         return mode
 
-# ------ AGV -----
-def increment_speed_agv(keystrokes):
-    # Variables
-    global speed_agv
+    # ------ AGV -----
+    def increment_speed_agv(self, keystrokes):
+        # Variables
+        # global speed_agv
 
-    # Increment AGV speed
-    if (SPEED_INCREASE_AGV in keystrokes):
-        if (speed_agv < max_velocity_agv):
-            speed_agv = round(speed_agv + SPEED_INCREMENT_AGV, 3)
-            print("AGV speed increased to: ", speed_agv)
-        else:
-            speed_agv = max_velocity_agv
-            sys.stderr.write("Maximum AGV speed reached.\n")
-    elif (SPEED_DECREASE_AGV in keystrokes):
-        if (speed_agv > 0):
-            speed_agv = round(speed_agv - SPEED_INCREMENT_AGV, 3)
-            print("AGV speed decreased to: ", speed_agv)
-        else:
-            speed_agv = 0
-            sys.stderr.write("Minimum AGV speed reached.\n")
+        # Increment AGV speed
+        if (self.SPEED_INCREASE_AGV in keystrokes):
+            if (self.speed_agv < self.max_velocity_agv):
+                self.speed_agv = round(self.speed_agv + self.SPEED_INCREMENT_AGV, 3)
+                print("AGV speed increased to: ", self.speed_agv)
+            else:
+                self.speed_agv = self.max_velocity_agv
+                sys.stderr.write("Maximum AGV speed reached.\n")
+        elif (self.SPEED_DECREASE_AGV in keystrokes):
+            if (self.speed_agv > 0):
+                self.speed_agv = round(self.speed_agv - self.SPEED_INCREMENT_AGV, 3)
+                print("AGV speed decreased to: ", self.speed_agv)
+            else:
+                self.speed_agv = 0
+                sys.stderr.write("Minimum AGV speed reached.\n")
 
 def move_agv(keystrokes):
     # Drive AGV
