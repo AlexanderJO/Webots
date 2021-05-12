@@ -289,6 +289,20 @@ class Driver(Supervisor):
         # Move snake part 1
         # self.move_snake_manual(keystrokes=keystrokes)
         pass
+
+    # ----------------- COMMUNICATION ---------------
+    # Receive message through receiver sent from emitter.
+    # Received in utf-8 format.
+    def receive_message(self):
+        message = ""
+        if self.receiver.getQueueLength() > 0:
+            message = self.receiver.getData().decode('utf-8')
+            self.receiver.nextPacket()
+
+        # Splits the message.
+        message = message.split()
+
+        return message
     def run(self):
     
         # Main loop:
