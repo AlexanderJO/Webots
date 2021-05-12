@@ -314,6 +314,18 @@ class AGV(Robot):
         message = message.split()
 
         return message
+
+    # Send message from emitter.
+    # Sent in utf-8 format.
+    def send_message(self, message):
+        # message_sent = False
+        if message != '':  # and message != self.previous_message:
+            self.previous_message = message
+            # message_packed = struct.pack(message)
+            # self.emitter.send(message_packed)
+            self.emitter.send(message.encode('utf-8'))
+            # message_sent = True
+        # return message_sent
 # ------------------- METHODS --------------
     def create_pallet(self, num_pallets):
         self.pallet_list = [""] * num_pallets
