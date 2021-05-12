@@ -1012,7 +1012,7 @@ class AGV(Robot):
         coordinates[0] = length * math.sin(math.radians(angle))
         coordinates[1] = length * math.cos(math.radians(angle))
 
-    return coordinates
+        return coordinates
 
     def snaketip_angle(self):
         # Variable for snake tip angle.
@@ -1190,25 +1190,17 @@ class AGV(Robot):
     def rotate_snakebox_sc(self):
         pass
 
-class Pallet:
-    length = int(0)
-    width = int(0)
-    height = int(0)
-    packets = []
+    def extend_snake_sc(self):
+        pass
 
-    def __init__(self, length, height, width):
-        self.length = length
-        self.width = height
-        self.height = width
+    def attach_packet_sc(self):
 
-    # Private function for setting length. Only used for testing. Not callable from outside class.
-    def __set_length(self, length):
-        self.length = length
+        pass
 
-    def add_packet(self, packet):
-        self.packets.append(packet)
+    def detach_packet_sc(self):
+        pass
 
-    def remove_packet(self, packet):
+    def retract_snake_sc(self):
         pass
 
     def switch_case_agv(self, argument):
@@ -1284,13 +1276,8 @@ class Pallet:
         self.go_init_pos = False
         self.packet_placed = False
 
-def main():
-    # Variables
-    # agv_heading = 0
-    # snake_box_angle = 0
-    # snake_angle = 0
-    
-    # Create the snake and setup the linear motors
+        return True
+
     def run(self):
         # Set robot in ready for operation.
         self.robot_ready = True
@@ -1905,12 +1892,10 @@ class Pallet:
         coordinates[2] = z
 
         return coordinates
-            sys.exit("The program will now be terminated.")
-            pass
 
 # Method to start the program by running the main. Python override.
 if __name__ == "__main__":
     #print("This is my file to test Python's execution methods.")
     #print("The variable __name__ tells me which context this file is running in.")
     #print("The value of __name__ is:", repr(__name__))
-    main()
+    AGV()
