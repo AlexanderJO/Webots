@@ -161,6 +161,19 @@ class Driver(Supervisor):
         # print(keystrokes)
         return keystrokes
         
+    # Returns the distance of two objects as coordinate system.
+    # Distance calculated as difference between object 1 and object 2.
+    def dist_two_objects(self, obj_1, obj_2):
+        obj_1_pos = self.get_position(obj_1)
+        obj_2_pos = self.get_position(obj_2)
+
+        # Object distance in millimeters
+        dist = [0] * 3
+        dist[0] = obj_1_pos[0] - obj_2_pos[0]
+        dist[1] = obj_2_pos[1] - obj_1_pos[1]
+        dist[2] = obj_1_pos[2] - obj_2_pos[2]
+
+        return dist
     def run(self):
     
         # Main loop:
