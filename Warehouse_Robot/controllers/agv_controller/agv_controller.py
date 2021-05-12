@@ -421,15 +421,15 @@ class AGV(Robot):
         # print(keystrokes)
         return keystrokes
 
-# ------ Switch case -----
-def manual_mode():
-    return "Manual mode"
+    # ------ Switch case - Mode -----
+    def manual_mode_sc(self):
+        return "Manual mode"
 
-def remote_mode():
-    return "Remote mode"
+    def remote_mode_sc(self):
+        return "Remote mode"
 
-def automatic_mode():
-    return "Automatic mode"
+    def automatic_mode_sc(self):
+        return "Automatic mode"
 
     # Set the type of robot mode.
     def robot_mode(self, argument):
