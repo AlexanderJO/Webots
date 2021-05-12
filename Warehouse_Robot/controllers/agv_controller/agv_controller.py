@@ -765,24 +765,24 @@ class AGV(Robot):
         # Variables
         # global axis_2_pos
 
-    if (UP_AXIS_2 in keystrokes):
-        axis_2_pos = round(ps_axis_2.getValue() + speed_axis_2, 2)
-        print(axis_2_pos)
-    elif (DOWN_AXIS_2 in keystrokes):
-        axis_2_pos = round(ps_axis_2.getValue() - speed_axis_2, 2)
-        print(axis_2_pos)
+        if (self.UP_AXIS_2 in keystrokes):
+            self.axis_2_pos = round(self.ps_axis_2.getValue() + self.speed_axis_2, 2)
+            print(self.axis_2_pos)
+        elif (self.DOWN_AXIS_2 in keystrokes):
+            self.axis_2_pos = round(self.ps_axis_2.getValue() - self.speed_axis_2, 2)
+            print(self.axis_2_pos)
 
-    if (axis_2_pos > motor_axis_2.getMaxPosition()):
-        axis_2_pos = round(motor_axis_2.getMaxPosition(), 2)
-        #print("Desired pos: ", axis_2_pos)
-        #print("Maximum position: ", motor_axis_2.getMaxPosition())
-        sys.stderr.write("Axis 2 has reached maximum height.\n")
-    elif (axis_2_pos < motor_axis_2.getMinPosition()):
-        axis_2_pos = round(motor_axis_2.getMinPosition(), 2)
-        #print("Min. pos: ", motor_axis_2.getMaxPosition())
-        sys.stderr.write("Axis 2 has reached minimum height.\n")
-    else:
-        motor_axis_2.setPosition(axis_2_pos)
+        if (self.axis_2_pos > self.motor_axis_2.getMaxPosition()):
+            self.axis_2_pos = round(self.motor_axis_2.getMaxPosition(), 2)
+            #print("Desired pos: ", self.axis_2_pos)
+            #print("Maximum position: ", motor_axis_2.getMaxPosition())
+            sys.stderr.write("Axis 2 has reached maximum height.\n")
+        elif (self.axis_2_pos < self.motor_axis_2.getMinPosition()):
+            self.axis_2_pos = round(self.motor_axis_2.getMinPosition(), 2)
+            #print("Min. pos: ", motor_axis_2.getMaxPosition())
+            sys.stderr.write("Axis 2 has reached minimum height.\n")
+        else:
+            self.motor_axis_2.setPosition(self.axis_2_pos)
 
 # ------ Snake - Axis 3 -----
 def increment_speed_snake_manual(keystrokes):
