@@ -180,6 +180,9 @@ class Driver(Supervisor):
 
     def get_position(self, object):
         return object.getPosition()
+
+    def get_rotation(self, object):
+        return object.getOrientation()
     def run(self):
     
         # Main loop:
