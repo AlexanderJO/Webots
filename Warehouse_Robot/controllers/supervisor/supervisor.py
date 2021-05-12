@@ -125,8 +125,26 @@ class Driver(Supervisor):
 
         # ========== AGV ROBOTS ==========
         # Instantiate the AGV robots.
-        agv_robot_1 = self.getFromDef('AGV_ROBOT1')
-        self.agv_robot_1_translation_field = agv_robot_1.getField('translation')
+        self.AGV_ROBOT_1 = self.getFromDef('AGV_ROBOT1')
+        self.robot_status = False
+
+        # Instantiate suction gripper
+        self.SUCTION_CUP = self.getFromDef('SUCTION_CUP')
+
+        self.MAX_NUM_PALLETS = 13
+        self.AGV_PALLET_NO = (self.MAX_NUM_PALLETS - 1)
+        self.create_pallets(num_pallets=self.MAX_NUM_PALLETS)
+        self.picked_packets = []
+
+        # Set initial GPS values for storing of updated packet positions.
+        self.current_gps_pos = [0, 0, 0]
+        self.previous_gps_pos = [0, 0, 0]
+
+        # Enable the keyboard.
+        self.kb = Keyboard()
+        self.kb.enable(self.TIME_STEP)
+
+        self.run()
 
         # ========== PACKET ROBOTS ==========
         # Instantiate the active packets/boxes.
