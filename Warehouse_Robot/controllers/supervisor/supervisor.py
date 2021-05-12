@@ -7,6 +7,29 @@ from dataclasses import dataclass, field
 # Error codes
 INVALID_NUM_MSG = "The parameter must be integer!"
 
+# Switch case variables
+ROBOT_IDLE = '1'
+MOVE_AGV = '2'
+MOVE_TOWER = '3'
+ROTATE_SNAKE = '4'
+EXTEND_SNAKE = '5'
+ATTACH_PACKET = '6'
+DETACH_PACKET = '7'
+RETRACT_SNAKE = '8'
+
+class Driver(Supervisor):
+    TIME_STEP = 32
+    x = int(0.0)
+    y = int(0.0)
+    z = int(0.0)
+    translation = [x, y, z]
+
+    # Instantiated objects
+    AGV_ROBOT_1 = None
+    SUCTION_CUP = None
+    #agv_robot_1_translation_field = agv_robot_1.getField('translation')
+    #suction_cup = self.getFromDef('suction_cup')
+    #box_1 =
 class Driver(Supervisor):
     TIME_STEP = 20
     x = int(0.0)
