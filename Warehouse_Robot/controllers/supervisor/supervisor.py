@@ -323,6 +323,44 @@ class Driver(Supervisor):
         s = struct.Struct('4s 4s 4s 4s 4s 4s 4s')
         packed = s.pack(message_list.encode('utf-8'))
         return packed
+
+    def update_picked_packet_positions(self):
+        updated = False
+
+        if len(self.picked_packets) == 0:
+            updated = False
+        else:
+            for i in range(len(self.picked_packets)):
+                updated_pos = [0, 0, 0]
+
+                # Get the packet and current position.
+                packet_num = self.picked_packets[i]
+                # print("Packet number: ", packet_num)
+                packet_name = "PACKET_" + str(packet_num)
+                packet = self.getFromDef(packet_name)
+                current_pos = packet.getField('translation').getSFVec3f()
+
+                # Get difference in current and previous gps position.
+                gps_diff_x = self.current_gps_pos[0] - self.previous_gps_pos[0]
+                gps_diff_y = self.current_gps_pos[1] - self.previous_gps_pos[1]
+                gps_diff_z = self.current_gps_pos[2] - self.previous_gps_pos[2]
+                gps_pos = [gps_diff_x, gps_diff_y, gps_diff_z]
+
+                # Get updated packet position.
+                for i in range(3):
+                    updated_pos[i] = current_pos[i] + gps_pos[i]
+                # updated_pos_x = current_pos[0] + gps_pos[0]
+                # updated_pos_y = current_pos[1] + gps_pos[1]
+                # updated_pos_z = current_pos[2] + gps_pos[2]
+
+                # Set updated packet position.
+                packet.getField('translation').setSFVec3f(updated_pos)
+
+            updated = True
+
+            print("Updated position for: ", self.picked_packets)
+
+        return updated
     def run(self):
     
         # Main loop:
