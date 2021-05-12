@@ -334,6 +334,16 @@ class AGV(Robot):
         s = struct.Struct('4s 4s 4s 4s 4s 4s 4s')
         packed = s.pack(message_list.encode('utf-8'))
         return packed
+
+    # ------------------- METHODS --------------
+    def create_pallet(self, num_pallets):
+        self.pallet_list = [""] * num_pallets
+
+        for i in range(num_pallets):
+            pallet_name = "AGV_PALLET_" + str(i+1)
+            pallet = Pallet(length=1.200, width=0.800, height=0.155)
+            self.pallet_list[i] = pallet
+            print("Pallet ", pallet_name, " placed on AGV.")
 # ------------------- METHODS --------------
     def create_pallet(self, num_pallets):
         self.pallet_list = [""] * num_pallets
