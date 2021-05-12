@@ -466,34 +466,65 @@ class AGV(Robot):
                 self.speed_agv = 0
                 sys.stderr.write("Minimum AGV speed reached.\n")
 
-def move_agv(keystrokes):
-    # Drive AGV
-    if (FORWARD in keystrokes):  # Drive forwards
-        if (TURN_LEFT in keystrokes):  # Turn left
+    # def move_agv
+    def move_agv(self, keyword):
+        # Drive AGV
+        if (keyword == 'forward'):
+            self.drive_agv(left_fwd=1, left_aft=1, right_fwd=1, right_aft=1, speed=self.speed_agv)
+        elif (keyword == 'forward_left'):
             print("Turning left")
-            drive_agv(left_fwd=0.2, left_aft=0.2, right_fwd=1, right_aft=1, speed=speed_agv)
-        elif (TURN_RIGHT in keystrokes):  # Turn right
+            self.drive_agv(left_fwd=0.2, left_aft=0.2, right_fwd=1, right_aft=1, speed=self.speed_agv)
+        elif (keyword == 'forward_right'):
             print("Turning right")
-            drive_agv(left_fwd=1, left_aft=1, right_fwd=0.2, right_aft=0.2, speed=speed_agv)
-        else:
-            drive_agv(left_fwd=1, left_aft=1, right_fwd=1, right_aft=1, speed=speed_agv)
-    elif (BACKWARD in keystrokes):  # Drive backwards
-        if (TURN_LEFT in keystrokes):  # Turn left
+            self.drive_agv(left_fwd=1, left_aft=1, right_fwd=0.2, right_aft=0.2, speed=self.speed_agv)
+        elif (keyword == 'backward'):
+            self.drive_agv(left_fwd=-1, left_aft=-1, right_fwd=-1, right_aft=-1, speed=self.speed_agv)
+        elif (keyword == 'backward_left'):
             print("Turning left")
-            drive_agv(left_fwd=-0.2, left_aft=-0.2, right_fwd=-1, right_aft=-1, speed=speed_agv)
-        elif (TURN_RIGHT in keystrokes):  # Turn right
+            self.drive_agv(left_fwd=-0.2, left_aft=-0.2, right_fwd=-1, right_aft=-1, speed=self.speed_agv)
+        elif (keyword == 'backward_right'):
             print("Turning right")
-            drive_agv(left_fwd=-1, left_aft=-1, right_fwd=-0.2, right_aft=-0.2, speed=speed_agv)
+            self.drive_agv(left_fwd=-1, left_aft=-1, right_fwd=-0.2, right_aft=-0.2, speed=self.speed_agv)
+        elif (keyword == 'left'):
+            print("Turning left")
+            self.drive_agv(left_fwd=-1, left_aft=-1, right_fwd=1, right_aft=1, speed=self.speed_agv)
+        elif (keyword == 'right'):
+            print("Turning right")
+            self.drive_agv(left_fwd=1, left_aft=1, right_fwd=-1, right_aft=-1, speed=self.speed_agv)
+        elif (keyword == 'idle'):
+            self.drive_agv(left_fwd=1, left_aft=1, right_fwd=1, right_aft=1, speed=0)
+        #else:
+        #    # Idle
+        #    self.drive_agv(left_fwd=1, left_aft=1, right_fwd=1, right_aft=1, speed=0)
+
+    def move_agv_keyboard(self, keystrokes):
+        # Drive AGV
+        if (self.FORWARD in keystrokes):  # Drive forwards
+            if (self.TURN_LEFT in keystrokes):  # Turn left
+                print("Turning left")
+                self.drive_agv(left_fwd=0.2, left_aft=0.2, right_fwd=1, right_aft=1, speed=self.speed_agv)
+            elif (self.TURN_RIGHT in keystrokes):  # Turn right
+                print("Turning right")
+                self.drive_agv(left_fwd=1, left_aft=1, right_fwd=0.2, right_aft=0.2, speed=self.speed_agv)
+            else:
+                self.drive_agv(left_fwd=1, left_aft=1, right_fwd=1, right_aft=1, speed=self.speed_agv)
+        elif (self.BACKWARD in keystrokes):  # Drive backwards
+            if (self.TURN_LEFT in keystrokes):  # Turn left
+                print("Turning left")
+                self.drive_agv(left_fwd=-0.2, left_aft=-0.2, right_fwd=-1, right_aft=-1, speed=self.speed_agv)
+            elif (self.TURN_RIGHT in keystrokes):  # Turn right
+                print("Turning right")
+                self.drive_agv(left_fwd=-1, left_aft=-1, right_fwd=-0.2, right_aft=-0.2, speed=self.speed_agv)
+            else:
+                self.drive_agv(left_fwd=-1, left_aft=-1, right_fwd=-1, right_aft=-1, speed=self.speed_agv)
+        elif (self.TURN_LEFT in keystrokes):  # Turn left
+            print("Turning left")
+            self.drive_agv(left_fwd=-1, left_aft=-1, right_fwd=1, right_aft=1, speed=self.speed_agv)
+        elif (self.TURN_RIGHT in keystrokes):  # Turn right
+            print("Turning right")
+            self.drive_agv(left_fwd=1, left_aft=1, right_fwd=-1, right_aft=-1, speed=self.speed_agv)
         else:
-            drive_agv(left_fwd=-1, left_aft=-1, right_fwd=-1, right_aft=-1, speed=speed_agv)
-    elif (TURN_LEFT in keystrokes):  # Turn left
-        print("Turning left")
-        drive_agv(left_fwd=-1, left_aft=-1, right_fwd=1, right_aft=1, speed=speed_agv)
-    elif (TURN_RIGHT in keystrokes):  # Turn right
-        print("Turning right")
-        drive_agv(left_fwd=1, left_aft=1, right_fwd=-1, right_aft=-1, speed=speed_agv)
-    else:
-        drive_agv(left_fwd=1, left_aft=1, right_fwd=1, right_aft=1, speed=0)
+            self.drive_agv(left_fwd=1, left_aft=1, right_fwd=1, right_aft=1, speed=0)
 
 # ------ Snake box - 1 -----
 def increment_speed_snakebox(keystrokes):
