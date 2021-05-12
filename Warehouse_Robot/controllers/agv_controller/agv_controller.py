@@ -693,9 +693,13 @@ class AGV(Robot):
                 speed_axis_1 = 0
                 sys.stderr.write("Minimum snake box speed reached.\n")
 
-def rotate_snakebox(keystrokes):
-    # Variables
-    global speed_axis_1
+    def rotate_snakebox_to(self, angle):
+        self.motor_axis_1.setVelocity(0.5)
+        self.motor_axis_1.setPosition(math.radians(angle))
+
+    def rotate_snakebox(self, keyword):
+        # Variables
+        # global speed_axis_1
 
     # Rotate snake box - Axis 1
     if (LEFT_AXIS_1 in keystrokes):
