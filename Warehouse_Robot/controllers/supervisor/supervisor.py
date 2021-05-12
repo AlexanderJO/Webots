@@ -215,6 +215,29 @@ class Driver(Supervisor):
         except Exception as e:
             e = traceback.format_exc()
             print("Error: ", e)
+# Dataclass for Packet with immutable input.
+@dataclass(frozen=True, order=True)
+class Packet:
+    length: float = field()
+    width: float = field()
+    height: float = field()
+    size: str = field(default="NO SIZE SELECTED!")
+    name: str = field(default="NO PACKET NAME")
+
+    def get_length(self):
+        return self.length
+
+    def get_width(self):
+        return self.width
+
+    def get_height(self):
+        return self.height
+
+    def get_size(self):
+        return self.size
+
+    def get_name(self):
+        return self.name
 
 
 controller = Driver()
