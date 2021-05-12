@@ -1,0 +1,55 @@
+Dataclass
+https://www.google.com/search?q=dataclass+python+text+input+validation&safe=off&sxsrf=ALeKk01PZOEYA_eccpnt1yZoHufy-PLZeQ%3A1617957630234&ei=_hJwYPvWDce6kwW-57Ig&oq=dataclass+python+text+input+&gs_lcp=Cgdnd3Mtd2l6EAMYADIICCEQFhAdEB46BwgAEEcQsAM6BAgAEBM6CggAEBYQChAeEBM6CAgAEBYQChAeOgUIIRCgAToGCAAQFhAeUJeZB1j-pwdg3rEHaAJwAngAgAGWAYgBhQmSAQQxMS4xmAEAoAEBqgEHZ3dzLXdpesgBCMABAQ&sclient=gws-wiz
+https://www.google.com/search?q=dataclass+python+counter&oq=dataclass+python+counter&aqs=chrome..69i57j33i160l2.3607j0j7&sourceid=chrome&ie=UTF-8
+https://www.google.com/search?q=tuple&oq=tuple&aqs=chrome..69i57j0l9.703j0j7&sourceid=chrome&ie=UTF-8
+https://www.google.com/search?q=dataclass+python+add+remove&safe=off&sxsrf=ALeKk03wa_OgflzoJPW0e31mlESM-CMd_g%3A1617958502351&ei=ZhZwYPv2FMTTsAe7m4jADg&oq=dataclass+python+add+remove&gs_lcp=Cgdnd3Mtd2l6EAMyBQghEKABOgcIABBHELADOgUIABDLAToICAAQFhAKEB46BggAEBYQHjoICCEQFhAdEB46BwghEAoQoAFQsvUCWOD9AmDA_gJoAXACeACAAYQBiAHNCJIBAzYuNZgBAKABAaoBB2d3cy13aXrIAQjAAQE&sclient=gws-wiz&ved=0ahUKEwj7wayO5fDvAhXEKewKHbsNAugQ4dUDCAw&uact=5
+https://www.google.com/search?q=dataclass+python+add+to+list&safe=off&sxsrf=ALeKk03VDLVhMOz8A8NVBMrk0uBUZGwB_g%3A1617958866771&ei=0hdwYNzMLq_rrgTqjKroDQ&oq=dataclass+python+add+to+list&gs_lcp=Cgdnd3Mtd2l6EAMyCAgAEBYQChAeOgcIIxCwAxAnOgcIABBHELADOgQIIxAnOgQIABATOgoIABAWEAoQHhATOgYIABAWEB5Q9J8CWOOyAmDcswJoAXACeACAAViIAasHkgECMTKYAQCgAQGqAQdnd3Mtd2l6yAEJwAEB&sclient=gws-wiz&ved=0ahUKEwjc_Y685vDvAhWvtYsKHWqGCt0Q4dUDCAw&uact=5
+https://www.google.com/search?q=python+dataclass+append&oq=python+dataclass+append&aqs=chrome..69i57j0i10i22i30l4j0i22i30j0i10i22i30l4.2879j0j7&sourceid=chrome&ie=UTF-8
+https://www.infoworld.com/article/3563878/how-to-use-python-dataclasses.html
+https://stackoverflow.com/questions/61522624/how-to-create-an-optional-field-in-a-dataclass-that-is-inherited
+https://docs.python.org/3/library/dataclasses.html
+https://betterprogramming.pub/6-things-to-know-to-get-started-with-python-data-classes-c795bf7e0a74
+
+Array
+https://stackoverflow.com/questions/57690749/how-to-declare-an-array-or-a-list-in-a-python-dataclass
+https://www.google.com/search?q=python+add+to+List&oq=python+add+to+List&aqs=chrome..69i57j0l7.5056j0j7&sourceid=chrome&ie=UTF-8
+
+Dataclass mutable
+https://www.google.com/search?q=python+dataclass+List+append&safe=off&sxsrf=ALeKk02RJGuQvhvxmgtWfhkbWmD33xdqpQ%3A1617959527474&ei=ZxpwYLKZHKyGwPAP4K6skAo&oq=python+dataclass+List+append&gs_lcp=Cgdnd3Mtd2l6EAMyBQgAEMsBOgcIABBHELADOgcIABAKEMsBOggIABAWEAoQHjoGCAAQFhAeUMQoWMMuYNMvaAFwAngAgAGXAYgBkgaSAQM1LjOYAQCgAQGqAQdnd3Mtd2l6yAEIwAEB&sclient=gws-wiz&ved=0ahUKEwjy6JT36PDvAhUsAxAIHWAXC6IQ4dUDCAw&uact=5
+https://stackoverflow.com/questions/53632152/why-cant-dataclasses-have-mutable-defaults-in-their-class-attributes-declaratio
+
+Dataclass getField
+https://www.google.com/search?q=python+dataclass+get+field&safe=off&sxsrf=ALeKk01k1A9jVE3p0TFrFS8shXX5kOTjEA%3A1617960678108&ei=5h5wYMf-BfHHrgTjoKcg&oq=python+dataclass+get+field&gs_lcp=Cgdnd3Mtd2l6EAMyBQgAEMsBMgUIABDLATIFCAAQywEyBggAEBYQHjoHCAAQRxCwAzoECAAQDToICAAQFhAKEB46CAgAEAgQDRAeOggIIRAWEB0QHlD9NljET2C-UGgEcAJ4AIABf4gBuAeSAQM2LjSYAQCgAQGqAQdnd3Mtd2l6yAEIwAEB&sclient=gws-wiz&ved=0ahUKEwjHieqb7fDvAhXxo4sKHWPQCQQQ4dUDCAw&uact=5
+
+
+Dataclass __init__
+https://www.infoworld.com/article/3563878/how-to-use-python-dataclasses.html
+
+__init__
+https://www.geeksforgeeks.org/__init__-in-python/
+
+Python list
+https://linuxize.com/post/python-list-lenght/
+
+Webots Emitter
+https://www.cyberbotics.com/doc/reference/emitter
+
+Try Except
+https://towardsdatascience.com/do-not-abuse-try-except-in-python-d9b8ee59e23b
+
+Traceback
+https://www.google.com/search?q=python+import+traceback&oq=python+import+traceback&aqs=chrome.0.0i19j0i19i22i30l7.4872j0j4&sourceid=chrome&ie=UTF-8
+
+Robot Controller
+https://cyberbotics.com/doc/guide/running-extern-robot-controllers#running-extern-robot-controller-with-the-snap-version-of-webots
+
+Webot suction gripper
+https://www.google.com/search?q=webots+suction+gripper&safe=off&sxsrf=ALeKk02awcubqHXVLJg_tv0EE0y0CiIn9A%3A1618172077200&ei=rVhzYI3nC6j5qwHw7Yu4Dg&oq=webots+suction+gripper&gs_lcp=Cgdnd3Mtd2l6EAMyBQghEKABMgUIIRCgATIFCCEQoAE6BwghEAoQoAFQyhZYsRpgwRpoAHACeACAAZkBiAHTA5IBAzQuMZgBAKABAaoBB2d3cy13aXrAAQE&sclient=gws-wiz&ved=0ahUKEwjN8eLegPfvAhWo_CoKHfD2AucQ4dUDCAw&uact=5
+
+Webots Supervisor
+https://www.youtube.com/watch?v=xMPyqbtYc_E
+https://www.cyberbotics.com/doc/reference/supervisor
+
+
+Webots Web Interface
+https://cyberbotics.com/wwi/R2019a/help.php
