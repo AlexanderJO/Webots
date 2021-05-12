@@ -239,6 +239,140 @@ class Packet:
     def get_name(self):
         return self.name
 
+@dataclass
+class Pallet:
+    max_packets = 64  # Max number of packets considered as 16 packets for each level, up to 4 levels.
+    length = float(0)
+    width = float(0)
+    height = float(0)
+    count_packets = 0
+    packets = {}
+
+    def __init__(self, pallet, length, height, width):
+        self.pallet = pallet
+        self.length = length
+        self.width = width
+        self.height = height
+
+        # Populate the pallet list with None objects.
+        self.__create_pallet_list()
+
+
+    # Private function for setting length. Only used for testing. Not callable from outside class.
+    def __set_length(self, length):
+        self.length = length
+
+    # Private function for setting width. Only used for testing. Not callable from outside class.
+    def __set_width(self, width):
+        self.width = width
+
+    # Private function for setting height. Only used for testing. Not callable from outside class.
+    def __set_height(self, height):
+        self.height = height
+
+    def __create_pallet_list(self):
+        for i in range(self.max_packets):
+            self.packets[i+1] = None
+
+    def add_packet(self, packet):
+        self.count_packets += 1
+        self.packets[self.count_packets] = packet
+
+    def remove_packet(self, packet_num):
+        self.count_packets -= 1
+        self.packets[packet_num] = None
+
+    # Returns a dictionary of packets with Packet and packet number.
+    def get_packets(self):
+        return self.packets
+
+    def get_packet(self, packet_num):
+        return self.packets.get(packet_num)
+
+    def get_packet_dimensions(self, packet_num):
+        dimensions = [0, 0, 0]
+        packet = self.packets.get(packet_num)
+        width = packet.get_width()
+        length = packet.get_length()
+        height = packet.get_height()
+
+        dimensions = [width, length, height]
+
+        return dimensions
+
+    def get_pallet_position(self):
+        # Initial displacement of pallets due to inaccuracy of STL file.
+        #disp_x = -0.046
+        disp_x = -1.371
+        disp_y = 0.0775
+        #disp_z = -0.798
+        disp_z = 0.8
+
+        # Position without displacement.
+        inaccurate_pos = self.get_pallet().getPosition()
+
+        x = inaccurate_pos[0] + disp_x
+        y = inaccurate_pos[1] + disp_y
+        z = inaccurate_pos[2] + disp_z
+
+        coordinates = [0, 0, 0]
+        coordinates[0] = x
+        coordinates[1] = y
+        coordinates[2] = z
+
+        return coordinates
+
+    def get_num_packets(self):
+        # return len(self.packets)
+        return self.count_packets
+
+    def get_pallet(self):
+        return self.pallet
+
+    def get_packet_position(self, packet_num):
+        coordinates = [0, 0, 0]
+
+        packet = self.get_packet(packet_num=packet_num)
+
+        max_width = self.width / packet.get_width()
+        max_length = self.length / packet.get_length()
+        max_packets_level = max_width * max_length
+
+        # Find the level where the packet is located. Each level has maximum 16 packets.
+        level = ((packet_num - 1) - (packet_num - 1) % max_packets_level) / max_packets_level + 1
+
+        # Find the position on the given level where the packet is located.
+        # ver_pos = ((packet_num - 1) - (packet_num - 1) % max_width) / max_width + 1
+        # print("Vertical pos. 1: ", ver_pos)
+        #test = ((packet_num - 1) % max_packets_level - ((5 - 1) % 16) % 4 ) / 4 + 1
+        #print("Test: ", test)
+        ver_pos = (((packet_num - 1) % max_packets_level) - ((packet_num - 1) % max_packets_level) % max_width) / max_width + 1
+        # hor_pos = packet_num - max_width * (ver_pos - 1)
+        hor_pos = ((packet_num - 1) % max_packets_level + 1) - max_width * (ver_pos - 1)
+
+        # Coordinates for packet.
+        x_init = packet.get_length() / 2 + packet.get_length() * (ver_pos - 1)
+        y_init = packet.get_height() / 2 + packet.get_height() * (level - 1)
+        z_init = packet.get_width() / 2 + packet.get_width() * (hor_pos - 1)
+        # print("X: ", x_init, " Y: ", y_init, " Z: ", z_init)
+
+        # Coordinates for packet with reference to GCS.
+        x = x_init + self.get_pallet_position()[0] - self.length / 2
+        y = y_init + self.get_pallet_position()[1]*2 + packet.get_height() / 2
+        z = z_init + self.get_pallet_position()[2] - self.width / 2
+
+        coordinates[0] = x
+        coordinates[1] = y
+        coordinates[2] = z
+
+        # if packet.get_size() == "small":
+        #     pass
+        # elif packet.get_size() == "large":
+        #     pass
+        # else:
+        #     pass
+
+        return coordinates
 
 controller = Driver()
 controller.run()
