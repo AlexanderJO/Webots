@@ -343,7 +343,13 @@ class AGV(Robot):
     axis_3_pos_pt = [0] * num_joints
     ps_axis_3_pt = [""] * num_joints
 
-    max_velocity_axis_3 = 0
+    def populate_snake(self, num_joints):
+        # Variables
+        # global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt
+
+        self.motor_axis_3_pt = [""] * num_joints
+        self.axis_3_pos_pt = [0] * num_joints
+        self.ps_axis_3_pt = [""] * num_joints
 
     for i in range(num_joints):
         # Get Axis 3 motor for each snake part
