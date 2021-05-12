@@ -174,6 +174,28 @@ RETRACT_AXIS_3 = '69'
 SPEED_INCREASE_SNAKE = str(Keyboard.SHIFT+43)
 SPEED_DECREASE_SNAKE = str(Keyboard.SHIFT+45)
 
+    def __init__(self):
+        # Instantiate receiver node to obtain data from emitters.
+        self.receiver = robot.getDevice('receiver_agv')
+        self.receiver.enable(self.TIME_STEP)
+
+        # Instantiate emitter node to send data to receivers.
+        self.emitter = robot.getDevice('emitter_agv')
+
+        # Instantiate cameras.
+        self.camera_top = robot.getDevice('camera_top')
+        self.camera_top.enable(self.TIME_STEP)
+        self.camera_snake = robot.getDevice('camera_snake')
+        self.camera_snake.enable(self.TIME_STEP)
+
+        # AGV position initialized.
+        self.agv_positioned[1] = True # No movements in y-direction
+
+        # Create pallet on AGV.
+        self.create_pallet(1)
+
+        # Run the program.
+        self.run()
 # ------------------- METHODS --------------
 def populate_snake(num_joints):
     # Variables
