@@ -1014,13 +1014,181 @@ class AGV(Robot):
 
     return coordinates
 
-# Dataclass for Packet with immutable input.
-@dataclass(frozen=True, order=True)
-class Packet:
-    length: int = field()
-    width: int = field()
-    height: int = field()
-    size: str = field(default="NO SIZE SELECTED!")
+    def snaketip_angle(self):
+        # Variable for snake tip angle.
+
+        # Get GPS position
+        # print("Heading of AGV: ", self.get_agv_heading())
+        agv_heading = self.get_agv_heading()
+
+        # Get snake box angle
+        angle_axis_1 = self.get_angular_position(name=self.ps_axis_1)
+        # print("Snake box angle: ", angle_axis_1)
+
+        snake_length = self.axis_3_pos_pt[0]
+        # print("Snake length: ", snake_length)
+
+        snaketip_angle = agv_heading + angle_axis_1
+        # print("Snake tip angle: ", snaketip_angle)
+
+        return snaketip_angle
+
+    # Returns angle in degrees (°).
+    def get_angle(self, adjacent, opposite):
+        angle = math.atan2(opposite, adjacent) * (360 / (2 * math.pi))
+        if angle < 0:
+            angle = angle + 360
+
+        # Returns the angle in degrees (°).
+        return angle
+
+    # Returns the angle in degrees (°) from two coordinate systems.
+    def get_angle_between_coords(self, coordinates_inner, coordinates_outer):
+        diff_x = coordinates_outer[0] - coordinates_inner[0]
+        diff_z = coordinates_outer[2] - coordinates_inner[2]
+
+        # Calculates the angle in degrees (°).
+        angle = math.atan2(diff_x, diff_z) * (360 / (2 * math.pi))
+        if angle < 0:
+            angle = angle + 360
+
+        # Returns the angle in degrees (°).
+        return angle
+
+    # Returns the angle in degrees (°) from two coordinate systems.
+    def get_heading(self, coordinates_inner, coordinates_outer):
+        diff_x = coordinates_outer['gps_pos'][0] - coordinates_inner['gps_pos'][0]
+        diff_y = coordinates_outer['gps_pos'][1] - coordinates_inner['gps_pos'][1]
+        diff_z = coordinates_outer['gps_pos'][2] - coordinates_inner['gps_pos'][2]
+
+        # Calculates the angle in degrees (°).
+        angle = math.atan2(diff_x, diff_z) * (360 / (2 * math.pi))
+        if angle < 0:
+            angle = angle + 360
+
+        # Returns the angle in degrees (°).
+        return angle
+
+    # Return GPS position in x, y and z format as a dictionary.
+    def get_gps_pos(self, name):
+        # Read GPS position
+        gps_info = dict()
+        gps_info['gps_pos'] = name.getValues()
+        return gps_info
+
+    # Returns the angular position in degrees (°) for a position sensor (name).
+    def get_angular_position(self, name):
+        angle_rad = name.getValue()
+
+        # Calculates the angle in degrees (°).
+        angle_deg = angle_rad * (360 / (2 * math.pi))
+        if angle_deg < 0:
+            angle = angle_deg + 360
+
+        # Returns the angle in degrees (°).
+        return angle_deg
+
+    # # Dataclass for Packet with immutable input.
+    # @dataclass(frozen=True, order=True)
+    # class Packet:
+    #     length: int = field()
+    #     width: int = field()
+    #     height: int = field()
+    #     size: str = field(default="NO SIZE SELECTED!")
+    #
+    # class Pallet:
+    #     length = int(0)
+    #     width = int(0)
+    #     height = int(0)
+    #     packets = []
+    #
+    #     def __init__(self, length, height, width):
+    #         self.length = length
+    #         self.width = height
+    #         self.height = width
+    #
+    #     # Private function for setting length. Only used for testing. Not callable from outside class.
+    #     def __set_length(self, length):
+    #         self.length = length
+    #
+    #     def add_packet(self, packet):
+    #         self.packets.append(packet)
+    #
+    #     def remove_packet(self, packet):
+    #         pass
+    #
+    #     def get_packets(self):
+    #         return self.packets
+
+    # ------ Snake tip - Axis 4 -----
+    def rotate_snaketip_to(self, angle, speed):
+        # margin = math.radians(2)
+        # angle = math.radians(angle)
+        # current_angle = self.ps_axis_4.getValue()
+        #
+        # if current_angle >= (angle - margin) and current_angle <= (angle + margin):
+        #     self.gripper_pos_reached = True
+        # elif current_angle >= angle:
+        #     self.rotate_snaketip(keyword='left')
+        # elif current_angle < angle:
+        #     self.rotate_snaketip(keyword='right')
+        # else:
+        #     self.motor_axis_4.setPosition(angle)
+
+        self.motor_axis_4.setVelocity(speed)
+        self.motor_axis_4.setPosition(math.radians(angle))
+
+    def rotate_snaketip(self, keyword):
+        # Rotate snake tip - Axis 4
+        if (keyword == 'left'):
+            self.drive_axis_4(left=True, right=False, speed=self.speed_axis_4)
+        elif (keyword == 'right'):
+            self.drive_axis_4(left=False, right=True, speed=self.speed_axis_4)
+        else:
+            self.drive_axis_4(left=False, right=False, speed=0)
+
+    def rotate_snaketip_keyboard(self, keystrokes):
+        # Rotate snake tip - Axis 4
+        if (self.LEFT_AXIS_4 in keystrokes):
+            self.drive_axis_4(left=True, right=False, speed=self.speed_axis_4)
+        elif (self.RIGHT_AXIS_4 in keystrokes):
+            self.drive_axis_4(left=False, right=True, speed=self.speed_axis_4)
+        else:
+            self.drive_axis_4(left=False, right=False, speed=0)
+
+    # ---- PALLET HANDLING ----
+    def get_packet_position(self, pallet_num, packet_num):
+        coordinates = self.pallet_list[pallet_num].get_packet_position(packet_num)
+
+        return coordinates
+
+    # ---- AGV STATES ----
+
+    def agv_idle_sc(self):
+        print("AGV is in idle mode!")
+        pass
+
+    def move_agv_sc(self):
+        pass
+
+    def rotate_agv_sc(self):
+        self.turn_agv(90)
+
+
+    # ---- ROBOT STATES ----
+
+    def robot_idle_sc(self):
+        print("Robot is in idle mode!")
+        pass
+
+    def moving_agv_sc(self):
+        pass
+
+    def move_tower_sc(self):
+        pass
+
+    def rotate_snakebox_sc(self):
+        pass
 
 class Pallet:
     length = int(0)
