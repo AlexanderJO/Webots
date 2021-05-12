@@ -196,6 +196,20 @@ SPEED_DECREASE_SNAKE = str(Keyboard.SHIFT+45)
 
         # Run the program.
         self.run()
+
+    # ----------------- COMMUNICATION ---------------
+    # Receive message through receiver sent from emitter.
+    # Received in utf-8 format.
+    def receive_message(self):
+        message = ""
+        if self.receiver.getQueueLength() > 0:
+            message = self.receiver.getData().decode('utf-8')
+            self.receiver.nextPacket()
+
+        # Splits the message.
+        message = message.split()
+
+        return message
 # ------------------- METHODS --------------
 def populate_snake(num_joints):
     # Variables
