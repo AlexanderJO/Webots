@@ -818,83 +818,94 @@ class AGV(Robot):
         elif (abs(current_length) <= (abs(length) + snake_margin)) and not self.snake_pos_reached:
             self.move_snake('extend')
 
-# Return GPS position in x, y and z format as a dictionary.
-def get_gps_pos(name):
-    # Read GPS position
-    gps_info = dict()
-    gps_info['gps_pos'] = name.getValues()
-    return gps_info
+    def move_snake(self, keyword):
+        # Variables
+        # global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt
 
-# Returns the angular position in degrees (°) for a position sensor (name).
-def get_angular_position(name):
-    angle_rad = name.getValue()
+        rem_length = round(self.axis_3_pos_pt[0], 3) % self.snake_piece_length
+        count = round(
+            abs((round(self.axis_3_pos_pt[0], 4) - rem_length + self.snake_piece_length) / self.snake_piece_length), 0)
+        # print("Overshooting length: ", rem_length, " at ", count, " pieces")
 
-    # Calculates the angle in degrees (°).
-    angle_deg = angle_rad * (360 / (2 * math.pi))
-    if angle_deg < 0:
-        angle = angle_deg + 360
+        for i in range(len(self.motor_axis_3_pt)):
+            if count >= i:
+                pos = i + 1
 
-    # Returns the angle in degrees (°).
-    return angle_deg
+                # Move snake part
+                if (keyword == 'extend'):
+                    self.axis_3_pos_pt[i] = round(self.ps_axis_3_pt[i].getValue() - self.speed_axis_3, 3)
+                    # print("Snake tip ", (i + 1), " position: ", self.axis_3_pos_pt[i])
+                elif (keyword == 'retract'):
+                    self.axis_3_pos_pt[i] = round(self.ps_axis_3_pt[i].getValue() + self.speed_axis_3, 3)
+                    # print("Snake tip ", (i + 1), " position: ", self.axis_3_pos_pt[i])
 
-def move_snake(keystrokes):
-    # Variables
-    global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt
+                if (self.axis_3_pos_pt[i] > self.motor_axis_3_pt[i].getMaxPosition()):
+                    print("Desired pos: ", self.axis_3_pos_pt[i])
+                    self.axis_3_pos_pt[i] = round(self.motor_axis_3_pt[i].getMaxPosition(), 3)
+                    sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " has reached maximum length.")
+                elif (self.axis_3_pos_pt[i] < self.motor_axis_3_pt[i].getMinPosition()):
+                    print("Desired pos: ", self.axis_3_pos_pt[i])
+                    self.axis_3_pos_pt[i] = round(self.motor_axis_3_pt[i].getMinPosition(), 3)
+                    sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " - has reached minimum length.")
+                else:
+                    self.motor_axis_3_pt[i].setPosition(self.axis_3_pos_pt[i])
+            pass
 
-    rem_length = round(axis_3_pos_pt[0], 3) % snake_piece_length
-    count = round(abs((round(axis_3_pos_pt[0], 4) - rem_length + snake_piece_length) / snake_piece_length), 0)
-    # print("Overshooting length: ", rem_length, " at ", count, " pieces")
+    def move_snake_keyboard(self, keystrokes):
+        # Variables
+        # global motor_axis_3_pt, axis_3_pos_pt, ps_axis_3_pt
 
+        rem_length = round(self.axis_3_pos_pt[0], 3) % self.snake_piece_length
+        count = round(abs((round(self.axis_3_pos_pt[0], 4) - rem_length + self.snake_piece_length) / self.snake_piece_length), 0)
+        # print("Overshooting length: ", rem_length, " at ", count, " pieces")
 
+        for i in range(len(self.motor_axis_3_pt)):
+            # if count == i:
+            #     pos = i + 1
+            #
+            #     # Move snake part
+            #     if (EXTEND_AXIS_3 in keystrokes):
+            #         axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() - speed_axis_3, 3)
+            #     elif (RETRACT_AXIS_3 in keystrokes):
+            #         axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() + speed_axis_3, 3)
+            #
+            #     if (axis_3_pos_pt[i] > motor_axis_3_pt[i].getMaxPosition()):
+            #         print("Desired pos: ", axis_3_pos_pt[i])
+            #         axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMaxPosition(), 3)
+            #         # print("Max. pos: ", motor_axis_3_pt[i].getMaxPosition())
+            #         sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " has reached maximum length.")
+            #     elif (axis_3_pos_pt[i] < motor_axis_3_pt[i].getMinPosition()):
+            #         print("Desired pos: ", axis_3_pos_pt[i])
+            #         axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMinPosition(), 3)
+            #         # print("Min. pos: ", motor_axis_3_pt[i].getMaxPosition())
+            #         sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " - has reached minimum length.")
+            #     else:
+            #         motor_axis_3_pt[i].setPosition(axis_3_pos_pt[i])
+            #
+            #     print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
 
+            if count >= i:
+                pos = i + 1
 
-    for i in range(len(motor_axis_3_pt)):
-        # if count == i:
-        #     pos = i + 1
-        #
-        #     # Move snake part
-        #     if (EXTEND_AXIS_3 in keystrokes):
-        #         axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() - speed_axis_3, 3)
-        #     elif (RETRACT_AXIS_3 in keystrokes):
-        #         axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() + speed_axis_3, 3)
-        #
-        #     if (axis_3_pos_pt[i] > motor_axis_3_pt[i].getMaxPosition()):
-        #         print("Desired pos: ", axis_3_pos_pt[i])
-        #         axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMaxPosition(), 3)
-        #         # print("Max. pos: ", motor_axis_3_pt[i].getMaxPosition())
-        #         sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " has reached maximum length.")
-        #     elif (axis_3_pos_pt[i] < motor_axis_3_pt[i].getMinPosition()):
-        #         print("Desired pos: ", axis_3_pos_pt[i])
-        #         axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMinPosition(), 3)
-        #         # print("Min. pos: ", motor_axis_3_pt[i].getMaxPosition())
-        #         sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " - has reached minimum length.")
-        #     else:
-        #         motor_axis_3_pt[i].setPosition(axis_3_pos_pt[i])
-        #
-        #     print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
+                # Move snake part
+                if (self.EXTEND_AXIS_3 in keystrokes):
+                    self.axis_3_pos_pt[i] = round(self.ps_axis_3_pt[i].getValue() - self.speed_axis_3, 3)
+                    print("Snake tip ", (i + 1), " position: ", self.axis_3_pos_pt[i])
+                elif (self.RETRACT_AXIS_3 in keystrokes):
+                    self.axis_3_pos_pt[i] = round(self.ps_axis_3_pt[i].getValue() + self.speed_axis_3, 3)
+                    print("Snake tip ", (i + 1), " position: ", self.axis_3_pos_pt[i])
 
-        if count >= i:
-            pos = i + 1
-
-            # Move snake part
-            if (EXTEND_AXIS_3 in keystrokes):
-                axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() - speed_axis_3, 3)
-                print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
-            elif (RETRACT_AXIS_3 in keystrokes):
-                axis_3_pos_pt[i] = round(ps_axis_3_pt[i].getValue() + speed_axis_3, 3)
-                print("Snake tip ", (i + 1), " position: ", axis_3_pos_pt[i])
-
-            if (axis_3_pos_pt[i] > motor_axis_3_pt[i].getMaxPosition()):
-                print("Desired pos: ", axis_3_pos_pt[i])
-                axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMaxPosition(), 3)
-                sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " has reached maximum length.")
-            elif (axis_3_pos_pt[i] < motor_axis_3_pt[i].getMinPosition()):
-                print("Desired pos: ", axis_3_pos_pt[i])
-                axis_3_pos_pt[i] = round(motor_axis_3_pt[i].getMinPosition(), 3)
-                sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " - has reached minimum length.")
-            else:
-                motor_axis_3_pt[i].setPosition(axis_3_pos_pt[i])
-        pass
+                if (self.axis_3_pos_pt[i] > self.motor_axis_3_pt[i].getMaxPosition()):
+                    print("Desired pos: ", self.axis_3_pos_pt[i])
+                    self.axis_3_pos_pt[i] = round(self.motor_axis_3_pt[i].getMaxPosition(), 3)
+                    sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " has reached maximum length.")
+                elif (self.axis_3_pos_pt[i] < self.motor_axis_3_pt[i].getMinPosition()):
+                    print("Desired pos: ", self.axis_3_pos_pt[i])
+                    self.axis_3_pos_pt[i] = round(self.motor_axis_3_pt[i].getMinPosition(), 3)
+                    sys.stderr.write("Axis 3 - Snake Part " + str(pos) + " - has reached minimum length.")
+                else:
+                    self.motor_axis_3_pt[i].setPosition(self.axis_3_pos_pt[i])
+            pass
 
 def move_snake_manual(keystrokes):
     # Variables
