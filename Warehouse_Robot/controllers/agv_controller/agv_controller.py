@@ -387,9 +387,9 @@ class AGV(Robot):
         else:
             self.motor_axis_4.setVelocity(speed)
 
-# Method to assign keys after keystrokes. - REDACTED
-def key_assign(keystrokes):
-    pass
+    # Method to assign keys after keystrokes. - REDACTED
+    def key_assign(keystrokes):
+        pass
 
     # Read the distance sensor.
     def read_distance_sensor(self):
