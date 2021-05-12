@@ -346,21 +346,21 @@ class AGV(Robot):
         self.axis_3_pos_pt = [0] * num_joints
         self.ps_axis_3_pt = [""] * num_joints
 
-    for i in range(num_joints):
-        # Get Axis 3 motor for each snake part
-        motor_axis_3_pt[i] = robot.getDevice("motor_axis_3_pt" + str(i+1))
-        axis_3_pos_pt[i] = 0
+        for i in range(num_joints):
+            # Get Axis 3 motor for each snake part
+            self.motor_axis_3_pt[i] = robot.getDevice("motor_axis_3_pt" + str(i+1))
+            self.axis_3_pos_pt[i] = 0
 
-        # Get position sensor for axis 3 - Snake part 1
-        ps_axis_3_pt[i] = robot.getDevice("ps_axis_3_pt" + str(i+1))
-        ps_axis_3_pt[i].enable(TIME_STEP)
+            # Get position sensor for axis 3 - Snake part 1
+            self.ps_axis_3_pt[i] = robot.getDevice("ps_axis_3_pt" + str(i+1))
+            self.ps_axis_3_pt[i].enable(self.TIME_STEP)
 
-        # Get the maximum motor velocity.
-        motor_velocity = motor_axis_3_pt[i].getMaxVelocity()
+            # Get the maximum motor velocity.
+            motor_velocity = self.motor_axis_3_pt[i].getMaxVelocity()
 
-        # Set the maximum velocity.
-        if motor_velocity > max_velocity_axis_3:
-            max_velocity_axis_3 = motor_velocity
+            # Set the maximum velocity.
+            if motor_velocity > self.max_velocity_axis_3:
+                self.max_velocity_axis_3 = motor_velocity
 
     # Method for driving AGV by controlling forward and aft wheel on left and right side
     def drive_agv(self, left_fwd, left_aft, right_fwd, right_aft, speed):
