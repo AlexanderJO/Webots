@@ -149,6 +149,17 @@ class Driver(Supervisor):
         # ========== PACKET ROBOTS ==========
         # Instantiate the active packets/boxes.
 
+    # Continuously reads the keyboard for user inputs.
+    # Reads up to 7 simultaneous/combined key presses.
+    def read_keyboard(self):
+        # ------ KEYBOARD -----
+        # https://cyberbotics.com/doc/reference/keyboard
+        # Register keystrokes
+        keystrokes = [str(-1)] * 7
+        for i in range(0, 7):
+            keystrokes[i] = str(self.kb.getKey())
+        # print(keystrokes)
+        return keystrokes
         
     def run(self):
     
