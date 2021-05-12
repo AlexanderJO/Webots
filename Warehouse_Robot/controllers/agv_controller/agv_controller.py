@@ -583,6 +583,9 @@ class AGV(Robot):
             #     self.move_agv('left')
             # else:
             #     print("I've stopped turning.")
+
+        return heading_reached
+
     # Increment Snake box - Axis 1 speed
     if (SPEED_INCREASE_SNAKEBOX in keystrokes):
         if (speed_axis_1 < max_velocity_axis_1):
