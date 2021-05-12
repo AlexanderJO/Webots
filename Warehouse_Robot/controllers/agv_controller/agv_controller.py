@@ -586,6 +586,92 @@ class AGV(Robot):
 
         return heading_reached
 
+    def move_agv_fwd_to(self, position):
+        # Margins
+        pos_margin = 0.05  # Position margin in metres.
+
+    def move_agv_to(self, x, y, z):
+        # Margins
+        pos_margin = 0.05  # Position margin in metres.
+
+        # AGV is moving.
+        self.agv_moving = True
+
+        # Get GPS position
+        gps_axle_info = self.get_gps_pos(name=self.gps_axle)
+        current_x = gps_axle_info['gps_pos'][0]
+        current_y = gps_axle_info['gps_pos'][1]  # To be ignored. Not moving in y-direction.
+        current_z = gps_axle_info['gps_pos'][2]
+
+        # Get current heading of the AGV.
+        current_heading = self.get_agv_heading()
+        # self.get_desired_heading(x, y, z)
+
+        # print("Current x:", current_x, " x: ", x, " Difference: ", current_x - x, "Greater? ", current_x > x)
+        # print("Current z:", current_z, " z: ", z, " Difference: ", current_z - z, "Greater? ", current_z > z)
+        # print("===========")
+
+        if not self.packet_picking_started:
+            # Moving in x direction
+            # if not self.agv_heading_reached: # Turning AGV in correct direction
+            if not self.agv_approach_heading_reached:  # Turning AGV in correct direction
+                if current_x >= (x + pos_margin):
+                    # if not (current_heading >= (270 - heading_margin) and current_heading <= (270 + heading_margin)):
+                    #     self.turn_agv_heading(270)
+                    # else:
+                    #     print("I'm at 270")
+                    self.agv_approach_heading_reached = self.turn_agv(desired_heading=270)
+                elif current_x <= (x - pos_margin):
+                    # if not (current_heading >= (90 - heading_margin) and current_heading <= (90 + heading_margin)):
+                    #     self.turn_agv_heading(90)
+                    # else:
+                    #     print("I'm at 90")
+                    self.agv_approach_heading_reached = self.turn_agv(desired_heading=90)
+                else:
+                    self.agv_approach_heading_reached = self.turn_agv(desired_heading=0)
+
+            # Move in x direction if necessary.
+            elif not ((current_x - x) >= (0 - pos_margin) and (current_x - x) <= (0 + pos_margin)) and self.agv_approach_heading_reached and not self.agv_x_pos_reached:
+                # print("I'm moving forward")
+                self.move_agv(keyword='forward')
+
+            elif ((current_x - x) >= (0 - pos_margin) and (current_x - x) <= (0 + pos_margin)):
+                self.agv_x_pos_reached = True
+                self.agv_positioned[0] = True
+                self.agv_moving = False
+
+            else:
+                print("I'm idle now")
+                self.move_agv(keyword='idle')
+                self.agv_moving = False
+
+            # Moving in z direction.
+            if self.agv_x_pos_reached and not self.agv_z_pos_reached:
+                self.agv_attack_heading_reached = self.turn_agv(0)
+
+            if self.agv_attack_heading_reached and not self.agv_z_pos_reached:
+                if not ((current_z - z) >= (0 - pos_margin) and (current_z - z) <= (0 + pos_margin)):
+                    self.move_agv(keyword='forward')
+                elif ((current_z - z) >= (0 - pos_margin) and (current_z - z) <= (0 + pos_margin)):
+                    self.agv_z_pos_reached = True
+                    self.agv_positioned[2] = True
+
+        elif self.packet_picking_started:
+            if ((current_z - z) >= (0 - pos_margin) and (current_z - z) <= (0 + pos_margin)):
+                self.move_agv(keyword='idle')
+                self.agv_moving = False
+            elif current_z >= (z + pos_margin):
+                #if not ((current_z - z) >= (0 - pos_margin) and (current_z - z) <= (0 + pos_margin)):
+                self.move_agv(keyword='backward')
+            elif current_z < (z - pos_margin):
+                #if not ((current_z - z) >= (0 - pos_margin) and (current_z - z) <= (0 + pos_margin)):
+                self.move_agv(keyword='forward')
+            else:
+                self.move_agv(keyword='idle')
+                self.agv_moving = False
+
+        elif self.packet_picking_ended:
+            self.move_agv(keyword='forward')
     # Increment Snake box - Axis 1 speed
     if (SPEED_INCREASE_SNAKEBOX in keystrokes):
         if (speed_axis_1 < max_velocity_axis_1):
