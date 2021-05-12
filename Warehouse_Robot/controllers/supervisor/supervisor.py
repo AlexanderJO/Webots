@@ -1,6 +1,8 @@
 """supervisor controller."""
 from controller import Supervisor, Keyboard
 import traceback
+import sys, math, struct, time
+from dataclasses import dataclass, field
 
 # Error codes
 INVALID_NUM_MSG = "The parameter must be integer!"
