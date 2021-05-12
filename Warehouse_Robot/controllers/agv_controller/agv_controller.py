@@ -784,26 +784,26 @@ class AGV(Robot):
         else:
             self.motor_axis_2.setPosition(self.axis_2_pos)
 
-# ------ Snake - Axis 3 -----
-def increment_speed_snake_manual(keystrokes):
-    # Variable
-    global speed_axis_3
+    # ------ Snake - Axis 3 -----
+    def increment_speed_snake_manual(self, keystrokes):
+        # Variable
+        # global speed_axis_3
 
-    # Increment Snake - Axis 3 speed
-    if (SPEED_INCREASE_SNAKE in keystrokes):
-        if (speed_axis_3 < max_velocity_axis_3):
-            speed_axis_3 = round(speed_axis_3 + SPEED_INCREMENT_AXIS_3, 3)
-            print("Snake speed increased to: ", speed_axis_3)
-        else:
-            speed_axis_1 = max_velocity_axis_1
-            sys.stderr.write("Maximum snake speed reached.\n")
-    elif (SPEED_DECREASE_SNAKE in keystrokes):
-        if (speed_axis_3 > 0):
-            speed_axis_3 = round(speed_axis_3 - SPEED_INCREMENT_AXIS_3, 3)
-            print("Snake speed decreased to: ", speed_axis_3)
-        else:
-            speed_axis_3 = 0
-            sys.stderr.write("Minimum snake speed reached.\n")
+        # Increment Snake - Axis 3 speed
+        if (self.SPEED_INCREASE_SNAKE in keystrokes):
+            if (self.speed_axis_3 < self.max_velocity_axis_3):
+                self.speed_axis_3 = round(self.speed_axis_3 + self.SPEED_INCREMENT_AXIS_3, 3)
+                print("Snake speed increased to: ", self.speed_axis_3)
+            else:
+                self.speed_axis_3 = self.max_velocity_axis_3
+                sys.stderr.write("Maximum snake speed reached.\n")
+        elif (self.SPEED_DECREASE_SNAKE in keystrokes):
+            if (self.speed_axis_3 > 0):
+                self.speed_axis_3 = round(self.speed_axis_3 - self.SPEED_INCREMENT_AXIS_3, 3)
+                print("Snake speed decreased to: ", self.speed_axis_3)
+            else:
+                self.speed_axis_3 = 0
+                sys.stderr.write("Minimum snake speed reached.\n")
 
 # Returns the angle in degrees (°) from two coordinate systems.
 def get_heading(coordinates_inner, coordinates_outer):
