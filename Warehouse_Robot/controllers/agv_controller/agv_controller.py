@@ -1211,8 +1211,78 @@ class Pallet:
     def remove_packet(self, packet):
         pass
 
-    def get_packets(self):
-        return self.packets
+    def switch_case_agv(self, argument):
+        # Creating a dictionary of the states.
+        switcher = {
+            1: self.agv_idle_sc,
+            2: self.move_agv_sc,
+            3: self.rotate_agv_sc
+        }
+
+        # Get the function from switcher dictionary
+        func = switcher.get(argument, lambda: "Invalid robot state")
+        # Execute the function
+        state = func()
+        return state
+
+    def switch_case_robot(self, argument):
+        # Creating a dictionary of the states.
+        switcher = {
+            1: self.robot_idle_sc,
+            2: self.moving_agv_sc,
+            3: self.move_tower_sc,
+            4: self.rotate_snakebox_sc,
+            5: self.extend_snake_sc,
+            6: self.attach_packet_sc,
+            7: self.detach_packet_sc,
+            8: self.retract_snake_sc
+        }
+
+        # Get the function from switcher dictionary
+        func = switcher.get(argument, lambda: "Invalid robot state")
+        # Execute the function
+        state = func()
+        return state
+
+    # Convert list to string. List shall contain
+    def list_to_string(self, list_elem):
+        text_string = ' '.join([str(elem) for elem in list_elem])
+
+        return text_string
+
+    def reset_pick_packet_variables(self):
+        print("Reset picking variables.")
+        self.tower_pos_reached = False
+        self.snakebox_pos_reached = False
+        self.snake_pos_reached = False
+        self.snaketip_pos_reached = False
+
+    def reset_extending_variables(self):
+        print("Reset extending variables.")
+        self.reset_pick_packet_variables()
+        self.snake_extending = False
+
+    def reset_retracting_variables(self):
+        print("Reset retracting variables.")
+        self.reset_pick_packet_variables()
+        self.snake_retracting = False
+
+    def reset_picking_variables(self):
+        print("Reset picking variables.")
+        self.reset_pick_packet_variables()
+        self.snake_retracting = False
+        self.snake_extending = False
+        self.gripper_pos_reached = False
+
+    def restart_picking_process(self):
+        print("Restart picking process.")
+        self.reset_picking_variables()
+        self.packet_attached = False
+        self.deliver_on_agv = False
+        self.go_idle = False
+        self.packet_created = False
+        self.go_init_pos = False
+        self.packet_placed = False
 
 def main():
     # Variables
