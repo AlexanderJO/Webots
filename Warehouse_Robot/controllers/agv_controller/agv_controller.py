@@ -805,19 +805,18 @@ class AGV(Robot):
                 self.speed_axis_3 = 0
                 sys.stderr.write("Minimum snake speed reached.\n")
 
-# Returns the angle in degrees (°) from two coordinate systems.
-def get_heading(coordinates_inner, coordinates_outer):
-    diff_x = coordinates_outer['gps_pos'][0] - coordinates_inner['gps_pos'][0]
-    diff_y = coordinates_outer['gps_pos'][1] - coordinates_inner['gps_pos'][1]
-    diff_z = coordinates_outer['gps_pos'][2] - coordinates_inner['gps_pos'][2]
+    def move_snake_to(self, length):
+        # Snake margin
+        snake_margin = 0.01
 
-    # Calculates the angle in degrees (°).
-    angle = math.atan2(diff_x, diff_z) * (360/(2*math.pi))
-    if angle < 0:
-        angle = angle + 360
+        current_length = self.ps_axis_3_pt[0].getValue()
 
-    # Returns the angle in degrees (°).
-    return angle
+        if (abs(current_length) >= (abs(length) - snake_margin)) and (abs(current_length) <= (abs(length) + snake_margin)):
+            self.snake_pos_reached = True
+        elif (abs(current_length) >= (abs(length) - snake_margin)) and not self.snake_pos_reached:
+            self.move_snake('retract')
+        elif (abs(current_length) <= (abs(length) + snake_margin)) and not self.snake_pos_reached:
+            self.move_snake('extend')
 
 # Return GPS position in x, y and z format as a dictionary.
 def get_gps_pos(name):
