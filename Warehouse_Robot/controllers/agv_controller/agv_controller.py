@@ -409,17 +409,17 @@ class AGV(Robot):
         except:
             raise Exception('Input not an integer.')
 
-# Continuously reads the keyboard for user inputs.
-# Reads up to 7 simultaneous/combined key presses.
-def read_keyboard():
-    # ------ KEYBOARD -----
-    # https://cyberbotics.com/doc/reference/keyboard
-    # Register keystrokes
-    keystrokes = [str(-1)] * 7
-    for i in range(0, 7):
-        keystrokes[i] = str(kb.getKey())
-    # print(keystrokes)
-    return keystrokes
+    # Continuously reads the keyboard for user inputs.
+    # Reads up to 7 simultaneous/combined key presses.
+    def read_keyboard(self):
+        # ------ KEYBOARD -----
+        # https://cyberbotics.com/doc/reference/keyboard
+        # Register keystrokes
+        keystrokes = [str(-1)] * 7
+        for i in range(0, 7):
+            keystrokes[i] = str(self.kb.getKey())
+        # print(keystrokes)
+        return keystrokes
 
 # ------ Switch case -----
 def manual_mode():
