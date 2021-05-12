@@ -44,6 +44,240 @@ class Drive():
     def __init__(self):
         pass
 
+class AGV(Robot):
+    # get the time step of the current world.
+    TIME_STEP = int(robot.getBasicTimeStep())
+    if TIME_STEP < 32:
+        TIME_STEP = 32
+    else:
+        TIME_STEP = 32
+
+    # ----------------- BOX CONNECTORS ---------------
+    con_suction_cup = robot.getDevice('con_suction_cup')
+    con_suction_cup.enablePresence(TIME_STEP)
+
+    # ----------------- COMMUNICATION ---------------
+    # Instantiate receiver variable to hold receiver.
+    receiver = None
+
+    # Instantiate emitter variable to hold emitter.
+    emitter = None
+
+    # Message sent by emitter.
+    emitted_message = ""
+    previous_message = ""
+
+    # ----------------- AGV ---------------
+    # Status variables
+    agv_approach_heading_reached = False
+    agv_attack_heading_reached = False
+    agv_heading_reached = False
+    agv_positioned = [False for i in range(3)] # Positioned AGV in x, y and z position.
+    agv_x_pos_reached = False
+    agv_y_pos_reached = True
+    agv_z_pos_reached = False
+    agv_pos_reached = False
+    agv_moving = False
+    packet_picking_started = False
+    packet_picking_ended = False
+    packet_attached = False
+    packet_placed = False
+    deliver_on_agv = False
+    go_idle = False
+    packet_created = False
+    gripper_pos_reached = False
+    robot_ready = False
+    go_init_pos = False
+
+    # Create instances of the AGV wheel motors.
+    motor_rightFWD_AGV = robot.getDevice('motor_rightFWD_AGV')
+    motor_rightAFT_AGV = robot.getDevice('motor_rightAFT_AGV')
+    motor_leftFWD_AGV = robot.getDevice('motor_leftFWD_AGV')
+    motor_leftAFT_AGV = robot.getDevice('motor_leftAFT_AGV')
+
+    # Additional wheels aft
+    motor_rightAFT2_AGV = robot.getDevice('motor_rightAFT2_AGV')
+    motor_leftAFT2_AGV = robot.getDevice('motor_leftAFT2_AGV')
+
+    # Sets the initial position of the motor.
+    motor_rightFWD_AGV.setPosition(float('inf'))
+    motor_rightAFT_AGV.setPosition(float('inf'))
+    motor_leftFWD_AGV.setPosition(float('inf'))
+    motor_leftAFT_AGV.setPosition(float('inf'))
+
+    # Additional wheels aft
+    motor_rightAFT2_AGV.setPosition(float('inf'))
+    motor_leftAFT2_AGV.setPosition(float('inf'))
+
+    # Sets the initial velocity of the motor.
+    motor_rightFWD_AGV.setVelocity(0.0)
+    motor_rightAFT_AGV.setVelocity(0.0)
+    motor_leftFWD_AGV.setVelocity(0.0)
+    motor_leftAFT_AGV.setVelocity(0.0)
+
+    # Additional wheels aft
+    motor_rightAFT2_AGV.setVelocity(0.0)
+    motor_leftAFT2_AGV.setVelocity(0.0)
+
+    # Speed settings for AGV
+    max_velocity_agv = min(motor_rightFWD_AGV.getMaxVelocity(), motor_rightAFT_AGV.getMaxVelocity(),
+                           motor_leftFWD_AGV.getMaxVelocity(), motor_leftAFT_AGV.getMaxVelocity())
+    speed_agv = 0.5 * max_velocity_agv
+    SPEED_INCREMENT_AGV = 0.1
+
+    # ------------------- GPS Axis 1 - Axle --------------
+    # Get the GPS device
+    gps_axle = robot.getDevice('gps_axle_center')
+    gps_agv = robot.getDevice('gps_agv')
+    gps_axle.enable(TIME_STEP)
+    gps_agv.enable(TIME_STEP)
+
+    # ------------------- AXIS 1 - Snake box --------------
+    # Status variables
+    snakebox_pos_reached = False
+
+    # Get Axis 1 motor
+    motor_axis_1 = robot.getDevice('motor_axis_1')
+
+    # Get position sensor for axis 1
+    ps_axis_1 = robot.getDevice('ps_axis_1')
+    ps_axis_1.enable(TIME_STEP)
+
+    # Sets the initial position of the motor.
+    motor_axis_1.setPosition(float('inf'))
+
+    # Sets the initial velocity of the motor.
+    motor_axis_1.setVelocity(0.0)
+
+    # Speed settings for Axis 1
+    max_velocity_axis_1 = motor_axis_1.getMaxVelocity()
+    speed_axis_1 = 2
+    SPEED_INCREMENT_AXIS_1 = 0.05
+
+    # ------------------- AXIS 2 - Tower --------------
+    # Status variables
+    tower_pos_reached = False
+
+    # Get Axis 2 motor
+    motor_axis_2 = robot.getDevice('motor_axis_2')
+    axis_2_pos = 0
+
+    # Get position sensor for axis 2
+    ps_axis_2 = robot.getDevice('ps_axis_2')
+    ps_axis_2.enable(TIME_STEP)
+
+    # Speed settings for Axis 2
+    max_velocity_axis_2 = motor_axis_2.getMaxVelocity()
+    speed_axis_2 = 0.02
+    SPEED_INCREMENT_AXIS_2 = 0.02
+
+    # ------------------- AXIS 3 - Snake --------------
+    # Status variables
+    snake_pos_reached = False
+    snake_extending = False
+    snake_retracting = False
+
+    # Populate the snake robot
+    num_snake_joints = 7
+    snake_piece_length = 0.30  # Length in meter.
+    dist_snake_start_to_tip = 0.445  # Length in meter.
+    max_snake_length = 1.70 + dist_snake_start_to_tip  # Length in meter.
+
+    # Get Axis 3 motor - Snake part 1
+    # motor_axis_3_pt1 = robot.getDevice('motor_axis_3_pt1')
+    # axis_3_pos_pt1 = 0
+
+    # Snake settings
+    motor_axis_3_pt = None
+    axis_3_pos_pt = None
+    ps_axis_3_pt = None
+
+    # Get position sensor for axis 3 - Snake part 1
+    # ps_axis_3_pt1 = robot.getDevice('ps_axis_3_pt1')
+    # ps_axis_3_pt1.enable(TIME_STEP)
+
+    # Speed settings for Axis 3
+    speed_axis_3 = 0.005
+    SPEED_INCREMENT_AXIS_3 = 0.005
+    max_velocity_axis_3 = 0
+
+    # ------------------- AXIS 4 - Snake tip --------------
+    # Status variables
+    snaketip_pos_reached = False
+
+    # Get Axis 4 motor
+    motor_axis_4 = robot.getDevice('motor_axis_4')
+
+    # Get position sensor for axis 4
+    ps_axis_4 = robot.getDevice('ps_axis_4')
+    ps_axis_4.enable(TIME_STEP)
+
+    # Sets the initial position of the motor.
+    motor_axis_4.setPosition(float('inf'))
+
+    # Sets the initial velocity of the motor.
+    motor_axis_4.setVelocity(0.0)
+
+    # Speed settings for Axis 4
+    max_velocity_axis_4 = motor_axis_4.getMaxVelocity()
+    speed_axis_4 = 2
+    SPEED_INCREMENT_AXIS_4 = 0.05
+
+    # # ------------------- KEYBOARD --------------
+    # Enable the keyboard.
+    kb = Keyboard()
+    kb.enable(TIME_STEP)
+
+    # Keyboard values for AGV
+    FORWARD = '315'
+    BACKWARD = '317'
+    TURN_LEFT = '314'
+    TURN_RIGHT = '316'
+    SPEED_INCREASE_AGV = '43'
+    SPEED_DECREASE_AGV = '45'
+
+    # Keyboard values for Hasselhoff Hug - Axis 1
+    LEFT_AXIS_1 = '65'
+    RIGHT_AXIS_1 = '68'
+    SPEED_INCREASE_SNAKEBOX = str(Keyboard.CONTROL + Keyboard.SHIFT + 43)
+    SPEED_DECREASE_SNAKEBOX = str(Keyboard.CONTROL + Keyboard.SHIFT + 45)
+
+    # Keyboard values for Tower - Axis 2
+    UP_AXIS_2 = '87'
+    DOWN_AXIS_2 = '83'
+    SPEED_INCREASE_TOWER = str(Keyboard.CONTROL + 43)
+    SPEED_DECREASE_TOWER = str(Keyboard.CONTROL + 45)
+
+    # Keyboard values for Snake - Axis 3
+    EXTEND_AXIS_3 = '81'
+    RETRACT_AXIS_3 = '69'
+    SPEED_INCREASE_SNAKE = str(Keyboard.SHIFT + 43)
+    SPEED_DECREASE_SNAKE = str(Keyboard.SHIFT + 45)
+
+    # Keyboard values for Snake tip - Axis 4
+    LEFT_AXIS_4 = '90'
+    RIGHT_AXIS_4 = '67'
+
+    # Keyboard values for Packet handling
+    PACKET_ATTACH = '32'
+    PACKET_DETACH = '65568'
+
+    # ------------------- CAMERA --------------
+    camera_top = None
+    camera_snake = None
+
+    # ------------------- STATE MACHINE VARIABLES --------------
+    state = 0
+    state_agv = 0
+
+    # ------------------- PACKET VARIABLES --------------
+    packet_dimensions = None
+    pallet_list = None
+    packet_list = None
+    packet_num = 0
+    current_gps_pos = None
+    previous_gps_pos = None
+
 # ----------------- BOX CONNECTORS ---------------
 con_suction_cup = robot.getDevice('con_suction_cup')
 con_suction_cup.enablePresence(TIME_STEP)
